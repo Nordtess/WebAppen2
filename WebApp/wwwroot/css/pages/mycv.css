@@ -1,0 +1,10 @@
+﻿.mycv-container {
+   justify-content: center;
+   align-items: center;
+   
+}
+
+.mycv-title {
+    text-align: left;
+    font-size: 10rem;
+}
