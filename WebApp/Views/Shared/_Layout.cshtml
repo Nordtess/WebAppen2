@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="~/css/layout.css" />
     <link rel="stylesheet" href="~/css/components.css" />
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
     @RenderSection("Styles", required: false)
 </head>
 <body>
@@ -27,10 +31,10 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link ext-dark" asp-area="" asp-controller="Login" asp-action="Index">Login</a>
                         </li>
-                        <li>
-                            <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                        <li class="nav-item">
+                            <a class="nav-link ext-dark" asp-area="" asp-controller="MyCV" asp-action="Index">Mitt CV</a>
                         </li>
                     </ul>
                 </div>

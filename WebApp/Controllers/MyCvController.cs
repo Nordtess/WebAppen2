@@ -2,11 +2,11 @@
 
 namespace WebApp.Controllers
 {
-    public class NewUserController : Controller
+    public class MyCvController : Controller
     {
         public IActionResult Index()
         {
-            return View("NewUser");
+            return View("MyCV");
         }
     }
 }

@@ -1,24 +1,22 @@
-﻿@{
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/pages/newuser.css" />
+}
+
+@{
     ViewData["Title"] = "NewUser";
 }
 
 
-<div class="newuser-container">
-    <h1 class="newuser-title">Ny användare</h1>
+<div class="page">
+    <h1>Ny användare</h1>
 
-    <form method="post" class="newuser-form">
-        <div class="form-group">
-            <label class="form-label" for="email">Email</label>
-            <input type="text" id="email" class="form-input" />
-        </div>
+    <form method="post">
+        <label>Email</label><br />
+        <input type="text" /><br /><br />
 
-        <div class="form-group">
-            <label class="form-label" for="password">Lösenord</label>
-            <input type="password" id="password" class="form-input" />
-        </div>
+        <label>Lösenord</label><br />
+        <input type="password" /><br /><br />
 
-        <button type="submit" class="btn-submit">
-            Skapa användare
-        </button>
+        <button>Skapa användare</button>
     </form>
 </div>

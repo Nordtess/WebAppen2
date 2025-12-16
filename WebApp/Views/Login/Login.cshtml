@@ -1,0 +1,38 @@
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/pages/login.css" />
+}
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="page">
+    <h1>Logga in</h1>
+
+    <form method="post">
+        <div>
+            <label for="username">Användarnamn</label><br />
+            <input type="text" id="username" name="Username" />
+        </div>
+
+        <br />
+
+        <div>
+            <label for="password">Lösenord</label><br />
+            <input type="password" id="password" name="Password" />
+        </div>
+
+        <br />
+
+        <button class="" type="submit">
+            Logga in
+        </button>
+    </form>
+
+    <p>
+        Ny användare?
+        <a asp-controller="NewUser" asp-action="Index">Ny användare</a>
+    </p>
+</div>
+
+

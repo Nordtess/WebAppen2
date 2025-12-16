@@ -2,11 +2,11 @@
 
 namespace WebApp.Controllers
 {
-    public class AccountController : Controller
+    public class LoginController : Controller
     {
-        public IActionResult Login()
+        public IActionResult Index()
         {
-            return View();
+            return View("Login");
         }
 
         public IActionResult NewUser()
