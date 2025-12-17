@@ -58,7 +58,7 @@ button.accept-policy {
     background: rgba(255, 255, 255, 0.88) !important;
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+    border-bottom: 2px solid #111 !important;
     box-shadow: none !important;
     margin-bottom: 0 !important;
 }
