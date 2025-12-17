@@ -29,3 +29,27 @@
     font-size: 25px;
     font-weight: bold;
 }
+
+.auth-benefits {
+    margin: 20px 0 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    color: rgba(0,0,0,0.75);
+}
+
+.benefit-icon {
+    font-size: 18px;
+    line-height: 1;
+}
+
+.benefit-text {
+    line-height: 1.4;
+}

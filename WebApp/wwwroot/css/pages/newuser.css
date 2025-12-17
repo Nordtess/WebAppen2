@@ -1,1 +1,133 @@
-﻿
+﻿/* Sida */
+.register-page {
+    display: flex;
+    justify-content: center;
+    padding: 70px 20px;
+}
+
+/* Stort kort */
+.register-card {
+    width: 100%;
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 56px;
+    border: 2px solid #111;
+    border-radius: 22px;
+    padding: 50px;
+    background: #fff;
+}
+
+/* Titel */
+.register-title {
+    font-size: 44px;
+    font-weight: 850;
+    margin: 0 0 18px;
+}
+
+/* Benefits */
+.register-benefits {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 30px;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 18px;
+    color: rgba(0,0,0,0.75);
+}
+
+.benefit-emoji {
+    font-size: 20px;
+    line-height: 1;
+}
+
+/* Lite fetare text för benefit-raderna (men inte för mycket) */
+.benefit-text {
+    font-weight: 600; /* 👈 lite fetare, inte tungt */
+    line-height: 1.35;
+}
+
+/* Form */
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+    .register-form label {
+        font-weight: 700;
+        font-size: 15px;
+    }
+
+    .register-form input {
+        padding: 14px 14px;
+        font-size: 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(0,0,0,0.25);
+    }
+
+/* Knapp + länk på samma rad */
+.register-actions {
+    margin-top: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Länken till höger */
+.login-link {
+    color: #111;
+    font-weight: 650;
+    text-decoration: none;
+}
+
+    .login-link:hover {
+        text-decoration: underline;
+    }
+
+/* Höger sida */
+.register-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.register-image-placeholder {
+    width: 100%;
+    height: 340px;
+    border-radius: 16px;
+    background: rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(0,0,0,0.5);
+    font-size: 15px;
+}
+
+/* Mobil */
+@media (max-width: 900px) {
+    .register-card {
+        grid-template-columns: 1fr;
+        padding: 36px;
+        gap: 28px;
+    }
+
+    .register-right {
+        display: none;
+    }
+
+    .register-title {
+        font-size: 36px;
+    }
+
+    .register-actions {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+    }
+}

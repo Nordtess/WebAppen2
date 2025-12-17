@@ -1,24 +1,63 @@
 ﻿@section Styles {
-    <link rel="stylesheet" href="~/css/pages/newuser.css" />
+    <link rel="stylesheet" href="~/css/pages/newuser.css" asp-append-version="true" />
 }
 
 @{
     ViewData["Title"] = "NewUser";
 }
 
+<div class="register-page">
+    <div class="register-card">
 
-<div class="page">
-    <h1>Ny användare</h1>
+        <!-- VÄNSTER: FORM -->
+        <div class="register-left">
+            <h1 class="register-title">Ny användare</h1>
 
-    <form method="post">
-        <label>Email</label><br />
-        <input type="text" /><br /><br />
+            <!-- Benefits under titeln -->
+            <div class="register-benefits">
+                <div class="benefit-item">
+                    <span class="benefit-emoji">✅</span>
+                    <span class="benefit-text">Skapa och uppdatera ditt CV snabbt</span>
+                </div>
+                <div class="benefit-item">
+                    <span class="benefit-emoji">🔒</span>
+                    <span class="benefit-text">Privat och säker meddelandetjänst</span>
+                </div>
+                <div class="benefit-item">
+                    <span class="benefit-emoji">🎯</span>
+                    <span class="benefit-text">Matchning baserad på kompetenser</span>
+                </div>
+            </div>
 
-        <label>Lösenord</label><br />
-        <input type="password" /><br /><br />
+            <form method="post" class="register-form">
+                <label for="email">Email</label>
+                <input id="email" type="email" placeholder="namn@exempel.se" />
 
-        <button class="btn-primary-custom" type="submit">
-            Skapa användare
-        </button>
-    </form>
+                <label for="password">Lösenord</label>
+                <input id="password" type="password" placeholder="••••••••" />
+
+                <label for="password2">Bekräfta lösenord</label>
+                <input id="password2" type="password" placeholder="••••••••" />
+
+                <!-- Actions row -->
+                <div class="register-actions">
+                    <button class="btn-primary-custom" type="submit">
+                        Skapa användare
+                    </button>
+
+                    <a asp-controller="Login" asp-action="Index" class="login-link">
+                        Jag är redan medlem
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- HÖGER: ILLUSTRATION -->
+        <div class="register-right">
+            <div class="register-image-placeholder">
+                Bild / illustration
+            </div>
+        </div>
+
+    </div>
 </div>
