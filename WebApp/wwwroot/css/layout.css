@@ -3,7 +3,7 @@
     --nl-line: 3px;
 }
 
-/* ===== Footer always at bottom (utan absolute) ===== */
+/* Footer alltid längst ner */
 .nl-body {
     min-height: 100vh;
     display: flex;
@@ -22,7 +22,7 @@
     line-height: 60px;
 }
 
-/* ===== Navbar ===== */
+/* Navbar */
 .nl-navbar {
     position: fixed;
     top: 0;
@@ -30,7 +30,7 @@
     right: 0;
     height: var(--nl-nav-h);
     z-index: 2000;
-    background: rgba(255, 255, 255, 0.88) !important;
+    background: rgba(255,255,255,0.88) !important;
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border-bottom: var(--nl-line) solid #111;
@@ -38,7 +38,7 @@
     overflow: visible;
 }
 
-/* Shell - Use flexbox instead of absolute positioning */
+/* Shell */
 .nl-shell {
     position: relative;
     height: var(--nl-nav-h);
@@ -50,23 +50,22 @@
     gap: 12px;
 }
 
-/* Left brand */
+/* LOGO (utan pill/border) */
 .nl-brand {
     display: inline-flex;
     align-items: center;
-    padding: 7px 12px;
-    border: 1px solid rgba(0,0,0,0.20);
-    border-radius: 999px;
-    text-decoration: none !important;
-    color: #111 !important;
-    font-weight: 750;
-    letter-spacing: 0.2px;
-    white-space: nowrap;
+    justify-content: center;
     flex: 0 0 auto;
     z-index: 10;
 }
 
-/* CENTER - Absolutely positioned to stay centered on wide screens */
+.nl-logo {
+    height: 180px; /* <-- större */
+    width: auto;
+    display: block;
+}
+
+/* CENTER: absolut centrerad */
 .nl-center-col {
     position: absolute;
     left: 50%;
@@ -75,7 +74,6 @@
     z-index: 1;
 }
 
-/* Streck runt länkarna */
 .nl-center-wrap {
     display: flex;
     align-items: center;
@@ -85,12 +83,11 @@
     pointer-events: auto;
 }
 
-/* Link spacing */
 .nl-nav-center {
     gap: 26px;
 }
 
-/* Länkar: exakt svart + underline animation */
+/* Länkar (behåll exakt look + underline animation) */
 .nl-link {
     font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
     font-size: 20px !important;
@@ -134,7 +131,7 @@
             transform: scaleX(1);
         }
 
-/* Lås länkar i navbaren så de aldrig blir blå */
+/* Lås så bootstrap aldrig gör dem blå */
 .nl-navbar a,
 .nl-navbar a:visited,
 .nl-navbar a:hover,
@@ -143,7 +140,7 @@
     text-decoration: none !important;
 }
 
-/* RIGHT - Use flex layout instead of absolute positioning */
+/* RIGHT */
 .nl-right {
     display: flex;
     align-items: center;
@@ -151,17 +148,18 @@
     min-width: 0;
     flex: 0 1 auto;
     z-index: 10;
+    max-width: min(520px, 46vw);
 }
 
     .nl-right > * {
         min-width: 0;
     }
 
-/* User section */
+/* User */
 .nl-user {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     padding-left: 18px;
     border-left: var(--nl-line) solid #111;
     min-width: 0;
@@ -221,11 +219,12 @@
         transform: translateY(-8px) rotate(-45deg);
     }
 
-/* Dropdown */
+/* Dropdown: till HÖGER om hamburgaren */
 .nl-menu-panel {
     position: absolute;
-    right: 0;
-    top: calc(100% + 12px);
+    left: calc(100% + 12px); /* <-- på höger sida */
+    top: 50%;
+    transform: translateY(-50%);
     min-width: 220px;
     max-width: min(320px, calc(100vw - 24px));
     overflow: hidden;
@@ -257,7 +256,7 @@
         background: rgba(0,0,0,0.05);
     }
 
-/* Mail */
+/* Mail (med bild) */
 .nl-mail {
     display: flex;
     align-items: center;
@@ -265,13 +264,14 @@
     padding-left: 18px;
     border-left: var(--nl-line) solid #111;
     min-width: 0;
-    flex: 0 1 auto;
+    flex: 1 1 auto;
 }
 
-.nl-mail-icon {
-    font-size: 18px;
-    line-height: 1;
-    opacity: 0.9;
+.nl-mail-img {
+    height: 70px;
+    width: auto;
+    display: block;
+    opacity: 0.95;
     flex: 0 0 auto;
 }
 
@@ -284,89 +284,106 @@
     min-width: 0;
 }
 
-/* ===== RESPONSIVE BREAKPOINTS ===== */
-
-/* Large screens: all elements visible */
+/* ===== Responsive ===== */
 @media (min-width: 1200px) {
     .nl-center-col {
         display: block;
     }
+
     .nl-mail-text {
         display: inline;
     }
+
     .nl-user-email {
         max-width: 180px;
     }
 }
 
-/* Medium screens: hide center nav, keep mail text short */
+/* Medium: göm center om tight */
 @media (min-width: 992px) and (max-width: 1199px) {
     .nl-center-col {
         display: none;
     }
-    .nl-mail-text {
-        max-width: 150px;
-    }
+
     .nl-user-email {
         max-width: 140px;
     }
+
+    .nl-right {
+        max-width: min(520px, 56vw);
+    }
 }
 
-/* Tablet: hide center nav and mail text */
+/* Tablet */
 @media (min-width: 768px) and (max-width: 991px) {
     .nl-center-col {
         display: none;
     }
+
     .nl-mail-text {
         display: none;
     }
-    .nl-user_email {
+
+    .nl-user-email {
         max-width: 120px;
+    }
+
+    /* dropdown under knappen (för att inte hamna offscreen) */
+    .nl-menu-panel {
+        left: auto;
+        right: 0;
+        top: calc(100% + 12px);
+        transform: none;
     }
 }
 
-/* Mobile: hide center nav, mail text, and email */
+/* Mobile */
 @media (max-width: 767px) {
     .nl-center-col {
         display: none;
     }
-    
+
     .nl-mail-text {
         display: none;
     }
-    
+
     .nl-user-email {
         display: none;
     }
-    
-    /* Remove left border from user section when email is hidden */
+
     .nl-user {
         border-left: none;
         padding-left: 0;
     }
-    
-    /* Reduce gaps for compact layout */
+
     .nl-right {
         gap: 10px;
+        max-width: 60vw;
     }
-    
+
     .nl-shell {
         padding: 0 12px;
         gap: 8px;
     }
+
+    /* dropdown under knappen */
+    .nl-menu-panel {
+        left: auto;
+        right: 0;
+        top: calc(100% + 12px);
+        transform: none;
+    }
 }
 
-/* Extra small mobile: minimal layout */
 @media (max-width: 480px) {
-    .nl-brand {
-        font-size: 14px;
-        padding: 5px 10px;
+    .nl-logo {
+        height: 30px;
     }
-    
+
     .nl-shell {
         padding: 0 8px;
     }
-    
+
     .nl-mail {
         padding-left: 12px;
     }

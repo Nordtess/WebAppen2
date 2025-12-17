@@ -30,12 +30,15 @@
         <nav class="navbar nl-navbar" role="navigation" aria-label="Huvudnavigation">
             <div class="container-fluid nl-shell">
 
-                <!-- LEFT: logo -->
-                <a class="nl-brand" asp-controller="Home" asp-action="Index" aria-label="Till startsidan">
-                    NotLinkedIn
-                </a>
+                <!-- LEFT: LOGO (INTE länk) -->
+                <div class="nl-brand" aria-label="NotLinkedIn logo">
+                    <img class="nl-logo"
+                         src="~/images/logos/loggamini.png"
+                         asp-append-version="true"
+                         alt="NotLinkedIn" />
+                </div>
 
-                <!-- CENTER: länkar (absolut centrerad på stora skärmar, dold på mindre) -->
+                <!-- CENTER: länkar -->
                 <div class="nl-center-col" aria-label="Primär navigation">
                     <div class="nl-center-wrap">
                         <ul class="navbar-nav flex-row nl-nav-center">
@@ -52,21 +55,14 @@
                     </div>
                 </div>
 
-                <!-- RIGHT: user + burger + mail -->
+                <!-- RIGHT -->
                 <div class="nl-right" aria-label="Användarområde">
 
-                    <!-- Mail notification (responsive) -->
-                    <div class="nl-mail" title="Du har 3 olästa meddelanden">
-                        <span class="nl-mail-icon" aria-hidden="true">✉</span>
-                        <span class="nl-mail-text">Du har <strong>3</strong> olästa meddelanden</span>
-                    </div>
-
-                    <!-- User section with burger menu -->
+                    <!-- User section (burger + email) -->
                     <div class="nl-user">
-                        <span class="nl-user-email" title="jamie@example.se">jamie@example.se</span>
-
                         <div class="nl-account">
-                            <button class="nl-burger" type="button" aria-label="Öppna meny" aria-expanded="false" aria-controls="user-menu">
+                            <button class="nl-burger" type="button"
+                                    aria-label="Öppna meny" aria-expanded="false" aria-controls="user-menu">
                                 <span></span>
                                 <span></span>
                                 <span></span>
@@ -77,6 +73,23 @@
                                 <a class="nl-menu-item" asp-controller="Messages" asp-action="Index" role="menuitem">Mina meddelanden</a>
                             </div>
                         </div>
+
+                        <span class="nl-user-email" title="jamie@example.se">jamie@example.se</span>
+                    </div>
+
+                    <!-- Mail notification (med era bilder) -->
+                    <div class="nl-mail"
+                         data-unread="3"
+                         data-closed-src="@Url.Content("~/images/bannersandicons/mail.png")"
+                         data-open-src="@Url.Content("~/images/bannersandicons/mailopen.png")"
+                         title="Meddelanden">
+                        <img class="nl-mail-img"
+                             src="~/images/bannersandicons/mail.png"
+                             asp-append-version="true"
+                             alt="Meddelanden" />
+                        <span class="nl-mail-text">
+                            Du har <strong class="nl-unread-count">3</strong> olästa meddelanden
+                        </span>
                     </div>
 
                 </div>
