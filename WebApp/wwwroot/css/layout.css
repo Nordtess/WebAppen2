@@ -1,6 +1,6 @@
 ﻿:root {
     --nl-nav-h: 76px;
-    --nl-line: 2px;
+    --nl-line: 3px;
 }
 
 /* ===== Footer always at bottom (utan absolute) ===== */
@@ -36,40 +36,49 @@
     border-bottom: var(--nl-line) solid #111;
 }
 
-/* Grid-ish shell */
+/* shell */
 .nl-shell {
     position: relative;
     height: var(--nl-nav-h);
+    display: flex;
     align-items: center;
+    padding: 0 18px;
+    min-width: 0; /* viktigt för ellipsis */
 }
 
-/* Left brand (pill placeholder) */
+/* Left brand */
+.nl-left {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+}
+
 .nl-brand {
     display: inline-flex;
     align-items: center;
     padding: 7px 12px;
     border: 1px solid rgba(0,0,0,0.20);
     border-radius: 999px;
-    text-decoration: none;
-    color: #111;
+    text-decoration: none !important;
+    color: #111 !important;
     font-weight: 750;
     letter-spacing: 0.2px;
 }
 
-/* Center column = absolut centrerad över hela headern */
+/* Center column = absolut centrerad */
 .nl-center-col {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
 }
 
-/* Wrap med streck vänster/höger (streck runt länkarna, inte runt loggan) */
+/* Streck runt länkarna (inte runt loggan) */
 .nl-center-wrap {
     display: flex;
     align-items: center;
     padding: 0 26px;
-    border-left: var(--nl-line) solid #111; /* streck vänster om Home */
-    border-right: var(--nl-line) solid #111; /* streck höger om Bli medlem */
+    border-left: var(--nl-line) solid #111;
+    border-right: var(--nl-line) solid #111;
 }
 
 /* Link spacing */
@@ -77,7 +86,7 @@
     gap: 26px;
 }
 
-/* Länkar: exakt “svart + underline animation” */
+/* Länkar: exakt svart + underline animation */
 .nl-link {
     font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
     font-size: 20px !important;
@@ -112,53 +121,53 @@
         transform: scaleX(1);
     }
 
-    .nl-link.active::after {
-        transform: scaleX(1);
-    }
-
     .nl-link.active {
         opacity: 1;
     }
 
-/* Bootstrap kan ibland försöka färga länkar – vi låser */
-.nl-navbar .nav-link,
-.nl-navbar .nav-link:visited,
-.nl-navbar .nav-link:hover,
-.nl-navbar .nav-link:focus {
+        .nl-link.active::after {
+            transform: scaleX(1);
+        }
+
+/* Bootstrap försöker ibland färga länkar -> vi låser ENBART i navbaren */
+.nl-navbar a,
+.nl-navbar a:visited,
+.nl-navbar a:hover,
+.nl-navbar a:focus {
     color: #111 !important;
     text-decoration: none !important;
 }
 
-/* Right area (alltid inom skärmen) */
+/* ===== Right column (måste få plats alltid) ===== */
 .nl-right {
     margin-left: auto;
     display: flex;
     align-items: center;
-    gap: 18px;
-    max-width: 44vw; /* skydd om mail-text blir lång */
+    gap: 14px;
+    min-width: 0;
+    flex: 0 1 auto;
+    /* hård gräns så höger aldrig trycks utanför */
+    max-width: min(520px, 46vw);
 }
 
-/* Vertical separators på höger sida */
+    /* se till att flex-items får krympa (annars ignoreras ellipsis) */
+    .nl-right > * {
+        min-width: 0;
+    }
+
+/* streck efter center-wrap */
 .nl-user {
     display: flex;
     align-items: center;
     gap: 12px;
     padding-left: 18px;
-    border-left: var(--nl-line) solid #111; /* streck precis efter center-wrap */
-}
-
-.nl-mail {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding-left: 18px;
-    border-left: var(--nl-line) solid #111; /* streck mellan burger/user och mail */
-    min-width: 0; /* krävs för ellipsis */
+    border-left: var(--nl-line) solid #111;
+    min-width: 0;
 }
 
 /* Email ellipsis */
 .nl-user-email {
-    max-width: 220px;
+    max-width: 180px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -166,29 +175,15 @@
     color: rgba(0,0,0,0.9);
 }
 
-/* Mail text ellipsis */
-.nl-mail-text {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: rgba(0,0,0,0.85);
-    font-weight: 600;
-}
-
-.nl-mail-icon {
-    font-size: 18px;
-    line-height: 1;
-    opacity: 0.9;
-}
-
-/* ===== Burger (utan ring, fetare linjer, hover + X animation) ===== */
+/* ===== Burger (lite mindre men fortfarande fet) ===== */
 .nl-account {
     position: relative;
+    flex: 0 0 auto;
 }
 
 .nl-burger {
-    width: 34px;
-    height: 24px;
+    width: 30px;
+    height: 22px;
     border: 0;
     background: transparent;
     padding: 0;
@@ -199,19 +194,19 @@
 
     .nl-burger span {
         display: block;
-        width: 28px;
-        height: 4px; /* fetare */
+        width: 24px;
+        height: 3px;
         background: #111;
         border-radius: 999px;
         transition: transform .22s ease, opacity .18s ease;
     }
 
         .nl-burger span:nth-child(1) {
-            transform: translateY(-8px);
+            transform: translateY(-7px);
         }
 
         .nl-burger span:nth-child(3) {
-            transform: translateY( 8px);
+            transform: translateY( 7px);
         }
 
     .nl-burger:hover span {
@@ -231,13 +226,41 @@
         transform: translateY(0) rotate(-45deg);
     }
 
-/* Dropdown panel – aldrig utanför viewport */
+/* ===== Mail section ===== */
+.nl-mail {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 18px;
+    border-left: var(--nl-line) solid #111;
+    min-width: 0;
+    flex: 1 1 auto; /* viktig: låt mailtexten krympa före att UI spricker */
+}
+
+.nl-mail-icon {
+    font-size: 18px;
+    line-height: 1;
+    opacity: 0.9;
+    flex: 0 0 auto;
+}
+
+.nl-mail-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: rgba(0,0,0,0.85);
+    font-weight: 600;
+    min-width: 0;
+}
+
+/* Dropdown panel */
 .nl-menu-panel {
     position: absolute;
     right: 0;
     top: calc(100% + 12px);
     min-width: 220px;
-    max-width: calc(100vw - 24px);
+    max-width: min(320px, calc(100vw - 24px));
+    overflow: hidden;
     background: rgba(255,255,255,0.95);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
@@ -257,8 +280,8 @@
     display: block;
     padding: 10px 12px;
     border-radius: 10px;
-    text-decoration: none;
-    color: #111;
+    text-decoration: none !important;
+    color: #111 !important;
     font-weight: 650;
 }
 
@@ -274,5 +297,28 @@
 
     .nl-user-email {
         max-width: 140px;
+    }
+}
+
+/* Mobil: om du vill att centrum inte ska kollidera när skärmen blir tight */
+@media (max-width: 575.98px) {
+    .nl-center-col {
+        position: static;
+        transform: none;
+        margin: 0 auto;
+    }
+
+    .nl-shell {
+        justify-content: space-between;
+    }
+
+    .nl-center-wrap {
+        border-left: 0;
+        border-right: 0;
+        padding: 0;
+    }
+
+    .nl-right {
+        max-width: 55vw;
     }
 }
