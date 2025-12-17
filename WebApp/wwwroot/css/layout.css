@@ -8,7 +8,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    padding-top: var(--nl-nav-h); /* plats för fixed navbar */
+    padding-top: var(--nl-nav-h);
 }
 
 .nl-main {
@@ -36,23 +36,17 @@
     border-bottom: var(--nl-line) solid #111;
 }
 
-/* shell */
+/* Shell */
 .nl-shell {
     position: relative;
     height: var(--nl-nav-h);
     display: flex;
     align-items: center;
     padding: 0 18px;
-    min-width: 0; /* viktigt för ellipsis */
+    min-width: 0;
 }
 
 /* Left brand */
-.nl-left {
-    display: flex;
-    align-items: center;
-    flex: 0 0 auto;
-}
-
 .nl-brand {
     display: inline-flex;
     align-items: center;
@@ -65,14 +59,14 @@
     letter-spacing: 0.2px;
 }
 
-/* Center column = absolut centrerad */
+/* CENTER = absolut centrerad (mitt i hela headern) */
 .nl-center-col {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
 }
 
-/* Streck runt länkarna (inte runt loggan) */
+/* Streck runt länkarna */
 .nl-center-wrap {
     display: flex;
     align-items: center;
@@ -129,7 +123,7 @@
             transform: scaleX(1);
         }
 
-/* Bootstrap försöker ibland färga länkar -> vi låser ENBART i navbaren */
+/* Lås länkar i navbaren så de aldrig blir blå */
 .nl-navbar a,
 .nl-navbar a:visited,
 .nl-navbar a:hover,
@@ -138,24 +132,24 @@
     text-decoration: none !important;
 }
 
-/* ===== Right column (måste få plats alltid) ===== */
+/* RIGHT = absolut höger (kan aldrig trycka utanför om vi sätter max-width) */
 .nl-right {
-    margin-left: auto;
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
     display: flex;
     align-items: center;
     gap: 14px;
-    min-width: 0;
-    flex: 0 1 auto;
-    /* hård gräns så höger aldrig trycks utanför */
     max-width: min(520px, 46vw);
+    min-width: 0;
 }
 
-    /* se till att flex-items får krympa (annars ignoreras ellipsis) */
     .nl-right > * {
         min-width: 0;
     }
 
-/* streck efter center-wrap */
+/* Streck efter center-wrap */
 .nl-user {
     display: flex;
     align-items: center;
@@ -165,7 +159,6 @@
     min-width: 0;
 }
 
-/* Email ellipsis */
 .nl-user-email {
     max-width: 180px;
     overflow: hidden;
@@ -175,7 +168,7 @@
     color: rgba(0,0,0,0.9);
 }
 
-/* ===== Burger (lite mindre men fortfarande fet) ===== */
+/* Burger */
 .nl-account {
     position: relative;
     flex: 0 0 auto;
@@ -213,7 +206,6 @@
         opacity: .75;
     }
 
-    /* Open -> X */
     .nl-burger.is-open span:nth-child(1) {
         transform: translateY(0) rotate(45deg);
     }
@@ -226,34 +218,7 @@
         transform: translateY(0) rotate(-45deg);
     }
 
-/* ===== Mail section ===== */
-.nl-mail {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding-left: 18px;
-    border-left: var(--nl-line) solid #111;
-    min-width: 0;
-    flex: 1 1 auto; /* viktig: låt mailtexten krympa före att UI spricker */
-}
-
-.nl-mail-icon {
-    font-size: 18px;
-    line-height: 1;
-    opacity: 0.9;
-    flex: 0 0 auto;
-}
-
-.nl-mail-text {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: rgba(0,0,0,0.85);
-    font-weight: 600;
-    min-width: 0;
-}
-
-/* Dropdown panel */
+/* Dropdown */
 .nl-menu-panel {
     position: absolute;
     right: 0;
@@ -289,7 +254,34 @@
         background: rgba(0,0,0,0.05);
     }
 
-/* Mobil: göm mail-text + korta email */
+/* Mail */
+.nl-mail {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 18px;
+    border-left: var(--nl-line) solid #111;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.nl-mail-icon {
+    font-size: 18px;
+    line-height: 1;
+    opacity: 0.9;
+    flex: 0 0 auto;
+}
+
+.nl-mail-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: rgba(0,0,0,0.85);
+    font-weight: 600;
+    min-width: 0;
+}
+
+/* Mobil: göm mailtext + korta email */
 @media (max-width: 768px) {
     .nl-mail-text {
         display: none;
@@ -297,28 +289,5 @@
 
     .nl-user-email {
         max-width: 140px;
-    }
-}
-
-/* Mobil: om du vill att centrum inte ska kollidera när skärmen blir tight */
-@media (max-width: 575.98px) {
-    .nl-center-col {
-        position: static;
-        transform: none;
-        margin: 0 auto;
-    }
-
-    .nl-shell {
-        justify-content: space-between;
-    }
-
-    .nl-center-wrap {
-        border-left: 0;
-        border-right: 0;
-        padding: 0;
-    }
-
-    .nl-right {
-        max-width: 55vw;
     }
 }

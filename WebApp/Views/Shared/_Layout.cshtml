@@ -30,22 +30,15 @@
         <nav class="navbar navbar-expand-sm nl-navbar">
             <div class="container-fluid nl-shell">
 
-                <!-- LEFT: logo (placeholder) -->
+                <!-- LEFT: logo -->
                 <a class="nl-brand" asp-controller="Home" asp-action="Index" aria-label="NotLinkedIn">
                     NotLinkedIn
                 </a>
 
-                <!-- Bootstrap toggler (mobil för länkarna) -->
-                <button class="navbar-toggler nl-toggler" type="button"
-                        data-bs-toggle="collapse" data-bs-target="#mainNav"
-                        aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <!-- CENTER: länkar (absolut centrerade) -->
-                <div class="collapse navbar-collapse nl-center-col justify-content-center" id="mainNav">
+                <!-- CENTER: länkar (ALLTID mitten av hela headern) -->
+                <div class="nl-center-col">
                     <div class="nl-center-wrap" aria-label="Primär navigation">
-                        <ul class="navbar-nav nl-nav-center">
+                        <ul class="navbar-nav flex-row nl-nav-center">
                             <li class="nav-item">
                                 <a class="nav-link nl-link @Active("Home")" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
@@ -65,7 +58,6 @@
                     <div class="nl-user">
                         <span class="nl-user-email" title="jamie@example.se">jamie@example.se</span>
 
-                        <!-- burger (account menu) -->
                         <div class="nl-account">
                             <button class="nl-burger" type="button" aria-label="Öppna meny" aria-expanded="false">
                                 <span></span><span></span><span></span>
@@ -79,7 +71,6 @@
                     </div>
 
                     <div class="nl-mail" title="Du har 3 olästa meddelanden">
-                        <!-- placeholder ikon: byt senare till stängt/öppet kuvert -->
                         <span class="nl-mail-icon" aria-hidden="true">✉</span>
                         <span class="nl-mail-text">Du har <strong>3</strong> olästa meddelanden</span>
                     </div>
