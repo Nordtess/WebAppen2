@@ -27,17 +27,17 @@
 
 <body class="nl-body">
     <header>
-        <nav class="navbar navbar-expand-sm nl-navbar">
+        <nav class="navbar nl-navbar" role="navigation" aria-label="Huvudnavigation">
             <div class="container-fluid nl-shell">
 
                 <!-- LEFT: logo -->
-                <a class="nl-brand" asp-controller="Home" asp-action="Index" aria-label="NotLinkedIn">
+                <a class="nl-brand" asp-controller="Home" asp-action="Index" aria-label="Till startsidan">
                     NotLinkedIn
                 </a>
 
-                <!-- CENTER: länkar (ALLTID mitten av hela headern) -->
-                <div class="nl-center-col">
-                    <div class="nl-center-wrap" aria-label="Primär navigation">
+                <!-- CENTER: länkar (absolut centrerad på stora skärmar, dold på mindre) -->
+                <div class="nl-center-col" aria-label="Primär navigation">
+                    <div class="nl-center-wrap">
                         <ul class="navbar-nav flex-row nl-nav-center">
                             <li class="nav-item">
                                 <a class="nav-link nl-link @Active("Home")" asp-controller="Home" asp-action="Index">Home</a>
@@ -52,27 +52,31 @@
                     </div>
                 </div>
 
-                <!-- RIGHT: user + burger + mail (placeholders) -->
+                <!-- RIGHT: user + burger + mail -->
                 <div class="nl-right" aria-label="Användarområde">
 
+                    <!-- Mail notification (responsive) -->
+                    <div class="nl-mail" title="Du har 3 olästa meddelanden">
+                        <span class="nl-mail-icon" aria-hidden="true">✉</span>
+                        <span class="nl-mail-text">Du har <strong>3</strong> olästa meddelanden</span>
+                    </div>
+
+                    <!-- User section with burger menu -->
                     <div class="nl-user">
                         <span class="nl-user-email" title="jamie@example.se">jamie@example.se</span>
 
                         <div class="nl-account">
-                            <button class="nl-burger" type="button" aria-label="Öppna meny" aria-expanded="false">
-                                <span></span><span></span><span></span>
+                            <button class="nl-burger" type="button" aria-label="Öppna meny" aria-expanded="false" aria-controls="user-menu">
+                                <span></span>
+                                <span></span>
+                                <span></span>
                             </button>
 
-                            <div class="nl-menu-panel" aria-hidden="true">
-                                <a class="nl-menu-item" asp-controller="MyCV" asp-action="Index">Mitt CV</a>
-                                <a class="nl-menu-item" asp-controller="Messages" asp-action="Index">Mina meddelanden</a>
+                            <div class="nl-menu-panel" id="user-menu" aria-hidden="true" role="menu">
+                                <a class="nl-menu-item" asp-controller="MyCV" asp-action="Index" role="menuitem">Mitt CV</a>
+                                <a class="nl-menu-item" asp-controller="Messages" asp-action="Index" role="menuitem">Mina meddelanden</a>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="nl-mail" title="Du har 3 olästa meddelanden">
-                        <span class="nl-mail-icon" aria-hidden="true">✉</span>
-                        <span class="nl-mail-text">Du har <strong>3</strong> olästa meddelanden</span>
                     </div>
 
                 </div>
@@ -81,11 +85,11 @@
         </nav>
     </header>
 
-    <main class="nl-main container">
+    <main class="nl-main container" role="main">
         @RenderBody()
     </main>
 
-    <footer class="nl-footer border-top text-muted">
+    <footer class="nl-footer border-top text-muted" role="contentinfo">
         <div class="container">
             &copy; 2025 - WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
