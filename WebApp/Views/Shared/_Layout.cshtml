@@ -1,12 +1,9 @@
 ﻿@{
-    // PLACEHOLDERS
-    var mockUserEmail = "jamie@example.se";
-    var unreadCount = 3;
-    var hasUnread = unreadCount > 0;
-
-    // Active-markering (valfritt men nice)
-    var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
-    string Active(string controller) => currentController == controller ? " active" : "";
+    string Active(string controller)
+    {
+        var current = ViewContext.RouteData.Values["controller"]?.ToString();
+        return string.Equals(current, controller, StringComparison.OrdinalIgnoreCase) ? "active" : "";
+    }
 }
 
 <!DOCTYPE html>
@@ -28,85 +25,76 @@
     @RenderSection("Styles", required: false)
 </head>
 
-<body>
+<body class="nl-body">
     <header>
         <nav class="navbar navbar-expand-sm nl-navbar">
-            <div class="container-fluid nl-grid">
+            <div class="container-fluid nl-shell">
 
-                <!-- VÄNSTER: LOGGA -->
-                <div class="nl-left">
-                    <a class="nl-brand" asp-controller="Home" asp-action="Index" aria-label="NotLinkedIn">
-                        <span class="nl-logo-pill">NotLinkedIn</span>
-                    </a>
+                <!-- LEFT: logo (placeholder) -->
+                <a class="nl-brand" asp-controller="Home" asp-action="Index" aria-label="NotLinkedIn">
+                    NotLinkedIn
+                </a>
+
+                <!-- Bootstrap toggler (mobil för länkarna) -->
+                <button class="navbar-toggler nl-toggler" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#mainNav"
+                        aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- CENTER: länkar (absolut centrerade) -->
+                <div class="collapse navbar-collapse nl-center-col justify-content-center" id="mainNav">
+                    <div class="nl-center-wrap" aria-label="Primär navigation">
+                        <ul class="navbar-nav nl-nav-center">
+                            <li class="nav-item">
+                                <a class="nav-link nl-link @Active("Home")" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nl-link @Active("Login")" asp-controller="Login" asp-action="Index">Logga in</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nl-link @Active("NewUser")" asp-controller="NewUser" asp-action="Index">Bli medlem</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
-                <!-- MITTEN: (streck + länkar) -->
-                <div class="collapse navbar-collapse justify-content-center" id="mainNav">
-                    <ul class="navbar-nav nl-nav-center">
-                        <li class="nav-item">
-                            <a class="nav-link nl-link" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link nl-link" asp-controller="Login" asp-action="Index">Logga in</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link nl-link" asp-controller="NewUser" asp-action="Index">Bli medlem</a>
-                        </li>
-                    </ul>
+                <!-- RIGHT: user + burger + mail (placeholders) -->
+                <div class="nl-right" aria-label="Användarområde">
 
-                <!-- HÖGER: (streck + user + burger + streck + mail) -->
-                <div class="nl-right">
-                    <span class="nl-vline" aria-hidden="true"></span>
+                    <div class="nl-user">
+                        <span class="nl-user-email" title="jamie@example.se">jamie@example.se</span>
 
-                    <span class="nl-user">@mockUserEmail</span>
+                        <!-- burger (account menu) -->
+                        <div class="nl-account">
+                            <button class="nl-burger" type="button" aria-label="Öppna meny" aria-expanded="false">
+                                <span></span><span></span><span></span>
+                            </button>
 
-                    <button class="nl-menu-btn" type="button" aria-label="Öppna meny" aria-expanded="false">
-                        <span class="nl-menu-lines" aria-hidden="true">
-                            <span></span><span></span><span></span>
-                        </span>
-                    </button>
-
-                    <div class="nl-menu-panel" aria-hidden="true">
-                        <a class="nl-menu-item" asp-controller="MyCV" asp-action="Index">Mitt CV</a>
-                        <a class="nl-menu-item" asp-controller="Messages" asp-action="Index">Mina meddelanden</a>
+                            <div class="nl-menu-panel" aria-hidden="true">
+                                <a class="nl-menu-item" asp-controller="MyCV" asp-action="Index">Mitt CV</a>
+                                <a class="nl-menu-item" asp-controller="Messages" asp-action="Index">Mina meddelanden</a>
+                            </div>
+                        </div>
                     </div>
 
-                    <span class="nl-vline" aria-hidden="true"></span>
+                    <div class="nl-mail" title="Du har 3 olästa meddelanden">
+                        <!-- placeholder ikon: byt senare till stängt/öppet kuvert -->
+                        <span class="nl-mail-icon" aria-hidden="true">✉</span>
+                        <span class="nl-mail-text">Du har <strong>3</strong> olästa meddelanden</span>
+                    </div>
 
-                    <a class="nl-mail @(hasUnread ? "has-unread" : "")"
-                       asp-controller="Messages" asp-action="Index">
-                        <span class="nl-mail-icon" aria-hidden="true">
-                            <!-- stängt kuvert -->
-                            <svg class="icon-closed" width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                <path d="M4 7.5C4 6.12 5.12 5 6.5 5h11C18.88 5 20 6.12 20 7.5v9c0 1.38-1.12 2.5-2.5 2.5h-11C5.12 19 4 17.88 4 16.5v-9Z" stroke="currentColor" stroke-width="1.8" />
-                                <path d="M5.2 7.2 12 12.1l6.8-4.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-
-                            <!-- öppet kuvert -->
-                            <svg class="icon-open" width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                <path d="M4.5 10.5 12 5l7.5 5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M6.3 9.6h11.4c1.1 0 2 .9 2 2v6.2c0 1.1-.9 2-2 2H6.3c-1.1 0-2-.9-2-2v-6.2c0-1.1.9-2 2-2Z" stroke="currentColor" stroke-width="1.8" />
-                                <path d="M6.2 12 12 15.7 17.8 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </span>
-
-                        <span class="nl-mail-text">
-                            @(hasUnread ? $"Du har {unreadCount} olästa meddelanden" : "Inga olästa meddelanden")
-                        </span>
-                    </a>
                 </div>
 
             </div>
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <main class="nl-main container">
+        @RenderBody()
+    </main>
 
-    <footer class="border-top footer text-muted">
+    <footer class="nl-footer border-top text-muted">
         <div class="container">
             &copy; 2025 - WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>

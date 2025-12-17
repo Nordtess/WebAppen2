@@ -1,5 +1,5 @@
 ﻿document.addEventListener("click", (e) => {
-    const btn = document.querySelector(".nl-menu-btn");
+    const btn = document.querySelector(".nl-burger");
     const panel = document.querySelector(".nl-menu-panel");
     if (!btn || !panel) return;
 
@@ -26,7 +26,7 @@
 document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
 
-    const btn = document.querySelector(".nl-menu-btn");
+    const btn = document.querySelector(".nl-burger");
     const panel = document.querySelector(".nl-menu-panel");
     if (!btn || !panel) return;
 
