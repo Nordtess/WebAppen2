@@ -55,3 +55,12 @@ html {
         padding: 0.5rem;
     }
 }
+
+/* Ensure no conflicts with navigation */
+.navbar {
+    box-sizing: border-box;
+}
+
+.navbar * {
+    box-sizing: border-box;
+}

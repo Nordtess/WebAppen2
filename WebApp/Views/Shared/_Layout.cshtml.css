@@ -47,36 +47,5 @@ button.accept-policy {
   line-height: 60px;
 }
 
-
-
-.navbar {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    padding-top: 18px;
-    padding-bottom: 18px;
-    background: rgba(255, 255, 255, 0.88) !important;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-bottom: 2px solid #111 !important;
-    box-shadow: none !important;
-    margin-bottom: 0 !important;
-}
-
-    
-.navbar .nav-link,
-.navbar .navbar-brand {
-        font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-        font-size: 20px;
-        font-weight: 700;
-        color: #111 !important;
-        opacity: 0.85;
-        letter-spacing: 0.2px;
-        transition: opacity 0.2s ease;
-}
-
-.navbar .nav-link:hover,
-.navbar .navbar-brand:hover {
-            opacity: 0.55;
-}
+/* Removed conflicting navbar styles - these are now in layout.css */
 
