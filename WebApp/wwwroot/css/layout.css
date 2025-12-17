@@ -229,7 +229,7 @@
 /* Dropdown: left edge aligned to right side of burger button */
 .nl-menu-panel {
     position: absolute;
-    left: 100%; /* Left edge starts at right side of button */
+    left: -50%; /* Left edge starts at right side of button */
     top: calc(100% + 12px); /* Below the burger button */
     transform: none;
     min-width: 220px;
