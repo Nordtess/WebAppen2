@@ -47,25 +47,25 @@ button.accept-policy {
   line-height: 60px;
 }
 
-/* ===== Apple-ish Bootstrap navbar overrides ===== */
+
 
 .navbar {
     position: sticky;
     top: 0;
     z-index: 1000;
-    padding-top: 18px; /* gör den "högre" */
+    padding-top: 18px;
     padding-bottom: 18px;
     background: rgba(255, 255, 255, 0.88) !important;
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border-bottom: 1px solid rgba(0,0,0,0.08) !important;
-    box-shadow: none !important; /* ta bort bootstrap shadow */
-    margin-bottom: 0 !important; /* tar bort mb-3-effekten */
+    box-shadow: none !important;
+    margin-bottom: 0 !important;
 }
 
-    /* Apple-lik typografi */
-    .navbar .nav-link,
-    .navbar .navbar-brand {
+    
+.navbar .nav-link,
+.navbar .navbar-brand {
         font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
         font-size: 20px;
         font-weight: 700;
@@ -73,10 +73,10 @@ button.accept-policy {
         opacity: 0.85;
         letter-spacing: 0.2px;
         transition: opacity 0.2s ease;
-    }
+}
 
-        .navbar .nav-link:hover,
-        .navbar .navbar-brand:hover {
+.navbar .nav-link:hover,
+.navbar .navbar-brand:hover {
             opacity: 0.55;
-        }
+}
 

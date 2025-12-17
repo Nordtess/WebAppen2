@@ -38,6 +38,10 @@ body {
  
 .navbar .nav-link:hover::after {
         transform: scaleX(1);
+ }
+
+.navbar .nav-link.active::after {
+        transform: scaleX(1);
 }
 
 
