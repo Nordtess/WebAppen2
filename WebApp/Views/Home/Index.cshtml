@@ -1,115 +1,98 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/home.css" asp-append-version="true" />
 }
 
+<div class="home-page">
 
+    <section class="home-hero">
+        <img class="home-logo" src="~/images/logos/logo.png" alt="NotLinkedIn logo" />
 
-<div class="logo">
-<img src="~/images/logos/logo.png" alt="NotLinkedIn logo" />
-</div>
+        <h1 class="home-h1">Välkommen till NotLinkedIn!</h1>
 
-
-<div class="home-title">
-    <h1 class="title">Välkommen till NotLinkedIn!</h1>
-</div>
-
-<div class="home-text">
-    <p>NotLinkedIn är en webbaserad plattform där individer kan skapa,
-       designa och presentera sina personliga CV på ett tydligt och visuellt tilltalande sätt.
-        Fokus ligger på att ge användaren full kontroll över hur kompetens, erfarenhet och
-        personlighet visas – utan onödiga titlar, klichéer eller överdrivna formuleringar.
-    </p>
-    <p>Som användare kan du bygga ett CV som faktiskt speglar vem du är och vad du kan bidra med. 
-        Genom en strukturerad men flexibel design går det att lyfta fram utbildning, arbetslivserfarenhet, 
-        tekniska färdigheter och personliga styrkor på ett sätt som är lätt att ta till sig för andra.
-    </p>
-    <p>Plattformen är samtidigt anpassad för arbetsgivare och rekryterare. 
-        Genom sök- och filtreringsfunktioner kan företag hitta relevanta kandidater baserat på kompetenser, 
-        erfarenhet och andra kriterier, snarare än enbart jobbtitlar eller nyckelord. 
-        Målet är att skapa bättre och mer träffsäkra matchningar mellan människor och öppna positioner.
-    </p>
-    <p>NotLinkedIn fungerar alltså från två håll – både som ett 
-        verktyg för personer som vill presentera sig själva 
-        professionellt och som ett stöd för arbetsgivare som söker rätt 
-        person till rätt roll. Resultatet är en mer ärlig, överskådlig och effektiv process 
-        för både kandidater och rekryterare.
-    </p>
-</div>
-
-
-<div class="home-title2">
-    <h2 class="title2">Privat meddelande funktion</h2>
-</div>
-
-<div class="home-message">
-    <p>Plattformen innehåller även en säker och privat meddelandetjänst som gör 
-        det möjligt för användare att kommunicera direkt med varandra. 
-        Meddelandefunktionen är utformad för att skydda användarnas 
-        integritet och säkerställa att konversationer förblir privata mellan 
-        avsändare och mottagare.
-    </p>
-    <p>Genom den inbyggda meddelandetjänsten kan kandidater och arbetsgivare enkelt ta 
-        kontakt, ställa frågor och föra dialog kring 
-        möjligheter och öppna positioner – utan att behöva använda 
-        externa kommunikationsverktyg. Detta skapar en sammanhållen och trygg 
-        upplevelse där all relevant interaktion sker direkt på plattformen.
-    </p>
-</div>
-
-<div class="home-section">
-
-    <div class="customer-story">
-        <div class="story-image">
-            <img src="~/images/customers/customer1.png" alt="Anna, småföretagare">
-        </div>
-
-        <div class="story-text">
-            <h3>Anna, småföretagare</h3>
+        <div class="home-card home-card--text">
             <p>
-                Med vår plattform kan Anna tryggt kontakta andra användare
-                och dela erfarenheter via privata, säkra meddelanden.
+                NotLinkedIn är en webbaserad plattform där individer kan skapa, designa och presentera sina personliga CV
+                på ett tydligt och visuellt tilltalande sätt. Fokus ligger på att ge användaren full kontroll över hur
+                kompetens, erfarenhet och personlighet visas – utan onödiga titlar, klichéer eller överdrivna formuleringar.
             </p>
-
-            <blockquote class="story-quote">
-                "Jag trodde aldrig det skulle kännas så enkelt att hitta rätt kontakter.
-                Meddelandefunktionen gjorde att jag kunde prata direkt med rätt personer,
-                ställa frågor och bygga förtroende – utan att lämna plattformen."
-            </blockquote>
-        </div>
-    </div>
-
-</div>
-
-<div class="home-section">
-
-    <div class="customer-story reverse">
-        <div class="story-image">
-            <img src="~/images/customers/customer2.png" alt="Anna, småföretagare">
-        </div>
-
-        <div class="story-text">
-            <h3>Erik, rekryterare</h3>
             <p>
-                Som rekryterare använder Erik plattformen för att snabbt komma i kontakt
-                med kandidater och föra en mer personlig dialog redan i ett tidigt skede.
+                Som användare kan du bygga ett CV som faktiskt speglar vem du är och vad du kan bidra med. Genom en strukturerad
+                men flexibel design går det att lyfta fram utbildning, arbetslivserfarenhet, tekniska färdigheter och personliga
+                styrkor på ett sätt som är lätt att ta till sig för andra.
             </p>
-
-            <blockquote class="story-quote">
-                "För mig har det gjort stor skillnad att kunna kontakta kandidater direkt
-                på plattformen. Jag får en bättre bild av personen bakom CV:t och kan ställa
-                rätt frågor tidigt i processen. Det sparar tid, minskar missförstånd och gör
-                rekryteringen betydligt mer mänsklig."
-            </blockquote>
+            <p>
+                Plattformen är samtidigt anpassad för arbetsgivare och rekryterare. Genom sök- och filtreringsfunktioner kan
+                företag hitta relevanta kandidater baserat på kompetenser, erfarenhet och andra kriterier, snarare än enbart
+                jobbtitlar eller nyckelord. Målet är att skapa bättre och mer träffsäkra matchningar mellan människor och öppna positioner.
+            </p>
+            <p>
+                NotLinkedIn fungerar alltså från två håll – både som ett verktyg för personer som vill presentera sig själva
+                professionellt och som ett stöd för arbetsgivare som söker rätt person till rätt roll. Resultatet är en mer ärlig,
+                överskådlig och effektiv process för både kandidater och rekryterare.
+            </p>
         </div>
-    </>
+    </section>
+
+    <section class="home-feature">
+        <h2 class="home-h2">Privat meddelandefunktion</h2>
+
+        <div class="home-card home-card--text">
+            <p>
+                Plattformen innehåller även en säker och privat meddelandetjänst som gör det möjligt för användare att kommunicera
+                direkt med varandra. Meddelandefunktionen är utformad för att skydda användarnas integritet och säkerställa att
+                konversationer förblir privata mellan avsändare och mottagare.
+            </p>
+            <p>
+                Genom den inbyggda meddelandetjänsten kan kandidater och arbetsgivare enkelt ta kontakt, ställa frågor och föra dialog
+                kring möjligheter och öppna positioner – utan att behöva använda externa kommunikationsverktyg. Detta skapar en sammanhållen
+                och trygg upplevelse där all relevant interaktion sker direkt på plattformen.
+            </p>
+        </div>
+    </section>
+
+    <section class="home-stories" aria-label="Kundberättelser">
+        <article class="story-card">
+            <div class="story-media">
+                <img src="~/images/customers/customer1.png" alt="Anna, småföretagare" />
+            </div>
+
+            <div class="story-content">
+                <h3 class="story-title">Anna, småföretagare</h3>
+                <p class="story-lead">
+                    Med vår plattform kan Anna tryggt kontakta andra användare och dela erfarenheter via privata, säkra meddelanden.
+                </p>
+
+                <blockquote class="story-quote">
+                    "Jag trodde aldrig det skulle kännas så enkelt att hitta rätt kontakter.
+                    Meddelandefunktionen gjorde att jag kunde prata direkt med rätt personer,
+                    ställa frågor och bygga förtroende – utan att lämna plattformen."
+                </blockquote>
+            </div>
+        </article>
+
+        <article class="story-card story-card--reverse">
+            <div class="story-media">
+                <img src="~/images/customers/customer2.png" alt="Erik, rekryterare" />
+            </div>
+
+            <div class="story-content">
+                <h3 class="story-title">Erik, rekryterare</h3>
+                <p class="story-lead">
+                    Som rekryterare använder Erik plattformen för att snabbt komma i kontakt med kandidater och föra en mer personlig
+                    dialog redan i ett tidigt skede.
+                </p>
+
+                <blockquote class="story-quote">
+                    "För mig har det gjort stor skillnad att kunna kontakta kandidater direkt på plattformen.
+                    Jag får en bättre bild av personen bakom CV:t och kan ställa rätt frågor tidigt i processen.
+                    Det sparar tid, minskar missförstånd och gör rekryteringen betydligt mer mänsklig."
+                </blockquote>
+            </div>
+        </article>
+    </section>
 
 </div>
-
-
-
-
-

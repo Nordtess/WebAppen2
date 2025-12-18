@@ -1,149 +1,362 @@
-﻿.logo img {
-    width: 400px;
-    max-width: 90%;
+﻿:root {
+    --home-max: 780px; /* var 900px -> smalare = högre */
+    --home-radius: 14px;
+    --home-border: 1px solid rgba(0,0,0,.22);
+    --home-shadow: 0 10px 26px rgba(0,0,0,.06);
+    --home-pad: 22px; /* var 18px -> mer luft i textkorten */
+    --home-gap: 14px;
+}
+
+/* Page wrapper */
+.home-page {
+    max-width: var(--home-max);
+    margin: 0 auto;
+    padding: 22px 18px 28px;
+}
+
+/* Hero */
+.home-hero {
+    text-align: center;
+}
+
+.home-logo {
+    width: 260px;
+    max-width: 80%;
     height: auto;
     display: block;
-    margin: 40px auto 20px;
+    margin: 18px auto 10px;
 }
 
-.home-title {
+.home-h1 {
+    margin: 10px 0 16px;
+    font-size: 32px;
+    font-weight: 850;
+    letter-spacing: -0.02em;
+}
+
+/* Section title */
+.home-h2 {
+    margin: 22px 0 12px;
     text-align: center;
-    margin: 30px auto;
+    font-size: 22px;
+    font-weight: 760;
+    letter-spacing: -0.01em;
 }
 
-.home-title .title {
-        font-weight: 800;
-        font-size: 40px;
-        margin: 0;
-}
-
-.home-text {
-    max-width: 900px;
-    margin: 30px auto;
-    padding: 24px 28px;
-    border: 2px solid #111;
-    border-radius: 12px;
+/* Shared card */
+.home-card {
     background: #fff;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    
+    border: var(--home-border);
+    border-radius: var(--home-radius);
+    box-shadow: var(--home-shadow);
+    padding: var(--home-pad);
 }
 
-.home-text p {
-        font-size: 20px;
-        line-height: 1.7;
-        margin: 0 0 16px;
-        font-weight: 450;
-        text-align: justify;
-}
-
-.home-text p:last-child {
-        margin-bottom: 0;
-}
-
-
-.home-title2 {
-    margin: 30px auto;
-    text-align: center;
-}
-
-.home-title2 h2 {
-    font-size: 30px;
-    font-weight: 600;
-}
-
-.home-message {
-    max-width: 900px;
-    margin: 30px auto;
-    padding: 24px 28px;
-    border: 2px solid #111;
-    border-radius: 12px;
-    background: #fff;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-}
-
-.home-message p {
-    font-size: 20px;
+/* Text block inside card */
+.home-card--text p {
+    margin: 0 0 12px;
+    font-size: 16px;
     line-height: 1.7;
-    margin: 0 0 16px;
     font-weight: 450;
+    color: rgba(0,0,0,.84);
+    /* dina önskemål */
     text-align: justify;
+    text-justify: inter-word;
+    /* gör raderna lite kortare -> korten blir högre + mer premium */
+    max-width: 66ch;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.home-section {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 1rem;
-}
+    .home-card--text p:last-child {
+        margin-bottom: 0;
+    }
 
-/* Testimonial/Customer Story Sections */
-.customer-story {
+/* Stories */
+.home-stories {
     display: flex;
-    align-items: flex-start;
-    gap: 3rem;
-    margin: 3rem auto 4rem;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 18px;
 }
 
-.story-image img {
-    width: 340px;
-    border-radius: 16px;
+/* Story card */
+.story-card {
+    display: grid;
+    grid-template-columns: 250px 1fr; /* var 280px -> smalare bildkolumn */
+    gap: 18px;
+    align-items: start;
+    background: #fff;
+    border: var(--home-border);
+    border-radius: var(--home-radius);
+    box-shadow: var(--home-shadow);
+    padding: 18px;
+}
+
+/* Reverse for desktop */
+.story-card--reverse {
+    grid-template-columns: 1fr 250px; /* var 280px */
+}
+
+    .story-card--reverse .story-media {
+        order: 2;
+    }
+
+    .story-card--reverse .story-content {
+        order: 1;
+    }
+
+/* Media */
+.story-media img {
+    width: 100%;
     display: block;
+    border-radius: 16px;
 }
 
-.story-text {
-    max-width: 420px;
+/* Content */
+.story-title {
+    margin: 2px 0 8px;
+    font-size: 18px;
+    font-weight: 780;
 }
 
-.story-text h3 {
-        margin-top: 0;
-        font-size: 1.5rem;
-}
-
-.story-text p {
-        margin-top: 0.75rem;
-        line-height: 1.6;
-        color: #444;
-        font-size: 18px;
+.story-lead {
+    margin: 0 0 12px;
+    font-size: 15px;
+    line-height: 1.65;
+    color: rgba(0,0,0,.70);
 }
 
 .story-quote {
-    margin: 1rem 0 0;
-    padding: 1rem 1.25rem;
-    border-left: 4px solid #111;
-    background: #f6f6f6;
+    margin: 0;
+    padding: 14px 14px;
+    border-left: 4px solid rgba(0,0,0,.85);
+    background: rgba(0,0,0,.04);
     border-radius: 12px;
-    color: #222;
-    line-height: 1.6;
+    color: rgba(0,0,0,.85);
+    line-height: 1.65;
     font-style: italic;
-    font-size: 20px;
+    font-size: 15px;
 }
 
-/* Reverse layout for desktop (image on right) */
-.customer-story.reverse {
-    flex-direction: row-reverse;
-}
-
-/* Mobile: consistent stacking for ALL testimonials */
+/* Mobile */
 @media (max-width: 800px) {
-    .customer-story,
-    .customer-story.reverse {
-        flex-direction: column;
-        align-items: center;
+    .home-page {
+        padding: 18px 14px 24px;
     }
 
-    .story-image {
-        width: 100%;
-        max-width: 100%;
+    .home-h1 {
+        font-size: 26px;
     }
 
-    .story-image img {
-        width: 100%;
-        max-width: 100%;
+    .home-h2 {
+        font-size: 20px;
     }
 
-    .story-text {
-        width: 100%;
+    /* lite mindre padding på små skärmar */
+    .home-card {
+        padding: 20px;
+    }
+
+    .home-card--text p {
         max-width: 100%;
+        text-align: left; /* justify på mobil kan se konstigt ut */
+    }
+
+    .story-card,
+    .story-card--reverse {
+        grid-template-columns: 1fr;
+    }
+
+        .story-card--reverse .story-media,
+        .story-card--reverse .story-content {
+            order: initial;
+        }
+
+    .story-title,
+    .story-lead,
+    .story-quote {
         text-align: center;
     }
 }
+:root {
+    --home-max: 780px; /* var 900px -> smalare = högre */
+    --home-radius: 14px;
+    --home-border: 1px solid rgba(0,0,0,.22);
+    --home-shadow: 0 10px 26px rgba(0,0,0,.06);
+    --home-pad: 22px; /* var 18px -> mer luft i textkorten */
+    --home-gap: 14px;
+}
 
+/* Page wrapper */
+.home-page {
+    max-width: var(--home-max);
+    margin: 0 auto;
+    padding: 22px 18px 28px;
+}
+
+/* Hero */
+.home-hero {
+    text-align: center;
+}
+
+.home-logo {
+    width: 260px;
+    max-width: 80%;
+    height: auto;
+    display: block;
+    margin: 18px auto 10px;
+}
+
+.home-h1 {
+    margin: 10px 0 16px;
+    font-size: 32px;
+    font-weight: 850;
+    letter-spacing: -0.02em;
+}
+
+/* Section title */
+.home-h2 {
+    margin: 22px 0 12px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 760;
+    letter-spacing: -0.01em;
+}
+
+/* Shared card */
+.home-card {
+    background: #fff;
+    border: var(--home-border);
+    border-radius: var(--home-radius);
+    box-shadow: var(--home-shadow);
+    padding: var(--home-pad);
+}
+
+/* Text block inside card */
+.home-card--text p {
+    margin: 0 0 12px;
+    font-size: 16px;
+    line-height: 1.7;
+    font-weight: 450;
+    color: rgba(0,0,0,.84);
+    /* dina önskemål */
+    text-align: justify;
+    text-justify: inter-word;
+    /* gör raderna lite kortare -> korten blir högre + mer premium */
+    max-width: 66ch;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    .home-card--text p:last-child {
+        margin-bottom: 0;
+    }
+
+/* Stories */
+.home-stories {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 18px;
+}
+
+/* Story card */
+.story-card {
+    display: grid;
+    grid-template-columns: 250px 1fr; /* var 280px -> smalare bildkolumn */
+    gap: 18px;
+    align-items: start;
+    background: #fff;
+    border: var(--home-border);
+    border-radius: var(--home-radius);
+    box-shadow: var(--home-shadow);
+    padding: 18px;
+}
+
+/* Reverse for desktop */
+.story-card--reverse {
+    grid-template-columns: 1fr 250px; /* var 280px */
+}
+
+    .story-card--reverse .story-media {
+        order: 2;
+    }
+
+    .story-card--reverse .story-content {
+        order: 1;
+    }
+
+/* Media */
+.story-media img {
+    width: 100%;
+    display: block;
+    border-radius: 16px;
+}
+
+/* Content */
+.story-title {
+    margin: 2px 0 8px;
+    font-size: 18px;
+    font-weight: 780;
+}
+
+.story-lead {
+    margin: 0 0 12px;
+    font-size: 15px;
+    line-height: 1.65;
+    color: rgba(0,0,0,.70);
+}
+
+.story-quote {
+    margin: 0;
+    padding: 14px 14px;
+    border-left: 4px solid rgba(0,0,0,.85);
+    background: rgba(0,0,0,.04);
+    border-radius: 12px;
+    color: rgba(0,0,0,.85);
+    line-height: 1.65;
+    font-style: italic;
+    font-size: 15px;
+}
+
+/* Mobile */
+@media (max-width: 800px) {
+    .home-page {
+        padding: 18px 14px 24px;
+    }
+
+    .home-h1 {
+        font-size: 26px;
+    }
+
+    .home-h2 {
+        font-size: 20px;
+    }
+
+    /* lite mindre padding på små skärmar */
+    .home-card {
+        padding: 20px;
+    }
+
+    .home-card--text p {
+        max-width: 100%;
+        text-align: left; /* justify på mobil kan se konstigt ut */
+    }
+
+    .story-card,
+    .story-card--reverse {
+        grid-template-columns: 1fr;
+    }
+
+        .story-card--reverse .story-media,
+        .story-card--reverse .story-content {
+            order: initial;
+        }
+
+    .story-title,
+    .story-lead,
+    .story-quote {
+        text-align: center;
+    }
+}
