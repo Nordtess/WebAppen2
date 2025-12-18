@@ -1,12 +1,18 @@
 ﻿:root {
-    --home-max: 780px;
+    --home-max: 900px;
     --home-radius: 14px;
     --home-border: 1px solid rgba(0,0,0,.22);
     --home-shadow: 0 10px 26px rgba(0,0,0,.06);
-    --home-pad: 22px;
+    --home-pad: 18px;
     --home-gap: 14px;
-    /* Banner-pan (ändra denna om du vill mer/mindre ansikte) */
-    --banner-pan-y: 30%; /* 60% lite, 70% lagom, 80% mycket */
+    /* Carousel knobs */
+    --carousel-h: 260px; /* 👈 gör “gröna kortet” högre här */
+    --slide-w: 620px; /* fokus-kort bredd */
+    --slide-h: 210px; /* fokus-kort höjd */
+    --side-scale: 0.86; /* storlek på sidkort */
+    --side-x: 320px; /* hur långt åt sidan sidkort flyttas */
+    --side-tilt: 0deg; /* kan vara typ 1deg om du vill */
+    --card-border-strong: 2px solid rgba(0,0,0,.92); /* stark svart border runt korten */
 }
 
 /* Page wrapper */
@@ -45,6 +51,10 @@
     letter-spacing: -0.01em;
 }
 
+.home-h2--in-card {
+    margin: 0 0 8px;
+}
+
 /* Shared card */
 .home-card {
     background: #fff;
@@ -58,47 +68,323 @@
 .home-card--text p {
     margin: 0 0 12px;
     font-size: 16px;
-    line-height: 1.7;
+    line-height: 1.75;
     font-weight: 450;
     color: rgba(0,0,0,.84);
-    text-align: justify;
-    text-justify: inter-word;
-    max-width: 66ch;
-    margin-left: auto;
-    margin-right: auto;
+    text-align: justify; /* 👈 du ville ha justify */
 }
 
     .home-card--text p:last-child {
         margin-bottom: 0;
     }
 
-/* =========================================
-   Banner card (Privat meddelandefunktion)
-   ========================================= */
-.home-card--banner {
+/* Message card with banner */
+.home-message-card {
     padding: 0;
     overflow: hidden;
 }
 
-.home-card__banner {
-    width: 100%;
-    border-bottom: var(--home-border);
+.home-message-banner {
+    height: 190px;
+    border-bottom: 1px solid rgba(0,0,0,.12);
     background: rgba(0,0,0,.03);
+    overflow: hidden;
 }
 
-    .home-card__banner img {
-        width: 100%;
-        height: 170px;
-        object-fit: cover;
-        /* 👇 flytta motivet nedåt (ansiktet syns mer) */
-        object-position: 50% var(--banner-pan-y);
-        display: block;
-        filter: saturate(0.95) contrast(0.98);
+.home-message-banner-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    /* 👇 “skjut ned” motivet så ansiktet syns mer */
+    object-position: center 35%;
+}
+
+.home-message-body {
+    padding: 18px 18px 18px; /* lite mer “luft” för texten */
+}
+
+/* Feature cards (CV carousel + latest project) */
+.home-feature-card {
+    margin-top: 16px;
+}
+
+.home-feature-head {
+    text-align: center;
+    padding: 4px 6px 10px;
+}
+
+.home-feature-sub {
+    margin: 0 auto;
+    max-width: 720px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: rgba(0,0,0,.65);
+    font-weight: 560;
+}
+
+/* =========================
+   CV CAROUSEL (NO OVERLAYS)
+   ========================= */
+.cv-carousel {
+    margin-top: 10px;
+    position: relative;
+}
+
+/* Stage: give space, no grey overlays, no clipping */
+.cv-stage {
+    position: relative;
+    height: var(--carousel-h);
+    display: block;
+    overflow: visible; /* 👈 så sidkorten syns */
+}
+
+/* Slides */
+.cv-slide {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(var(--slide-w), 92%);
+    height: var(--slide-h);
+    transform: translate(-50%, -50%) scale(0.92);
+    transform-origin: center;
+    opacity: 0;
+    z-index: 1;
+    pointer-events: none; /* 👈 viktigt: sidkort ska inte stjäla klick */
+    text-decoration: none;
+    color: inherit;
+    transition: transform .28s ease, opacity .22s ease, filter .22s ease;
+}
+
+/* The actual mini CV card */
+.cv-mini {
+    height: 100%;
+    border: var(--card-border-strong); /* 👈 stark svart border */
+    border-radius: 18px;
+    background: rgba(255,255,255,.96);
+    box-shadow: 0 18px 36px rgba(0,0,0,.10);
+    padding: 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Active (center) */
+.cv-slide.is-active {
+    opacity: 1;
+    z-index: 4;
+    pointer-events: auto; /* 👈 klicka på kortet i fokus */
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Left / Right */
+.cv-slide.is-left {
+    opacity: .75;
+    z-index: 2;
+    transform: translate(calc(-50% - var(--side-x)), -50%) scale(var(--side-scale)) rotate(var(--side-tilt));
+    filter: saturate(.95) contrast(.98);
+}
+
+.cv-slide.is-right {
+    opacity: .75;
+    z-index: 2;
+    transform: translate(calc(-50% + var(--side-x)), -50%) scale(var(--side-scale)) rotate(var(--side-tilt));
+    filter: saturate(.95) contrast(.98);
+}
+
+/* Hover animation on active card */
+.cv-slide.is-active:hover {
+    transform: translate(-50%, -50%) scale(1.02);
+}
+
+/* Mini CV content */
+.cv-mini-top {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.cv-mini-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,.18);
+    display: grid;
+    place-items: center;
+    font-weight: 850;
+    color: rgba(0,0,0,.72);
+    background: rgba(0,0,0,.03);
+    flex: 0 0 auto;
+}
+
+.cv-mini-name {
+    font-size: 18px;
+    font-weight: 860;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+}
+
+.cv-mini-role {
+    margin-top: 2px;
+    font-size: 13px;
+    font-weight: 650;
+    color: rgba(0,0,0,.60);
+}
+
+.cv-mini-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 650;
+    color: rgba(0,0,0,.70);
+}
+
+.cv-mini-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.cv-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,.14);
+    background: rgba(255,255,255,.95);
+    font-weight: 750;
+    font-size: 12px;
+    color: rgba(0,0,0,.78);
+}
+
+.cv-mini-desc {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.55;
+    font-weight: 560;
+    color: rgba(0,0,0,.72);
+}
+
+/* Nav buttons (big hit-area, above cards) */
+.cv-nav {
+    position: absolute;
+    top: calc(var(--carousel-h) / 2);
+    transform: translateY(-50%);
+    width: 48px; /* 👈 större klickyta */
+    height: 48px;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,.18);
+    background: rgba(255,255,255,.92);
+    box-shadow: 0 10px 22px rgba(0,0,0,.10);
+    display: grid;
+    place-items: center;
+    font-size: 26px;
+    line-height: 1;
+    color: rgba(0,0,0,.78);
+    cursor: pointer;
+    z-index: 20; /* 👈 alltid klickbar */
+    user-select: none;
+}
+
+    .cv-nav:hover {
+        transform: translateY(-50%) scale(1.06);
     }
 
-.home-card__content {
-    padding: var(--home-pad);
+.cv-nav--prev {
+    left: 10px;
 }
+
+.cv-nav--next {
+    right: 10px;
+}
+
+/* Dots */
+.cv-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.cv-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,.18);
+    background: rgba(0,0,0,.18);
+    cursor: pointer;
+}
+
+    .cv-dot.is-active {
+        background: #000; /* 👈 “ännu svartare” */
+        border-color: #000;
+    }
+
+/* =========================
+   Latest project spotlight
+   ========================= */
+.project-spotlight {
+    border: 1px solid rgba(0,0,0,.14);
+    border-radius: 16px;
+    padding: 16px;
+    background: rgba(255,255,255,.96);
+    box-shadow: 0 10px 26px rgba(0,0,0,.06);
+}
+
+.project-title {
+    font-size: 18px;
+    font-weight: 880;
+    letter-spacing: -0.01em;
+}
+
+.project-sub {
+    margin-top: 3px;
+    font-size: 13px;
+    font-weight: 650;
+    color: rgba(0,0,0,.60);
+}
+
+.project-chips {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.project-desc {
+    margin: 12px 0 0;
+    font-size: 14px;
+    line-height: 1.65;
+    font-weight: 560;
+    color: rgba(0,0,0,.74);
+}
+
+.project-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+}
+
+.btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,.22);
+    background: rgba(255,255,255,.95);
+    color: rgba(0,0,0,.86);
+    text-decoration: none;
+    font-weight: 750;
+    font-size: 14px;
+    box-shadow: 0 10px 22px rgba(0,0,0,.06);
+}
+
+    .btn-ghost:hover {
+        transform: translateY(-1px);
+    }
 
 /* Stories */
 .home-stories {
@@ -111,7 +397,7 @@
 /* Story card */
 .story-card {
     display: grid;
-    grid-template-columns: 250px 1fr;
+    grid-template-columns: 280px 1fr;
     gap: 18px;
     align-items: start;
     background: #fff;
@@ -123,7 +409,7 @@
 
 /* Reverse for desktop */
 .story-card--reverse {
-    grid-template-columns: 1fr 250px;
+    grid-template-columns: 1fr 280px;
 }
 
     .story-card--reverse .story-media {
@@ -169,6 +455,14 @@
 
 /* Mobile */
 @media (max-width: 800px) {
+    :root {
+        --carousel-h: 300px; /* lite mer plats i mobile */
+        --slide-h: 240px;
+        --side-x: 230px;
+        --slide-w: 520px;
+        --side-scale: 0.82;
+    }
+
     .home-page {
         padding: 18px 14px 24px;
     }
@@ -181,19 +475,12 @@
         font-size: 20px;
     }
 
-    .home-card {
-        padding: 20px;
+    .home-message-banner {
+        height: 160px;
     }
 
-    .home-card--text p {
-        max-width: 100%;
-        text-align: left;
-    }
-
-    /* banner: lite lägre höjd men samma "pan" nedåt */
-    .home-card__banner img {
-        height: 150px;
-        object-position: 50% var(--banner-pan-y);
+    .home-message-banner-img {
+        object-position: center 38%;
     }
 
     .story-card,
@@ -201,14 +488,17 @@
         grid-template-columns: 1fr;
     }
 
-        .story-card--reverse .story-media,
-        .story-card--reverse .story-content {
-            order: initial;
-        }
-
     .story-title,
     .story-lead,
     .story-quote {
         text-align: center;
+    }
+
+    /* Make nav buttons slightly smaller but still easy */
+    .cv-nav {
+        width: 44px;
+        height: 44px;
+        font-size: 24px;
+        top: calc(var(--carousel-h) / 2);
     }
 }

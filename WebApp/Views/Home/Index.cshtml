@@ -8,103 +8,256 @@
 
 <div class="home-page">
 
-    <section class="home-hero">
+    <!-- HERO -->
+    <div class="home-hero">
         <img class="home-logo" src="~/images/logos/logo.png" alt="NotLinkedIn logo" />
-
         <h1 class="home-h1">Välkommen till NotLinkedIn!</h1>
+    </div>
 
-        <div class="home-card home-card--text">
+    <!-- WELCOME TEXT -->
+    <section class="home-card home-card--text">
+        <p>
+            NotLinkedIn är en webbaserad plattform där individer kan skapa, designa och presentera sina personliga CV på ett tydligt och visuellt tilltalande sätt.
+            Fokus ligger på att ge användaren full kontroll över hur kompetens, erfarenhet och personlighet visas – utan onödiga titlar, klichéer eller överdrivna formuleringar.
+        </p>
+        <p>
+            Som användare kan du bygga ett CV som faktiskt speglar vem du är och vad du kan bidra med.
+            Genom en strukturerad men flexibel design går det att lyfta fram utbildning, arbetslivserfarenhet, tekniska färdigheter och personliga styrkor på ett sätt som är lätt att ta till sig för andra.
+        </p>
+        <p>
+            Plattformen är anpassad för arbetsgivare och rekryterare. Med smart filtrering och sökbara profiler blir matchningen mer träffsäker än enbart jobbtitlar och nyckelord.
+            Resultatet: en mer överskådlig och effektiv process för både kandidater och rekryterare.
+        </p>
+        <p>
+            NotLinkedIn fungerar från två håll – både som ett verktyg för personer som vill presentera sig professionellt
+            och som ett stöd för arbetsgivare som söker rätt person till rätt roll.
+        </p>
+    </section>
+
+    <!-- MESSAGE FEATURE -->
+    <h2 class="home-h2">Privat meddelandefunktion</h2>
+
+    <section class="home-card home-message-card">
+        <div class="home-message-banner" aria-hidden="true">
+            <img class="home-message-banner-img" src="~/images/viewimages/message.png" alt="Meddelanden banner" />
+        </div>
+
+        <div class="home-message-body home-card--text">
             <p>
-                NotLinkedIn är en webbaserad plattform där individer kan skapa, designa och presentera sina personliga CV
-                på ett tydligt och visuellt tilltalande sätt. Fokus ligger på att ge användaren full kontroll över hur
-                kompetens, erfarenhet och personlighet visas – utan onödiga titlar, klichéer eller överdrivna formuleringar.
+                Plattformen innehåller även en säker och privat meddelandetjänst som gör det möjligt för användare att kommunicera direkt med varandra.
+                Meddelandefunktionen är utformad för att skydda användarnas integritet och säkerställa att konversationer förblir privata mellan avsändare och mottagare.
             </p>
             <p>
-                Som användare kan du bygga ett CV som faktiskt speglar vem du är och vad du kan bidra med. Genom en strukturerad
-                men flexibel design går det att lyfta fram utbildning, arbetslivserfarenhet, tekniska färdigheter och personliga
-                styrkor på ett sätt som är lätt att ta till sig för andra.
-            </p>
-            <p>
-                Plattformen är samtidigt anpassad för arbetsgivare och rekryterare. Genom sök- och filtreringsfunktioner kan
-                företag hitta relevanta kandidater baserat på kompetenser, erfarenhet och andra kriterier, snarare än enbart
-                jobbtitlar eller nyckelord. Målet är att skapa bättre och mer träffsäkra matchningar mellan människor och öppna positioner.
-            </p>
-            <p>
-                NotLinkedIn fungerar alltså från två håll – både som ett verktyg för personer som vill presentera sig själva
-                professionellt och som ett stöd för arbetsgivare som söker rätt person till rätt roll. Resultatet är en mer ärlig,
-                överskådlig och effektiv process för både kandidater och rekryterare.
+                Kandidater och arbetsgivare kan enkelt ta kontakt, ställa frågor och föra dialog kring möjligheter och öppna positioner – utan externa verktyg.
+                Det skapar en sammanhållen och trygg upplevelse där all relevant interaktion sker direkt på plattformen.
             </p>
         </div>
     </section>
 
-    <section class="home-feature">
-        <h2 class="home-h2">Privat meddelandefunktion</h2>
+    <!-- NEW SECTION 1: CV CAROUSEL (INSIDE ITS OWN APPLE CARD) -->
+    <section class="home-card home-feature-card">
+        <header class="home-feature-head">
+            <h2 class="home-h2 home-h2--in-card">Utvalda CV-profiler</h2>
+            <p class="home-feature-sub">
+                Här är ett urval av CV-profiler i vår signaturdesign: tydlig struktur, lättläst hierarki och smarta “chips” som gör kompetenser enkla att upptäcka.
+                Klicka på kortet i fokus för att öppna profilen.
+            </p>
+        </header>
 
-        <div class="home-card home-card--banner">
-            <div class="home-card__banner">
-                <img src="~/images/bannersandicons/message.png" alt="Privata meddelanden" />
+        <div class="cv-carousel" data-carousel="cv">
+            <button class="cv-nav cv-nav--prev" type="button" aria-label="Föregående profil">
+                ‹
+            </button>
+
+            <div class="cv-stage" aria-label="Karusell med CV-profiler">
+                <!-- Slide 1 -->
+                <a class="cv-slide is-active"
+                   href="#"
+                   data-href="#"
+                   aria-label="Öppna profil: Jamie Larsson">
+                    <div class="cv-mini">
+                        <div class="cv-mini-top">
+                            <div class="cv-mini-avatar">JL</div>
+                            <div class="cv-mini-id">
+                                <div class="cv-mini-name">Jamie Larsson</div>
+                                <div class="cv-mini-role">Systemvetenskap • Fullstack</div>
+                            </div>
+                        </div>
+
+                        <div class="cv-mini-meta">
+                            <span class="cv-mini-dot">📍</span>
+                            <span class="cv-mini-loc">Örebro</span>
+                        </div>
+
+                        <div class="cv-mini-chips">
+                            <span class="cv-chip">ASP.NET</span>
+                            <span class="cv-chip">MVC</span>
+                            <span class="cv-chip">SQL</span>
+                            <span class="cv-chip">C#</span>
+                        </div>
+
+                        <p class="cv-mini-desc">
+                            Ren layout med tydliga sektioner: om mig, utbildning, erfarenhet och projekt – redo att kopplas mot SQL.
+                        </p>
+                    </div>
+                </a>
+
+                <!-- Slide 2 -->
+                <a class="cv-slide"
+                   href="#"
+                   data-href="#"
+                   aria-label="Öppna profil: Alva Svensson">
+                    <div class="cv-mini">
+                        <div class="cv-mini-top">
+                            <div class="cv-mini-avatar">AS</div>
+                            <div class="cv-mini-id">
+                                <div class="cv-mini-name">Alva Svensson</div>
+                                <div class="cv-mini-role">Frontend • UI/UX</div>
+                            </div>
+                        </div>
+
+                        <div class="cv-mini-meta">
+                            <span class="cv-mini-dot">📍</span>
+                            <span class="cv-mini-loc">Stockholm</span>
+                        </div>
+
+                        <div class="cv-mini-chips">
+                            <span class="cv-chip">HTML</span>
+                            <span class="cv-chip">CSS</span>
+                            <span class="cv-chip">JavaScript</span>
+                            <span class="cv-chip">Figma</span>
+                        </div>
+
+                        <p class="cv-mini-desc">
+                            Fokus på tydlig presentation och visuell hierarki – lätt att skanna, lätt att minnas.
+                        </p>
+                    </div>
+                </a>
+
+                <!-- Slide 3 -->
+                <a class="cv-slide"
+                   href="#"
+                   data-href="#"
+                   aria-label="Öppna profil: Elias Karlsson">
+                    <div class="cv-mini">
+                        <div class="cv-mini-top">
+                            <div class="cv-mini-avatar">EK</div>
+                            <div class="cv-mini-id">
+                                <div class="cv-mini-name">Elias Karlsson</div>
+                                <div class="cv-mini-role">Backend • Databaser</div>
+                            </div>
+                        </div>
+
+                        <div class="cv-mini-meta">
+                            <span class="cv-mini-dot">📍</span>
+                            <span class="cv-mini-loc">Göteborg</span>
+                        </div>
+
+                        <div class="cv-mini-chips">
+                            <span class="cv-chip">C#</span>
+                            <span class="cv-chip">SQL</span>
+                            <span class="cv-chip">API</span>
+                            <span class="cv-chip">Azure</span>
+                        </div>
+
+                        <p class="cv-mini-desc">
+                            Byggd för rekryterare: snabb överblick, smarta taggar och balanserad fokus på innehåll.
+                        </p>
+                    </div>
+                </a>
             </div>
 
-            <div class="home-card__content home-card--text">
-                <p>
-                    Plattformen innehåller även en säker och privat meddelandetjänst som gör
-                    det möjligt för användare att kommunicera direkt med varandra.
-                    Meddelandefunktionen är utformad för att skydda användarnas
-                    integritet och säkerställa att konversationer förblir privata mellan
-                    avsändare och mottagare.
-                </p>
+            <button class="cv-nav cv-nav--next" type="button" aria-label="Nästa profil">
+                ›
+            </button>
 
-                <p>
-                    Genom den inbyggda meddelandetjänsten kan kandidater och arbetsgivare enkelt ta
-                    kontakt, ställa frågor och föra dialog kring
-                    möjligheter och öppna positioner – utan att behöva använda
-                    externa kommunikationsverktyg. Detta skapar en sammanhållen och trygg
-                    upplevelse där all relevant interaktion sker direkt på plattformen.
-                </p>
+            <div class="cv-dots" aria-label="Välj profil">
+                <button class="cv-dot is-active" type="button" aria-label="Visa profil 1"></button>
+                <button class="cv-dot" type="button" aria-label="Visa profil 2"></button>
+                <button class="cv-dot" type="button" aria-label="Visa profil 3"></button>
             </div>
         </div>
     </section>
 
+    <!-- NEW SECTION 2: LATEST PROJECT (INSIDE ITS OWN APPLE CARD) -->
+    <section class="home-card home-feature-card">
+        <header class="home-feature-head">
+            <h2 class="home-h2 home-h2--in-card">Senast upplagda projektet</h2>
+            <p class="home-feature-sub">
+                Projekt kan kopplas till en profil och visas direkt i CV:t. Här visas det senast upplagda projektet (placeholder tills SQL är kopplat).
+            </p>
+        </header>
 
-    <section class="home-stories" aria-label="Kundberättelser">
-        <article class="story-card">
+        <article class="project-spotlight" aria-label="Senast upplagda projektet">
+            <div class="project-top">
+                <div>
+                    <div class="project-title">NotLinkedIn — WebApp</div>
+                    <div class="project-sub">
+                        Upplagt: 2025-12-18 • av Jamie Larsson
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-chips">
+                <span class="cv-chip">ASP.NET</span>
+                <span class="cv-chip">MVC</span>
+                <span class="cv-chip">SQL</span>
+            </div>
+
+            <p class="project-desc">
+                Ett webbprojekt där användare kan skapa CV-profiler, koppla projekt och kommunicera via privata meddelanden.
+                Fokus ligger på ren “Apple-ish” design, tydlig struktur och en upplevelse som känns snabb och professionell.
+            </p>
+
+            <div class="project-actions">
+                <a class="btn-ghost" href="#">Öppna projekt</a>
+                <a class="btn-ghost" href="#">Se alla projekt</a>
+            </div>
+        </article>
+    </section>
+
+    <!-- CUSTOMER STORIES (your existing section can remain, but I keep a clean wrapper) -->
+    <div class="home-stories">
+
+        <div class="story-card">
             <div class="story-media">
-                <img src="~/images/customers/customer1.png" alt="Anna, småföretagare" />
+                <img src="~/images/customers/customer1.png" alt="Anna, småföretagare">
             </div>
 
             <div class="story-content">
-                <h3 class="story-title">Anna, småföretagare</h3>
+                <div class="story-title">Anna, småföretagare</div>
                 <p class="story-lead">
                     Med vår plattform kan Anna tryggt kontakta andra användare och dela erfarenheter via privata, säkra meddelanden.
                 </p>
 
                 <blockquote class="story-quote">
-                    "Jag trodde aldrig det skulle kännas så enkelt att hitta rätt kontakter.
-                    Meddelandefunktionen gjorde att jag kunde prata direkt med rätt personer,
+                    "Jag trodde aldrig det skulle kännas så enkelt att hitta rätt kontakter. Meddelandefunktionen gjorde att jag kunde prata direkt med rätt personer,
                     ställa frågor och bygga förtroende – utan att lämna plattformen."
                 </blockquote>
             </div>
-        </article>
+        </div>
 
-        <article class="story-card story-card--reverse">
+        <div class="story-card story-card--reverse">
             <div class="story-media">
-                <img src="~/images/customers/customer2.png" alt="Erik, rekryterare" />
+                <img src="~/images/customers/customer2.png" alt="Erik, rekryterare">
             </div>
 
             <div class="story-content">
-                <h3 class="story-title">Erik, rekryterare</h3>
+                <div class="story-title">Erik, rekryterare</div>
                 <p class="story-lead">
-                    Som rekryterare använder Erik plattformen för att snabbt komma i kontakt med kandidater och föra en mer personlig
-                    dialog redan i ett tidigt skede.
+                    Som rekryterare använder Erik plattformen för att snabbt komma i kontakt med kandidater och föra en mer personlig dialog redan i ett tidigt skede.
                 </p>
 
                 <blockquote class="story-quote">
-                    "För mig har det gjort stor skillnad att kunna kontakta kandidater direkt på plattformen.
-                    Jag får en bättre bild av personen bakom CV:t och kan ställa rätt frågor tidigt i processen.
-                    Det sparar tid, minskar missförstånd och gör rekryteringen betydligt mer mänsklig."
+                    "För mig har det gjort stor skillnad att kunna kontakta kandidater direkt på plattformen. Jag får en bättre bild av personen bakom CV:t och kan ställa
+                    rätt frågor tidigt i processen. Det sparar tid, minskar missförstånd och gör rekryteringen betydligt mer mänsklig."
                 </blockquote>
             </div>
-        </article>
-    </section>
+        </div>
 
+    </div>
 </div>
+
+@section Scripts {
+    <script src="~/js/pages/home.js" asp-append-version="true"></script>
+}
