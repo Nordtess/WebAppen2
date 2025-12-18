@@ -35,7 +35,7 @@
     height: 100%;
     display: block;
     object-fit: cover; /* 👈 fyller hela elementet */
-    object-position: center; /* prova "center top" om du vill */
+    object-position: center 20%; /* 👈 visar mer av toppen/huvudet */
 }
 
 /* CV-kort (samma Apple-ish känsla som register/login) */
