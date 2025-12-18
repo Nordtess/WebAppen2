@@ -34,7 +34,7 @@
     width: 100%;
     height: 100%;
     display: block;
-    object-fit: contain; /* 👈 visar hela bilden */
+    object-fit: cover; /* 👈 fyller hela elementet */
     object-position: center; /* prova "center top" om du vill */
 }
 
@@ -274,6 +274,30 @@
     font-weight: 600;
     line-height: 1.45;
 }
+
+/* Edit Button Container */
+.cv-edit-button-container {
+    width: 100%;
+    max-width: var(--cv-max);
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+.cv-edit-button-container .btn-primary-custom {
+    text-decoration: none;
+    color: #fff;
+}
+
+    .cv-edit-button-container .btn-primary-custom:hover {
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .cv-edit-button-container .btn-primary-custom:visited {
+        text-decoration: none;
+        color: #fff;
+    }
 
 /* Responsiv */
 @media (max-width: 900px) {

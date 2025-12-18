@@ -1,9 +1,10 @@
 ﻿@section Styles {
     <link rel="stylesheet" href="~/css/pages/mycv.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components.css" asp-append-version="true" />
 }
 
 @{
-    ViewData["Title"] = "My CV";
+    ViewData["Title"] = "Mitt CV";
 }
 
 <div class="cv-page">
@@ -168,5 +169,15 @@
             </div>
 
         </div>
+    </div>
+
+    <!-- EDIT BUTTON (under CV-kortet) -->
+    <div class="cv-edit-button-container">
+        <a href="@Url.Action("Index", "EditCV")" class="btn-primary-custom">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+            </svg>
+            Redigera CV
+        </a>
     </div>
 </div>
