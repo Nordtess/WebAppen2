@@ -1,288 +1,570 @@
-﻿/* Sida */
+﻿.mycv-page {
+    display: flex;
+    justify-content: center;
+    padding: 70px 20px;
+}
+
+.mycv-wrap {
+    width: 100%;
+    max-width: 1100px;
+}
+
+/* ===== Banner ===== */
+.mycv-banner {
+    width: 100%;
+    height: 220px; /* <- banner-höjd (ändra här om du vill) */
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 18px;
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 16px 34px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.mycv-banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* <- gör den till banner */
+    object-position: center;
+    display: block;
+    transform: scale(1.02);
+}
+
+.mycv-banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.10), rgba(255,255,255,0.65));
+    pointer-events: none;
+}
+
+/* ===== Card (same Apple-ish style) ===== */
+.mycv-card {
+    background: rgba(255,255,255,0.95);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+    overflow: hidden;
+    padding: 0;
+}
+
+.mycv-top {
+    padding: 18px 22px;
+}
+
+.mycv-subtitle {
+    margin: 0 0 10px;
+    color: rgba(0,0,0,0.70);
+    font-weight: 550;
+    line-height: 1.35;
+}
+
+.mycv-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.mycv-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,0.12);
+    background: rgba(255,255,255,0.8);
+    color: rgba(0,0,0,0.85);
+    font-weight: 650;
+    font-size: 13px;
+}
+
+.badge-icon {
+    line-height: 1;
+}
+
+.mycv-divider {
+    height: 1px;
+    background: rgba(0,0,0,0.08);
+}
+
+/* ===== Layout grid ===== */
+.mycv-grid {
+    display: grid;
+    grid-template-columns: 0.95fr 1.05fr;
+    gap: 18px;
+    padding: 22px;
+}
+
+/* Left profile block */
+.mycv-profile {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    padding: 14px;
+    border: 1px solid rgba(0,0,0,0.10);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.85);
+}
+
+.mycv-avatar-wrap {
+    flex: 0 0 auto;
+}
+
+.mycv-avatar {
+    width: 92px; /* <- större profilbild */
+    height: 92px; /* <- större profilbild */
+    border-radius: 18px;
+    border: 1px solid rgba(0,0,0,0.18);
+    background: rgba(0,0,0,0.02);
+    display: grid;
+    place-items: center;
+    font-weight: 850;
+    letter-spacing: 0.6px;
+    color: rgba(0,0,0,0.75);
+}
+
+.mycv-profile-meta {
+    min-width: 0;
+}
+
+.mycv-name {
+    font-size: 18px;
+    font-weight: 850;
+    margin: 0;
+}
+
+.mycv-role {
+    font-size: 13px;
+    color: rgba(0,0,0,0.70);
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+/* Generic boxes */
+.mycv-box {
+    margin-top: 14px;
+    padding: 14px;
+    border: 1px solid rgba(0,0,0,0.10);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.85);
+}
+
+.mycv-box-title {
+    font-weight: 850;
+    font-size: 13px;
+    color: rgba(0,0,0,0.80);
+    margin-bottom: 10px;
+}
+
+.mycv-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 13px;
+}
+
+.mycv-k {
+    color: rgba(0,0,0,0.65);
+    font-weight: 650;
+}
+
+.mycv-v {
+    color: rgba(0,0,0,0.85);
+    font-weight: 650;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 65%;
+    text-align: right;
+}
+
+.mycv-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.mycv-tag {
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,0.14);
+    background: rgba(255,255,255,0.9);
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(0,0,0,0.78);
+}
+
+/* Right column sections */
+.mycv-section {
+    padding: 0;
+    margin-bottom: 14px;
+}
+
+.mycv-section-title {
+    font-weight: 850;
+    font-size: 13px;
+    margin-bottom: 8px;
+    color: rgba(0,0,0,0.80);
+}
+
+.mycv-section-text {
+    color: rgba(0,0,0,0.72);
+    font-weight: 600;
+    line-height: 1.45;
+    font-size: 13px;
+}
+
+    .mycv-section-text.small {
+        font-size: 12px;
+    }
+
+.mycv-item {
+    border: 1px solid rgba(0,0,0,0.10);
+    border-radius: 14px;
+    background: rgba(255,255,255,0.85);
+    padding: 12px 14px;
+    margin-bottom: 10px;
+}
+
+.mycv-item-title {
+    font-weight: 850;
+    font-size: 13px;
+    color: rgba(0,0,0,0.85);
+}
+
+.mycv-item-sub {
+    margin-top: 3px;
+    font-weight: 650;
+    font-size: 12px;
+    color: rgba(0,0,0,0.70);
+}
+
+/* Projects grid */
+.mycv-projects {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.mycv-proj {
+    border: 1px solid rgba(0,0,0,0.10);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.85);
+    padding: 14px;
+}
+
+.mycv-proj-title {
+    font-weight: 850;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: rgba(0,0,0,0.85);
+}
+
+.mycv-proj-desc {
+    font-weight: 650;
+    font-size: 12px;
+    color: rgba(0,0,0,0.70);
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .mycv-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .mycv-projects {
+        grid-template-columns: 1fr;
+    }
+
+    .mycv-banner {
+        height: 170px;
+    }
+}
 .mycv-page {
     display: flex;
     justify-content: center;
     padding: 70px 20px;
 }
 
-/* Card (samma Apple-look som register) */
-.mycv-card {
+.mycv-wrap {
     width: 100%;
     max-width: 1100px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 24px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-    .mycv-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 26px 50px rgba(0, 0, 0, 0.10), 0 6px 12px rgba(0, 0, 0, 0.06);
-    }
-
-/* Banner */
+/* ===== Banner ===== */
 .mycv-banner {
-    padding: 34px 46px;
-    border-bottom: 1px solid rgba(0,0,0,0.06);
-    background: radial-gradient(circle at 30% 20%, rgba(0,0,0,0.03), transparent 60%), linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.00));
+    width: 100%;
+    height: 220px; /* <- banner-höjd (ändra här om du vill) */
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 18px;
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 16px 34px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
 }
 
-.mycv-title {
-    margin: 0 0 10px;
-    font-size: 40px;
-    font-weight: 850;
-    letter-spacing: -0.2px;
+.mycv-banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* <- gör den till banner */
+    object-position: center;
+    display: block;
+    transform: scale(1.02);
+}
+
+.mycv-banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.10), rgba(255,255,255,0.65));
+    pointer-events: none;
+}
+
+/* ===== Card (same Apple-ish style) ===== */
+.mycv-card {
+    background: rgba(255,255,255,0.95);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+    overflow: hidden;
+    padding: 0;
+}
+
+.mycv-top {
+    padding: 18px 22px;
 }
 
 .mycv-subtitle {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-    color: rgba(0,0,0,0.68);
+    margin: 0 0 10px;
+    color: rgba(0,0,0,0.70);
+    font-weight: 550;
+    line-height: 1.35;
 }
 
-/* Små chips i bannern */
-.mycv-banner-meta {
-    margin-top: 16px;
+.mycv-badges {
     display: flex;
-    gap: 10px;
     flex-wrap: wrap;
+    gap: 10px;
 }
 
-.mycv-chip {
+.mycv-badge {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 12px;
+    padding: 7px 10px;
     border-radius: 999px;
-    border: 1px solid rgba(0,0,0,0.10);
-    background: rgba(255,255,255,0.70);
-    font-size: 14px;
+    border: 1px solid rgba(0,0,0,0.12);
+    background: rgba(255,255,255,0.8);
+    color: rgba(0,0,0,0.85);
     font-weight: 650;
-    color: rgba(0,0,0,0.78);
+    font-size: 13px;
 }
 
-/* Body layout */
-.mycv-body {
+.badge-icon {
+    line-height: 1;
+}
+
+.mycv-divider {
+    height: 1px;
+    background: rgba(0,0,0,0.08);
+}
+
+/* ===== Layout grid ===== */
+.mycv-grid {
     display: grid;
-    grid-template-columns: 0.9fr 1.1fr;
-    gap: 44px;
-    padding: 44px 46px 52px;
-}
-
-/* Vänsterkolumn */
-.mycv-left {
-    display: flex;
-    flex-direction: column;
+    grid-template-columns: 0.95fr 1.05fr;
     gap: 18px;
+    padding: 22px;
 }
 
-/* Profilbild placeholder */
+/* Left profile block */
 .mycv-profile {
     display: flex;
-    align-items: center;
     gap: 14px;
+    align-items: center;
+    padding: 14px;
+    border: 1px solid rgba(0,0,0,0.10);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.85);
 }
 
-.mycv-avatar {
-    width: 84px;
-    height: 84px;
-    border-radius: 18px;
-    border: 1px solid rgba(0,0,0,0.12);
-    background: rgba(0,0,0,0.03);
-    display: grid;
-    place-items: center;
-    overflow: hidden;
+.mycv-avatar-wrap {
     flex: 0 0 auto;
 }
 
-    /* om du senare sätter <img> i .mycv-avatar */
-    .mycv-avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-
-.mycv-avatar-initials {
-    font-size: 22px;
+.mycv-avatar {
+    width: 92px; /* <- större profilbild */
+    height: 92px; /* <- större profilbild */
+    border-radius: 18px;
+    border: 1px solid rgba(0,0,0,0.18);
+    background: rgba(0,0,0,0.02);
+    display: grid;
+    place-items: center;
     font-weight: 850;
-    color: rgba(0,0,0,0.7);
+    letter-spacing: 0.6px;
+    color: rgba(0,0,0,0.75);
 }
 
-.mycv-nameblock h2 {
+.mycv-profile-meta {
+    min-width: 0;
+}
+
+.mycv-name {
+    font-size: 18px;
+    font-weight: 850;
     margin: 0;
-    font-size: 20px;
-    font-weight: 850;
 }
 
-.mycv-nameblock p {
-    margin: 4px 0 0;
-    font-size: 14px;
+.mycv-role {
+    font-size: 13px;
+    color: rgba(0,0,0,0.70);
     font-weight: 600;
-    color: rgba(0,0,0,0.65);
+    margin-top: 2px;
 }
 
-/* Boxar i vänsterspalten */
+/* Generic boxes */
 .mycv-box {
-    border: 1px solid rgba(0,0,0,0.08);
+    margin-top: 14px;
+    padding: 14px;
+    border: 1px solid rgba(0,0,0,0.10);
     border-radius: 16px;
-    padding: 16px;
     background: rgba(255,255,255,0.85);
 }
 
 .mycv-box-title {
-    margin: 0 0 10px;
-    font-size: 14px;
-    font-weight: 800;
-    letter-spacing: 0.2px;
-    color: rgba(0,0,0,0.78);
+    font-weight: 850;
+    font-size: 13px;
+    color: rgba(0,0,0,0.80);
+    margin-bottom: 10px;
 }
 
-/* Kontaktlista */
-.mycv-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
+.mycv-row {
+    display: flex;
+    justify-content: space-between;
     gap: 10px;
+    padding: 6px 0;
+    font-size: 13px;
 }
 
-    .mycv-list li {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 14px;
-        font-size: 14px;
-        font-weight: 600;
-        color: rgba(0,0,0,0.78);
-    }
-
-.mycv-muted {
-    color: rgba(0,0,0,0.55);
+.mycv-k {
+    color: rgba(0,0,0,0.65);
     font-weight: 650;
 }
 
-/* Kompetens-tags */
+.mycv-v {
+    color: rgba(0,0,0,0.85);
+    font-weight: 650;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 65%;
+    text-align: right;
+}
+
 .mycv-tags {
     display: flex;
-    gap: 10px;
     flex-wrap: wrap;
+    gap: 8px;
 }
 
 .mycv-tag {
-    padding: 8px 12px;
+    padding: 6px 10px;
     border-radius: 999px;
-    border: 1px solid rgba(0,0,0,0.12);
-    background: rgba(0,0,0,0.02);
-    font-size: 14px;
-    font-weight: 650;
+    border: 1px solid rgba(0,0,0,0.14);
+    background: rgba(255,255,255,0.9);
+    font-size: 12px;
+    font-weight: 700;
     color: rgba(0,0,0,0.78);
 }
 
-/* Högerkolumn */
-.mycv-right {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
+/* Right column sections */
+.mycv-section {
+    padding: 0;
+    margin-bottom: 14px;
 }
 
-.mycv-section h3 {
-    margin: 0 0 10px;
-    font-size: 16px;
+.mycv-section-title {
     font-weight: 850;
+    font-size: 13px;
+    margin-bottom: 8px;
+    color: rgba(0,0,0,0.80);
 }
 
-.mycv-section p {
-    margin: 0;
-    font-size: 15px;
+.mycv-section-text {
+    color: rgba(0,0,0,0.72);
     font-weight: 600;
-    color: rgba(0,0,0,0.70);
-    line-height: 1.55;
+    line-height: 1.45;
+    font-size: 13px;
 }
 
-/* Timeline-like items */
-.mycv-items {
-    display: grid;
-    gap: 12px;
-}
+    .mycv-section-text.small {
+        font-size: 12px;
+    }
 
 .mycv-item {
-    border: 1px solid rgba(0,0,0,0.08);
-    border-radius: 16px;
-    padding: 14px 14px;
+    border: 1px solid rgba(0,0,0,0.10);
+    border-radius: 14px;
     background: rgba(255,255,255,0.85);
+    padding: 12px 14px;
+    margin-bottom: 10px;
 }
 
 .mycv-item-title {
-    margin: 0 0 6px;
-    font-size: 14px;
     font-weight: 850;
-}
-
-.mycv-item-meta {
-    margin: 0;
     font-size: 13px;
-    font-weight: 650;
-    color: rgba(0,0,0,0.58);
+    color: rgba(0,0,0,0.85);
 }
 
-/* Projekt-grid */
+.mycv-item-sub {
+    margin-top: 3px;
+    font-weight: 650;
+    font-size: 12px;
+    color: rgba(0,0,0,0.70);
+}
+
+/* Projects grid */
 .mycv-projects {
+    margin-top: 10px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
 }
 
-.mycv-project {
-    border: 1px solid rgba(0,0,0,0.08);
+.mycv-proj {
+    border: 1px solid rgba(0,0,0,0.10);
     border-radius: 16px;
-    padding: 14px;
     background: rgba(255,255,255,0.85);
+    padding: 14px;
 }
 
-    .mycv-project h4 {
-        margin: 0 0 8px;
-        font-size: 14px;
-        font-weight: 850;
-    }
+.mycv-proj-title {
+    font-weight: 850;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: rgba(0,0,0,0.85);
+}
 
-    .mycv-project p {
-        margin: 0 0 10px;
-        font-size: 13px;
-        font-weight: 650;
-        color: rgba(0,0,0,0.65);
-        line-height: 1.45;
-    }
+.mycv-proj-desc {
+    font-weight: 650;
+    font-size: 12px;
+    color: rgba(0,0,0,0.70);
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
 
-    .mycv-project .mycv-tags {
-        gap: 8px;
-    }
-
-    .mycv-project .mycv-tag {
-        padding: 6px 10px;
-        font-size: 13px;
-    }
-
-/* Mobil */
+/* Responsive */
 @media (max-width: 900px) {
-    .mycv-banner {
-        padding: 28px 26px;
-    }
-
-    .mycv-title {
-        font-size: 34px;
-    }
-
-    .mycv-body {
+    .mycv-grid {
         grid-template-columns: 1fr;
-        padding: 28px 26px 34px;
-        gap: 18px;
     }
 
     .mycv-projects {
         grid-template-columns: 1fr;
+    }
+
+    .mycv-banner {
+        height: 170px;
     }
 }

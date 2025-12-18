@@ -3,167 +3,197 @@
 }
 
 @{
-    ViewData["Title"] = "Mitt CV";
+    ViewData["Title"] = "My CV";
 }
 
 <div class="mycv-page">
-    <div class="mycv-card">
+    <div class="mycv-wrap">
 
-        <!-- Banner -->
+        <!-- Banner (placeholder för alla CV) -->
         <div class="mycv-banner">
-            <h1 class="mycv-title">Mitt CV</h1>
-            <p class="mycv-subtitle">
-                Här visas din profil och ditt CV (placeholder). När vi kopplar mot SQL hämtas allt automatiskt här.
-            </p>
+            <img src="~/images/viewimages/mycv.png" alt="CV banner" class="mycv-banner-img" />
+            <div class="mycv-banner-overlay"></div>
+        </div>
 
-            <div class="mycv-banner-meta">
-                <span class="mycv-chip">🔒 Profil: Privat</span>
-                <span class="mycv-chip">📍 Örebro, Sverige</span>
-                <span class="mycv-chip">✉ jamie@example.se</span>
+        <!-- Kortet -->
+        <div class="mycv-card">
+
+            <!-- Top info bar -->
+            <div class="mycv-top">
+                <div class="mycv-top-left">
+                    <p class="mycv-subtitle">
+                        Här visas din profil och ditt CV (placeholder). När vi kopplar mot SQL hämtas allt automatiskt här.
+                    </p>
+
+                    <div class="mycv-badges">
+                        <span class="mycv-badge">
+                            <span class="badge-icon">🔒</span>
+                            Profil: Privat
+                        </span>
+
+                        <span class="mycv-badge">
+                            <span class="badge-icon">📍</span>
+                            Örebro, Sverige
+                        </span>
+
+                        <span class="mycv-badge">
+                            <span class="badge-icon">✉️</span>
+                            jamie@example.se
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mycv-divider"></div>
+
+            <!-- 2 kolumner -->
+            <div class="mycv-grid">
+
+                <!-- VÄNSTER -->
+                <div class="mycv-left">
+
+                    <!-- Profilkort -->
+                    <div class="mycv-profile">
+                        <div class="mycv-avatar-wrap">
+                            <!-- Placeholder: byt mot uppladdad bild senare -->
+                            <div class="mycv-avatar">
+                                <span>JL</span>
+                            </div>
+                        </div>
+
+                        <div class="mycv-profile-meta">
+                            <div class="mycv-name">Jamie Larsson</div>
+                            <div class="mycv-role">Systemvetenskap • Fullstack (placeholder)</div>
+                        </div>
+                    </div>
+
+                    <!-- Kontakt -->
+                    <div class="mycv-box">
+                        <div class="mycv-box-title">Kontaktuppgifter</div>
+
+                        <div class="mycv-row">
+                            <span class="mycv-k">E-post</span>
+                            <span class="mycv-v">jamie@example.se</span>
+                        </div>
+
+                        <div class="mycv-row">
+                            <span class="mycv-k">Telefon</span>
+                            <span class="mycv-v">+46 70 123 45 67</span>
+                        </div>
+
+                        <div class="mycv-row">
+                            <span class="mycv-k">LinkedIn</span>
+                            <span class="mycv-v">linkedin.com/in/placeholder</span>
+                        </div>
+                    </div>
+
+                    <!-- Kompetenser -->
+                    <div class="mycv-box">
+                        <div class="mycv-box-title">Kompetenser</div>
+
+                        <div class="mycv-tags">
+                            <span class="mycv-tag">ASP.NET</span>
+                            <span class="mycv-tag">MVC</span>
+                            <span class="mycv-tag">C#</span>
+                            <span class="mycv-tag">SQL</span>
+                            <span class="mycv-tag">Fullstack</span>
+                            <span class="mycv-tag">Git</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- HÖGER -->
+                <div class="mycv-right">
+
+                    <div class="mycv-section">
+                        <div class="mycv-section-title">Om mig</div>
+                        <div class="mycv-section-text">
+                            Placeholder-text: Kort sammanfattning av vem du är, vad du söker och vad du är bra på.
+                            (Hämtas senare från databasen.)
+                        </div>
+                    </div>
+
+                    <div class="mycv-section">
+                        <div class="mycv-section-title">Utbildningar</div>
+
+                        <div class="mycv-item">
+                            <div class="mycv-item-title">Örebro universitet — Systemvetenskap</div>
+                            <div class="mycv-item-sub">2024 – Pågående • Inriktning: Webbutveckling (placeholder)</div>
+                        </div>
+
+                        <div class="mycv-item">
+                            <div class="mycv-item-title">Kurs / Certifiering (placeholder)</div>
+                            <div class="mycv-item-sub">År • Kort beskrivning</div>
+                        </div>
+                    </div>
+
+                    <div class="mycv-section">
+                        <div class="mycv-section-title">Tidigare erfarenhet</div>
+
+                        <div class="mycv-item">
+                            <div class="mycv-item-title">ICA — Kassör (placeholder)</div>
+                            <div class="mycv-item-sub">2021 – 2023 • Kundservice, tempo, ansvar</div>
+                        </div>
+
+                        <div class="mycv-item">
+                            <div class="mycv-item-title">Lagerarbete (placeholder)</div>
+                            <div class="mycv-item-sub">2019 – 2021 • Logistik, plock, struktur</div>
+                        </div>
+                    </div>
+
+                    <div class="mycv-section">
+                        <div class="mycv-section-title">Projekt</div>
+                        <div class="mycv-section-text small">
+                            Placeholder: här listas projekt som användaren valt att visa (även projekt man inte skapat själv).
+                        </div>
+
+                        <div class="mycv-projects">
+                            <div class="mycv-proj">
+                                <div class="mycv-proj-title">NotLinkedIn — WebApp</div>
+                                <div class="mycv-proj-desc">CV-sidor, auth-flöden och UI i Apple-ish stil (placeholder).</div>
+                                <div class="mycv-tags">
+                                    <span class="mycv-tag">ASP.NET</span>
+                                    <span class="mycv-tag">MVC</span>
+                                    <span class="mycv-tag">SQL</span>
+                                </div>
+                            </div>
+
+                            <div class="mycv-proj">
+                                <div class="mycv-proj-title">Projekt: AES GUI</div>
+                                <div class="mycv-proj-desc">Implementerade AES-kryptering i ett GUI (placeholder).</div>
+                                <div class="mycv-tags">
+                                    <span class="mycv-tag">C#</span>
+                                    <span class="mycv-tag">Security</span>
+                                    <span class="mycv-tag">GUI</span>
+                                </div>
+                            </div>
+
+                            <div class="mycv-proj">
+                                <div class="mycv-proj-title">Projekt: Linux & Nätverk</div>
+                                <div class="mycv-proj-desc">Rapport, Wireshark och IPv6 (placeholder).</div>
+                                <div class="mycv-tags">
+                                    <span class="mycv-tag">Linux</span>
+                                    <span class="mycv-tag">IPv6</span>
+                                    <span class="mycv-tag">Wireshark</span>
+                                </div>
+                            </div>
+
+                            <div class="mycv-proj">
+                                <div class="mycv-proj-title">Projekt (placeholder)</div>
+                                <div class="mycv-proj-desc">Kort beskrivning av projektets syfte och din roll.</div>
+                                <div class="mycv-tags">
+                                    <span class="mycv-tag">Tag</span>
+                                    <span class="mycv-tag">Tag</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
         </div>
 
-        <!-- Body -->
-        <div class="mycv-body">
-
-            <!-- Vänster: profil, kontakt, kompetenser -->
-            <div class="mycv-left">
-
-                <div class="mycv-profile">
-                    <div class="mycv-avatar">
-                        <!-- SENARE: byt till riktig bild från uppladdning/DB -->
-                        <!-- <img src="~/images/viewimages/profile.png" alt="Profilbild" /> -->
-                        <div class="mycv-avatar-initials">JL</div>
-                    </div>
-
-                    <div class="mycv-nameblock">
-                        <h2>Jamie Larsson</h2>
-                        <p>Systemvetenskap • Fullstack (placeholder)</p>
-                    </div>
-                </div>
-
-                <div class="mycv-box">
-                    <p class="mycv-box-title">Kontaktuppgifter</p>
-                    <ul class="mycv-list">
-                        <li><span>E-post</span> <span class="mycv-muted">jamie@example.se</span></li>
-                        <li><span>Telefon</span> <span class="mycv-muted">+46 70 123 45 67</span></li>
-                        <li><span>LinkedIn</span> <span class="mycv-muted">linkedin.com/in/placeholder</span></li>
-                    </ul>
-                </div>
-
-                <div class="mycv-box">
-                    <p class="mycv-box-title">Kompetenser</p>
-                    <div class="mycv-tags">
-                        <span class="mycv-tag">ASP.NET</span>
-                        <span class="mycv-tag">MVC</span>
-                        <span class="mycv-tag">C#</span>
-                        <span class="mycv-tag">SQL</span>
-                        <span class="mycv-tag">Fullstack</span>
-                        <span class="mycv-tag">Git</span>
-                    </div>
-                </div>
-
-                <div class="mycv-box">
-                    <p class="mycv-box-title">Profilinställning</p>
-                    <ul class="mycv-list">
-                        <li>
-                            <span>Synlighet</span>
-                            <span class="mycv-muted">Privat (placeholder)</span>
-                        </li>
-                    </ul>
-                </div>
-
-            </div>
-
-            <!-- Höger: utbildning, erfarenhet, projekt -->
-            <div class="mycv-right">
-
-                <div class="mycv-section">
-                    <h3>Om mig</h3>
-                    <p>
-                        Placeholder-text: Kort sammanfattning av vem du är, vad du söker och vad du är bra på.
-                        (Hämtas senare från databasen.)
-                    </p>
-                </div>
-
-                <div class="mycv-section">
-                    <h3>Utbildningar</h3>
-                    <div class="mycv-items">
-                        <div class="mycv-item">
-                            <p class="mycv-item-title">Örebro universitet — Systemvetenskap</p>
-                            <p class="mycv-item-meta">2024 – Pågående • Inriktning: Webbutveckling (placeholder)</p>
-                        </div>
-                        <div class="mycv-item">
-                            <p class="mycv-item-title">Kurs / Certifiering (placeholder)</p>
-                            <p class="mycv-item-meta">År • Kort beskrivning</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mycv-section">
-                    <h3>Tidigare erfarenhet</h3>
-                    <div class="mycv-items">
-                        <div class="mycv-item">
-                            <p class="mycv-item-title">ICA — Kassör (placeholder)</p>
-                            <p class="mycv-item-meta">2021 – 2023 • Kundservice, tempo, ansvar</p>
-                        </div>
-                        <div class="mycv-item">
-                            <p class="mycv-item-title">Lagerarbete (placeholder)</p>
-                            <p class="mycv-item-meta">2019 – 2021 • Logistik, plock, struktur</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mycv-section">
-                    <h3>Projekt</h3>
-                    <p class="mycv-muted" style="margin-bottom:10px;">
-                        Placeholder: här listas projekt som användaren valt att visa (även projekt man inte skapat själv).
-                    </p>
-
-                    <div class="mycv-projects">
-                        <div class="mycv-project">
-                            <h4>NotLinkedIn — WebApp</h4>
-                            <p>CV-sidor, auth-flöden och UI i Apple-ish stil (placeholder).</p>
-                            <div class="mycv-tags">
-                                <span class="mycv-tag">ASP.NET</span>
-                                <span class="mycv-tag">MVC</span>
-                                <span class="mycv-tag">SQL</span>
-                            </div>
-                        </div>
-
-                        <div class="mycv-project">
-                            <h4>Projekt: AES GUI</h4>
-                            <p>Implementerade AES-kryptering i ett GUI (placeholder).</p>
-                            <div class="mycv-tags">
-                                <span class="mycv-tag">C#</span>
-                                <span class="mycv-tag">Security</span>
-                                <span class="mycv-tag">GUI</span>
-                            </div>
-                        </div>
-
-                        <div class="mycv-project">
-                            <h4>Projekt: Linux & Nätverk</h4>
-                            <p>Rapport, Wireshark och IPv6 (placeholder).</p>
-                            <div class="mycv-tags">
-                                <span class="mycv-tag">Linux</span>
-                                <span class="mycv-tag">IPv6</span>
-                                <span class="mycv-tag">Wireshark</span>
-                            </div>
-                        </div>
-
-                        <div class="mycv-project">
-                            <h4>Projekt (placeholder)</h4>
-                            <p>Kort beskrivning av projektets syfte och din roll.</p>
-                            <div class="mycv-tags">
-                                <span class="mycv-tag">Tag</span>
-                                <span class="mycv-tag">Tag</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
     </div>
 </div>
