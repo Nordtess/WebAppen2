@@ -6,13 +6,13 @@
     --home-pad: 18px;
     --home-gap: 14px;
     /* Carousel knobs */
-    --carousel-h: 320px; /* 👈 increased from 260px to give more height */
-    --slide-w: 520px; /* 👈 reduced from 620px to make cards narrower */
-    --slide-h: 210px; /* fokus-kort höjd */
-    --side-scale: 0.86; /* storlek på sidkort */
-    --side-x: 320px; /* hur långt åt sidan sidkort flyttas */
-    --side-tilt: 0deg; /* kan vara typ 1deg om du vill */
-    --card-border-strong: 2px solid rgba(0,0,0,.92); /* stark svart border runt korten */
+    --carousel-h: 320px;
+    --slide-w: 520px;
+    --slide-h: 210px;
+    --side-scale: 0.86;
+    --side-x: 320px;
+    --side-tilt: 0deg;
+    --card-border-strong: 2px solid rgba(0,0,0,.92);
 }
 
 /* Page wrapper */
@@ -136,8 +136,8 @@
     position: relative;
     height: var(--carousel-h);
     display: block;
-    overflow: visible; /* 👈 så sidkorten syns */
-    padding-bottom: 32px; /* 👈 add breathing room before dots */
+    overflow: visible;
+    padding-bottom: 32px;
 }
 
 /* Slides */
@@ -151,17 +151,24 @@
     transform-origin: center;
     opacity: 0;
     z-index: 1;
-    pointer-events: none; /* 👈 viktigt: sidkort ska inte stjäla klick */
-    cursor: default; /* 👈 no pointer cursor on non-active cards */
-    text-decoration: none;
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none !important; /* 👈 remove underline completely */
     color: inherit;
-    transition: transform .28s ease, opacity .22s ease, filter .22s ease;
+    transition: transform .28s ease, opacity .22s ease, filter .22s ease, box-shadow .28s ease;
+}
+
+/* Remove underline from all text inside slides */
+.cv-slide *,
+.cv-slide:hover *,
+.cv-slide:focus * {
+    text-decoration: none !important;
 }
 
 /* The actual mini CV card */
 .cv-mini {
     height: 100%;
-    border: var(--card-border-strong); /* 👈 stark svart border */
+    border: var(--card-border-strong);
     border-radius: 18px;
     background: rgba(255,255,255,.96);
     box-shadow: 0 18px 36px rgba(0,0,0,.10);
@@ -169,15 +176,28 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    transition: border .28s ease, box-shadow .28s ease;
 }
 
 /* Active (center) */
 .cv-slide.is-active {
     opacity: 1;
     z-index: 4;
-    pointer-events: auto; /* 👈 klicka på kortet i fokus */
-    cursor: pointer; /* 👈 show pointer cursor only on active card */
+    pointer-events: auto;
+    cursor: pointer;
     transform: translate(-50%, -50%) scale(1);
+}
+
+/* Apple-like glow effect on active card hover */
+.cv-slide.is-active:hover {
+    transform: translate(-50%, -50%) scale(1.02);
+}
+
+.cv-slide.is-active:hover .cv-mini {
+    border: 3px solid #000; /* 👈 stronger black border */
+    box-shadow: 
+        0 0 0 4px rgba(0,0,0,.08), /* 👈 outer ring/glow */
+        0 20px 40px rgba(0,0,0,.16); /* 👈 nicer shadow */
 }
 
 /* Left / Right */
@@ -269,60 +289,91 @@
     color: rgba(0,0,0,.72);
 }
 
-/* Nav buttons (big hit-area, above cards) */
+/* Edge fade zones for nav buttons */
+.carousel-nav-zone {
+    position: absolute;
+    top: 0;
+    width: 140px; /* 👈 fade zone width */
+    height: 100%;
+    pointer-events: none; /* 👈 zone doesn't block interaction */
+    z-index: 19; /* 👈 behind buttons but above cards */
+}
+
+.carousel-nav-zone.left {
+    left: 0;
+    background: linear-gradient(to right, rgba(255,255,255,.95), rgba(255,255,255,0));
+}
+
+.carousel-nav-zone.right {
+    right: 0;
+    background: linear-gradient(to left, rgba(255,255,255,.95), rgba(255,255,255,0));
+}
+
+/* Nav buttons (pill style with strong black ring) */
 .cv-nav {
     position: absolute;
     top: calc(var(--carousel-h) / 2);
     transform: translateY(-50%);
-    width: 48px; /* 👈 större klickyta */
+    width: 48px;
     height: 48px;
-    border-radius: 999px;
+    border-radius: 999px; /* 👈 pill/circular shape */
     border: 2px solid #000; /* 👈 strong black border */
-    background: rgba(255,255,255,.92);
-    box-shadow: 0 10px 22px rgba(0,0,0,.10);
+    background: rgba(255,255,255,.98); /* 👈 white background */
+    box-shadow: 0 4px 12px rgba(0,0,0,.15); /* 👈 soft shadow */
     display: grid;
     place-items: center;
     font-size: 26px;
     line-height: 1;
-    color: rgba(0,0,0,.78);
+    color: rgba(0,0,0,.88);
     cursor: pointer;
-    z-index: 20; /* 👈 alltid klickbar */
+    z-index: 20; /* 👈 always on top */
     user-select: none;
+    pointer-events: auto; /* 👈 button captures clicks */
+    transition: transform .2s ease, box-shadow .2s ease;
 }
 
-    .cv-nav:hover {
-        transform: translateY(-50%) scale(1.06);
-    }
+.cv-nav:hover {
+    transform: translateY(-50%) scale(1.08); /* 👈 lift on hover */
+    box-shadow: 0 6px 18px rgba(0,0,0,.22); /* 👈 stronger shadow */
+}
 
 .cv-nav--prev {
-    left: 10px;
+    left: 20px;
 }
 
 .cv-nav--next {
-    right: 10px;
+    right: 20px;
 }
 
-/* Dots */
+/* Dots - improved visibility */
 .cv-dots {
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-top: 24px; /* 👈 increased from 10px to move dots down */
+    margin-top: 24px;
 }
 
 .cv-dot {
     width: 10px;
     height: 10px;
     border-radius: 999px;
-    border: 1px solid rgba(0,0,0,.18);
-    background: rgba(0,0,0,.18);
+    border: 1.5px solid rgba(0,0,0,.30); /* 👈 visible border */
+    background: rgba(0,0,0,.25); /* 👈 subtle gray */
     cursor: pointer;
+    transition: all .2s ease;
 }
 
-    .cv-dot.is-active {
-        background: #000; /* 👈 “ännu svartare” */
-        border-color: #000;
-    }
+.cv-dot:hover {
+    background: rgba(0,0,0,.40);
+    border-color: rgba(0,0,0,.50);
+}
+
+.cv-dot.is-active {
+    width: 12px; /* 👈 slightly larger */
+    height: 12px;
+    background: #000; /* 👈 true black */
+    border: 1.5px solid #000; /* 👈 matching black border */
+}
 
 /* =========================
    Latest project spotlight
@@ -459,10 +510,10 @@
 /* Mobile */
 @media (max-width: 800px) {
     :root {
-        --carousel-h: 360px; /* 👈 increased from 300px to give more height on mobile */
+        --carousel-h: 360px;
         --slide-h: 240px;
         --side-x: 230px;
-        --slide-w: 440px; /* 👈 reduced from 520px to make mobile cards narrower */
+        --slide-w: 440px;
         --side-scale: 0.82;
     }
 
@@ -497,11 +548,24 @@
         text-align: center;
     }
 
+    /* Adjust fade zones for mobile */
+    .carousel-nav-zone {
+        width: 100px;
+    }
+
     /* Make nav buttons slightly smaller but still easy */
     .cv-nav {
         width: 44px;
         height: 44px;
         font-size: 24px;
         top: calc(var(--carousel-h) / 2);
+    }
+
+    .cv-nav--prev {
+        left: 12px;
+    }
+
+    .cv-nav--next {
+        right: 12px;
     }
 }
