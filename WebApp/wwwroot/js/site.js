@@ -77,21 +77,78 @@ document.addEventListener("DOMContentLoaded", () => {
             if (txt) txt.innerHTML = "Inga nya meddelanden";
         }
     }
+
+    // User menu dropdown toggle
+    document.addEventListener("click", (e) => {
+        const toggle = document.querySelector(".user-menu-toggle");
+        const dropdown = document.querySelector(".user-dropdown");
+        
+        if (!toggle || !dropdown) return;
+
+        const clickedToggle = toggle.contains(e.target);
+        const clickedDropdown = dropdown.contains(e.target);
+
+        if (clickedToggle) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const isOpen = dropdown.getAttribute("aria-hidden") === "false";
+            
+            dropdown.setAttribute("aria-hidden", isOpen ? "true" : "false");
+            toggle.setAttribute("aria-expanded", isOpen ? "false" : "true");
+            
+            return;
+        }
+
+        if (!clickedDropdown && dropdown.getAttribute("aria-hidden") === "false") {
+            dropdown.setAttribute("aria-hidden", "true");
+            toggle.setAttribute("aria-expanded", "false");
+        }
+    });
+
+    // Close dropdown on Escape key
+    document.addEventListener("keydown", (e) => {
+        if (e.key !== "Escape") return;
+
+        const toggle = document.querySelector(".user-menu-toggle");
+        const dropdown = document.querySelector(".user-dropdown");
+        
+        if (!toggle || !dropdown) return;
+
+        if (dropdown.getAttribute("aria-hidden") === "false") {
+            dropdown.setAttribute("aria-hidden", "true");
+            toggle.setAttribute("aria-expanded", "false");
+            toggle.focus();
+        }
+    });
+
+    // Close dropdown when clicking dropdown items
+    document.querySelectorAll(".dropdown-item").forEach((item) => {
+        item.addEventListener("click", () => {
+            const toggle = document.querySelector(".user-menu-toggle");
+            const dropdown = document.querySelector(".user-dropdown");
+            
+            if (!toggle || !dropdown) return;
+
+            dropdown.setAttribute("aria-hidden", "true");
+            toggle.setAttribute("aria-expanded", "false");
+        });
+    });
 });
 
+// Close dropdown on window resize
 let resizeTimer;
 window.addEventListener("resize", () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-        const btn = document.querySelector(".nl-burger");
-        const panel = document.querySelector(".nl-menu-panel");
-        if (!btn || !panel) return;
+        const toggle = document.querySelector(".user-menu-toggle");
+        const dropdown = document.querySelector(".user-dropdown");
+        
+        if (!toggle || !dropdown) return;
 
-        if (panel.classList.contains("open")) {
-            panel.classList.remove("open");
-            btn.classList.remove("is-open");
-            btn.setAttribute("aria-expanded", "false");
-            panel.setAttribute("aria-hidden", "true");
+        if (dropdown.getAttribute("aria-hidden") === "false") {
+            dropdown.setAttribute("aria-hidden", "true");
+            toggle.setAttribute("aria-expanded", "false");
         }
     }, 250);
 });

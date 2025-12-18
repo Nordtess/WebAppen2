@@ -1,545 +1,398 @@
-﻿:root {
-    --nl-nav-h: 120px; /* Increased from 76px to accommodate larger elements */
-    --nl-line: 3px;
+﻿/* ===== CSS GRID APP SHELL ===== */
+
+:root {
+    --header-height: 80px;
+    --sidebar-width: 260px;
+    --footer-height: 60px;
+    --shell-gap: 16px;
+    --shell-padding: 18px;
+    --border-radius: 14px;
+    --border-color: rgba(0, 0, 0, 0.12);
+    --bg-color: #fff;
+    --text-color: #111;
+    --hover-bg: rgba(0, 0, 0, 0.04);
+    --active-bg: rgba(0, 0, 0, 0.08);
 }
 
-/* Footer alltid längst ner */
-.nl-body {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding-top: var(--nl-nav-h);
-}
-
-.nl-main {
-    flex: 1 0 auto;
-    padding-top: 24px;
-    padding-bottom: 24px;
-}
-
-.nl-footer {
-    flex-shrink: 0;
-    line-height: 60px;
-}
-
-/* Navbar */
-.nl-navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: var(--nl-nav-h);
-    z-index: 2000;
-    background: rgba(255,255,255,0.88) !important;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-bottom: var(--nl-line) solid #111;
-    padding: 0 !important;
-    overflow: visible;
-}
-
-/* Shell */
-.nl-shell {
-    position: relative;
-    height: var(--nl-nav-h);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 24px;
-    min-width: 0;
-    gap: 20px;
-}
-
-/* LOGO */
-.nl-brand {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 auto;
-    z-index: 10;
-}
-
-.nl-logo {
-    height: 150px;
-    width: auto;
-    display: block;
-}
-
-/* CENTER: absolut centrerad */
-.nl-center-col {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    z-index: 1;
-}
-
-.nl-center-wrap {
-    display: flex;
-    align-items: center;
-    padding: 0 26px;
-    border-left: var(--nl-line) solid #111;
-    border-right: var(--nl-line) solid #111;
-    pointer-events: auto;
-    height: 60px; /* Fixed height for consistent border alignment */
-}
-
-.nl-nav-center {
-    gap: 26px;
-}
-
-/* Länkar (behåll exakt look + underline animation) */
-.nl-link {
-    font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
-    font-size: 20px !important;
-    font-weight: 750 !important;
-    color: #111 !important;
-    opacity: 0.85;
-    letter-spacing: 0.2px;
-    text-decoration: none !important;
-    position: relative;
-    padding-bottom: 6px;
-    transition: opacity .2s ease;
-    white-space: nowrap;
-}
-
-    .nl-link:hover {
-        opacity: 0.55;
-    }
-
-    .nl-link::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        height: 2px;
-        background: #111;
-        transform: scaleX(0);
-        transform-origin: center;
-        transition: transform .25s ease;
-    }
-
-    .nl-link:hover::after {
-        transform: scaleX(1);
-    }
-
-    .nl-link.active {
-        opacity: 1;
-    }
-
-        .nl-link.active::after {
-            transform: scaleX(1);
-        }
-
-        /* Lås så bootstrap aldrig gör dem blå */
-.nl-navbar a,
-.nl-navbar a:visited,
-.nl-navbar a:hover,
-.nl-navbar a:focus {
-    color: #111 !important;
-    text-decoration: none !important;
-}
-
-/* RIGHT */
-.nl-right {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    min-width: 0;
-    flex: 0 1 auto;
-    z-index: 10;
-    max-width: 45%;
-}
-
-    .nl-right > * {
-        min-width: 0;
-    }
-
-/* User */
-.nl-user {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding-left: 20px;
-    border-left: var(--nl-line) solid #111;
-    min-width: 0;
-    flex: 0 1 auto;
-    order: 0;
-    height: 60px; /* Fixed height for consistent border alignment */
-}
-
-.nl-user-email {
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-weight: 650;
-    font-size: 16px;
-    color: rgba(0,0,0,0.9);
-}
-
-/* Burger */
-.nl-account {
-    position: relative;
-    flex: 0 0 auto;
-    z-index: 3000;
-}
-
-.nl-burger {
-    width: 32px;
-    height: 32px;
-    border: 0;
-    background: transparent;
+* {
+    margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-optical-sizing: auto;
+    background: #f5f5f7;
+    min-height: 100vh;
+    padding: var(--shell-padding);
+}
+
+/* APP SHELL - CSS Grid Container */
+.app-shell {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 1fr;
+    grid-template-rows: var(--header-height) 1fr var(--footer-height);
+    grid-template-areas:
+        "header header"
+        "sidebar main"
+        "footer footer";
+    gap: var(--shell-gap);
+    min-height: calc(100vh - (var(--shell-padding) * 2));
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* ===== HEADER ===== */
+.app-header {
+    grid-area: header;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.header-content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-img {
+    height: 60px;
+    width: auto;
+}
+
+.header-user {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.user-email {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-color);
+    opacity: 0.85;
+}
+
+/* User Menu Dropdown */
+.user-menu {
+    position: relative;
+}
+
+.user-menu-toggle {
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
     cursor: pointer;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 5px;
+    border-radius: 8px;
+    transition: background 0.2s ease;
 }
 
-    .nl-burger span {
-        display: block;
-        width: 26px;
-        height: 3px;
-        background: #111;
-        border-radius: 999px;
-        transition: transform .22s ease, opacity .18s ease;
-    }
-
-    .nl-burger:hover span {
-        opacity: .75;
-    }
-
-    .nl-burger.is-open span:nth-child(1) {
-        transform: translateY(8px) rotate(45deg);
-    }
-
-    .nl-burger.is-open span:nth-child(2) {
-        opacity: 0;
-    }
-
-    .nl-burger.is-open span:nth-child(3) {
-        transform: translateY(-8px) rotate(-45deg);
-    }
-
-/* Dropdown: left edge aligned to right side of burger button */
-.nl-menu-panel {
-    position: absolute;
-    left: -50%; /* Left edge starts at right side of button */
-    top: calc(100% + 12px); /* Below the burger button */
-    transform: none;
-    min-width: 220px;
-    max-width: min(320px, calc(100vw - 24px));
-    overflow: hidden;
-    background: rgba(255,255,255,0.95);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(0,0,0,0.10);
-    border-radius: 14px;
-    box-shadow: 0 18px 40px rgba(0,0,0,0.10);
-    padding: 10px;
-    display: none;
-    z-index: 3500;
+.user-menu-toggle:hover {
+    background: var(--hover-bg);
 }
 
-    .nl-menu-panel.open {
-        display: block;
-    }
-
-.nl-menu-item {
+.burger-line {
     display: block;
-    padding: 10px 12px;
-    border-radius: 10px;
-    text-decoration: none !important;
-    color: #111 !important;
-    font-weight: 650;
+    width: 22px;
+    height: 2px;
+    background: var(--text-color);
+    border-radius: 2px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-    .nl-menu-item:hover {
-        background: rgba(0,0,0,0.05);
-    }
+.user-menu-toggle[aria-expanded="true"] .burger-line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
 
-/* Mail (med bild) */
-.nl-mail {
+.user-menu-toggle[aria-expanded="true"] .burger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.user-menu-toggle[aria-expanded="true"] .burger-line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+.user-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 220px;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    padding: 8px;
+    display: none;
+    z-index: 1000;
+}
+
+.user-dropdown[aria-hidden="false"] {
+    display: block;
+}
+
+.dropdown-item {
+    display: block;
+    padding: 10px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 15px;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background: var(--hover-bg);
+}
+
+/* ===== SIDEBAR ===== */
+.app-sidebar {
+    grid-area: sidebar;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 20px 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sidebar-link {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding-left: 20px;
-    border-left: var(--nl-line) solid #111;
-    min-width: 0;
-    flex: 0 1 auto;
-    order: 1;
-    z-index: 5;
-    height: 60px; /* Fixed height for consistent border alignment */
-}
-
-.nl-mail-img {
-    height: 70px;
-    width: auto;
-    display: block;
-    opacity: 0.95;
-    flex: 0 0 auto;
-}
-
-.nl-mail-text {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: rgba(0,0,0,0.85);
-    font-weight: 600;
+    padding: 12px 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--text-color);
     font-size: 15px;
-    min-width: 0;
-    flex: 1 1 auto;
+    font-weight: 600;
+    transition: background 0.2s ease, transform 0.15s ease;
+    opacity: 0.85;
 }
 
-/* ===== Responsive ===== */
-@media (min-width: 1400px) {
-    .nl-center-col {
-        display: block;
-    }
-
-    .nl-mail-text {
-        display: inline;
-    }
-
-    .nl-user-email {
-        max-width: 200px;
-    }
-    
-    .nl-right {
-        max-width: 48%;
-    }
+.sidebar-link:hover {
+    background: var(--hover-bg);
+    opacity: 1;
+    transform: translateX(2px);
 }
 
-@media (min-width: 1200px) and (max-width: 1399px) {
-    .nl-center-col {
-        display: block;
-    }
-
-    .nl-mail_text {
-        display: inline;
-    }
-
-    .nl-user-email {
-        max-width: 160px;
-    }
-    
-    .nl-right {
-        max-width: 50%;
-    }
-    
-    .nl-logo {
-        height: 130px;
-    }
-    
-    .nl-mail-img {
-        height: 60px;
-    }
+.sidebar-link.active {
+    background: var(--active-bg);
+    opacity: 1;
 }
 
-/* Medium: göm center om tight */
-@media (min-width: 992px) and (max-width: 1199px) {
-    .nl-center-col {
-        display: none;
-    }
-
-    .nl-user-email {
-        max-width: 140px;
-    }
-
-    .nl-right {
-        max-width: 55%;
-    }
-    
-    .nl-logo {
-        height: 110px;
-    }
-    
-    .nl-mail-img {
-        height: 55px;
-    }
-    
-    .nl-mail-text {
-        font-size: 14px;
-    }
+.link-icon {
+    font-size: 18px;
+    width: 24px;
+    text-align: center;
 }
 
-/* Tablet */
-@media (min-width: 768px) and (max-width: 991px) {
+.link-text {
+    flex: 1;
+}
+
+/* ===== MAIN CONTENT ===== */
+.app-main {
+    grid-area: main;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 32px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    overflow-y: auto;
+    min-height: 500px;
+}
+
+/* ===== FOOTER ===== */
+.app-footer {
+    grid-area: footer;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.footer-content {
+    text-align: center;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.footer-content a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+}
+
+.footer-content a:hover {
+    opacity: 0.6;
+    text-decoration: underline;
+}
+
+/* ===== ERROR PAGE STYLES ===== */
+.error-title {
+    color: #dc3545;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Tablets and below */
+@media (max-width: 1024px) {
     :root {
-        --nl-nav-h: 100px;
-    }
-    
-    .nl-center-col {
-        display: none;
+        --sidebar-width: 220px;
+        --shell-padding: 14px;
     }
 
-    .nl-mail-text {
-        display: none;
-    }
-
-    .nl-user-email {
-        max-width: 120px;
-        font-size: 14px;
-    }
-    
-    .nl-right {
-        max-width: 60%;
-        gap: 12px;
-    }
-    
-    .nl-logo {
-        height: 90px;
-    }
-    
-    .nl-mail-img {
+    .logo-img {
         height: 50px;
     }
-    
-    .nl-shell {
+
+    .app-main {
+        padding: 24px;
+    }
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+    :root {
+        --shell-padding: 12px;
+        --shell-gap: 12px;
+        --header-height: 70px;
+    }
+
+    body {
+        padding: var(--shell-padding);
+    }
+
+    .app-shell {
+        grid-template-columns: 1fr;
+        grid-template-rows: var(--header-height) auto 1fr var(--footer-height);
+        grid-template-areas:
+            "header"
+            "sidebar"
+            "main"
+            "footer";
+    }
+
+    .app-header {
         padding: 0 16px;
-        gap: 16px;
-    }
-    
-    .nl-user {
-        height: 50px;
-    }
-    
-    .nl-mail {
-        height: 50px;
-    }
-    
-    .nl-center-wrap {
-        height: 50px;
     }
 
-    /* dropdown under knappen - switch to right-aligned on smaller screens */
-    .nl-menu-panel {
-        left: auto;
-        right: 0;
-        transform: none;
-        top: calc(100% + 12px);
-    }
-}
-
-/* Mobile */
-@media (max-width: 767px) {
-    :root {
-        --nl-nav-h: 90px;
-    }
-    
-    .nl-center-col {
-        display: none;
-    }
-
-    .nl-mail-text {
-        display: none;
-    }
-
-    .nl-user_email {
-        display: none;
-    }
-
-    .nl-user {
-        border-left: none;
-        padding-left: 0;
+    .logo-img {
         height: 45px;
     }
 
-    .nl-right {
-        gap: 10px;
-        max-width: 65%;
+    .user-email {
+        display: none;
     }
 
-    .nl-shell {
-        padding: 0 12px;
-        gap: 12px;
-    }
-    
-    .nl-logo {
-        height: 75px;
-    }
-    
-    .nl-mail-img {
-        height: 45px;
-    }
-    
-    .nl-mail {
-        height: 45px;
+    .app-sidebar {
+        padding: 12px 8px;
     }
 
-    /* dropdown under knappen */
-    .nl-menu-panel {
-        left: auto;
-        right: 0;
-        transform: none;
-        top: calc(100% + 12px);
-    }
-}
-
-@media (max-width: 480px) {
-    :root {
-        --nl-nav-h: 80px;
-    }
-    
-    .nl-logo {
-        height: 65px;
-    }
-
-    .nl-shell {
-        padding: 0 8px;
+    .sidebar-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
         gap: 8px;
     }
 
-    .nl-mail {
-        padding-left: 10px;
-        height: 40px;
+    .sidebar-link {
+        flex: 1 1 calc(50% - 4px);
+        min-width: 140px;
+        padding: 10px 12px;
+        font-size: 14px;
     }
-    
-    .nl-mail-img {
-        height: 40px;
+
+    .link-icon {
+        font-size: 16px;
+        width: 20px;
     }
-    
-    .nl-user {
-        height: 40px;
+
+    .app-main {
+        padding: 20px 16px;
+        min-height: 400px;
     }
-    
-    .nl-burger {
-        width: 28px;
-        height: 28px;
-    }
-    
-    .nl-burger span {
-        width: 22px;
+
+    .footer-content {
+        font-size: 13px;
+        padding: 0 12px;
     }
 }
 
-@media (max-width: 380px) {
+/* Small mobile devices */
+@media (max-width: 480px) {
     :root {
-        --nl-nav-h: 70px;
+        --shell-padding: 8px;
+        --shell-gap: 10px;
+        --header-height: 60px;
+        --border-radius: 12px;
     }
-    
-    .nl-logo {
-        height: 55px;
+
+    .logo-img {
+        height: 38px;
     }
-    
-    .nl-mail-img {
+
+    .app-header {
+        padding: 0 12px;
+    }
+
+    .sidebar-link {
+        flex: 1 1 100%;
+        padding: 10px 14px;
+    }
+
+    .app-main {
+        padding: 16px 12px;
+    }
+
+    .footer-content {
+        font-size: 12px;
+    }
+}
+
+/* Very small devices */
+@media (max-width: 360px) {
+    :root {
+        --shell-padding: 6px;
+        --shell-gap: 8px;
+    }
+
+    .logo-img {
         height: 35px;
-    }
-    
-    .nl-mail {
-        height: 35px;
-    }
-    
-    .nl-user {
-        height: 35px;
-    }
-    
-    .nl-right {
-        max-width: 70%;
     }
 }

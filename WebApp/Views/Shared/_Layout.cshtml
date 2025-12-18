@@ -13,7 +13,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - WebApp</title>
 
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/components.css" asp-append-version="true" />
@@ -25,98 +24,81 @@
     @RenderSection("Styles", required: false)
 </head>
 
-<body class="nl-body">
-    <header>
-        <nav class="navbar nl-navbar" role="navigation" aria-label="Huvudnavigation">
-            <div class="container-fluid nl-shell">
-
-                <!-- LEFT: LOGO (INTE länk) -->
-                <div class="nl-brand" aria-label="NotLinkedIn logo">
-                    <img class="nl-logo"
-                         src="~/images/logos/loggamini.png"
+<body>
+    <div class="app-shell">
+        
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-logo">
+                    <img src="~/images/logos/loggamini.png"
                          asp-append-version="true"
-                         alt="NotLinkedIn" />
+                         alt="NotLinkedIn" 
+                         class="logo-img" />
                 </div>
+                <div class="header-user">
+                    <div class="user-menu">
+                        <button class="user-menu-toggle" type="button"
+                                aria-label="Öppna användarmeny" aria-expanded="false" aria-controls="user-dropdown">
+                            <span class="burger-line"></span>
+                            <span class="burger-line"></span>
+                            <span class="burger-line"></span>
+                        </button>
 
-                <!-- CENTER: länkar -->
-                <div class="nl-center-col" aria-label="Primär navigation">
-                    <div class="nl-center-wrap">
-                        <ul class="navbar-nav flex-row nl-nav-center">
-                            <li class="nav-item">
-                                <a class="nav-link nl-link @Active("Home")" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link nl-link @Active("SearchCv")" asp-controller="SearchCv" asp-action="Index">Sök CV</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link nl-link @Active("Projects")" asp-controller="Projects" asp-action="Index">Alla projekt</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link nl-link @Active("Login")" asp-controller="Login" asp-action="Index">Logga in</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link nl-link @Active("NewUser")" asp-controller="NewUser" asp-action="Index">Bli medlem</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- RIGHT -->
-                <div class="nl-right" aria-label="Användarområde">
-
-                    <!-- User section (burger + email) -->
-                    <div class="nl-user">
-                        <div class="nl-account">
-                            <button class="nl-burger" type="button"
-                                    aria-label="Öppna meny" aria-expanded="false" aria-controls="user-menu">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </button>
-
-                            <div class="nl-menu-panel" id="user-menu" aria-hidden="true" role="menu">
-                                <a class="nl-menu-item" asp-controller="MyCV" asp-action="Index" role="menuitem">Mitt CV</a>
-                                <a class="nl-menu-item" asp-controller="Messages" asp-action="Index" role="menuitem">Mina meddelanden</a>
-                            </div>
+                        <div class="user-dropdown" id="user-dropdown" aria-hidden="true" role="menu">
+                            <a class="dropdown-item" asp-controller="MyCV" asp-action="Index" role="menuitem">Mitt CV</a>
+                            <a class="dropdown-item" asp-controller="Messages" asp-action="Index" role="menuitem">Mina meddelanden</a>
                         </div>
-
-                        <span class="nl-user-email" title="jamie@example.se">jamie@example.se</span>
                     </div>
-
-                    <!-- Mail notification (med era bilder) -->
-                    <a class="nl-mail"
-                       asp-controller="Messages" asp-action="Index"
-                       data-unread="3"
-                       data-closed-src="@Url.Content("~/images/bannersandicons/mail.png")"
-                       data-open-src="@Url.Content("~/images/bannersandicons/mailopen.png")"
-                       title="Meddelanden">
-                        <img class="nl-mail-img"
-                             src="~/images/bannersandicons/mail.png"
-                             asp-append-version="true"
-                             alt="Meddelanden" />
-                        <span class="nl-mail-text">
-                            Du har <strong class="nl-unread-count">3</strong> olästa meddelanden
-                        </span>
-                    </a>
-
+                    <span class="user-email" title="jamie@example.se">jamie@example.se</span>
                 </div>
-
             </div>
-        </nav>
-    </header>
+        </header>
 
-    <main class="nl-main container" role="main">
-        @RenderBody()
-    </main>
+        <aside class="app-sidebar">
+            <nav class="sidebar-nav" role="navigation" aria-label="Huvudnavigation">
+                <a class="sidebar-link @Active("Home")" asp-controller="Home" asp-action="Index">
+                    <span class="link-icon">🏠</span>
+                    <span class="link-text">Home</span>
+                </a>
+                <a class="sidebar-link @Active("SearchCv")" asp-controller="SearchCv" asp-action="Index">
+                    <span class="link-icon">🔍</span>
+                    <span class="link-text">Sök CV</span>
+                </a>
+                <a class="sidebar-link @Active("Projects")" asp-controller="Projects" asp-action="Index">
+                    <span class="link-icon">📁</span>
+                    <span class="link-text">Alla projekt</span>
+                </a>
+                <a class="sidebar-link @Active("Login")" asp-controller="Login" asp-action="Index">
+                    <span class="link-icon">🔑</span>
+                    <span class="link-text">Logga in</span>
+                </a>
+                <a class="sidebar-link @Active("NewUser")" asp-controller="NewUser" asp-action="Index">
+                    <span class="link-icon">✨</span>
+                    <span class="link-text">Bli medlem</span>
+                </a>
+                <a class="sidebar-link @Active("MyCV")" asp-controller="MyCV" asp-action="Index">
+                    <span class="link-icon">👤</span>
+                    <span class="link-text">Mitt CV</span>
+                </a>
+                <a class="sidebar-link @Active("Messages")" asp-controller="Messages" asp-action="Index">
+                    <span class="link-icon">💬</span>
+                    <span class="link-text">Meddelanden</span>
+                </a>
+            </nav>
+        </aside>
 
-    <footer class="nl-footer border-top text-muted" role="contentinfo">
-        <div class="container">
-            &copy; 2025 - WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+        <main class="app-main" role="main">
+            @RenderBody()
+        </main>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <footer class="app-footer" role="contentinfo">
+            <div class="footer-content">
+                &copy; 2025 - WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>
+
+    </div>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

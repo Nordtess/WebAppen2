@@ -11,16 +11,24 @@ a {
   color: #0077cc;
 }
 
+/* Button styles */
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1.5;
+  text-decoration: none;
+  display: inline-block;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.btn-primary:hover {
+  background-color: #1861ac;
+  border-color: #164a8e;
 }
 
 .border-top {
