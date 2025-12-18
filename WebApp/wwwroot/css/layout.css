@@ -3,9 +3,8 @@
 :root {
     --header-height: 70px;
     --sidebar-width: 240px;
-    --footer-height: 60px;
-    --shell-gap: 16px;
-    --shell-padding: 16px;
+    --shell-gap: 10px;
+    --shell-padding-sides: 10px;
     --border-radius: 14px;
     --border-color: rgba(0, 0, 0, 0.25);
     --bg-color: #fff;
@@ -60,18 +59,17 @@ p {
     margin-bottom: 0.75rem;
 }
 
-/* APP SHELL - CSS Grid Container with 3 rows */
+/* APP SHELL - CSS Grid Container (no top padding, header flush to top) */
 .app-shell {
     display: grid;
     grid-template-columns: var(--sidebar-width) 1fr;
-    grid-template-rows: var(--header-height) 1fr var(--footer-height);
+    grid-template-rows: var(--header-height) 1fr;
     grid-template-areas:
         "header header"
-        "sidebar main"
-        "sidebar footer";
+        "sidebar main";
     gap: var(--shell-gap);
     height: 100vh;
-    padding: var(--shell-padding);
+    padding: 0 var(--shell-padding-sides) var(--shell-padding-sides) var(--shell-padding-sides);
     box-sizing: border-box;
 }
 
@@ -176,7 +174,7 @@ p {
     white-space: nowrap;
 }
 
-/* ===== SIDEBAR (extends full height next to footer) ===== */
+/* ===== SIDEBAR (full height) ===== */
 .app-sidebar {
     grid-area: sidebar;
     background: var(--bg-color);
@@ -185,6 +183,8 @@ p {
     padding: 16px 10px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
     overflow-y: auto;
+    align-self: stretch;
+    height: 100%;
 }
 
 .sidebar-nav {
@@ -234,7 +234,7 @@ p {
     display: none;
 }
 
-/* ===== MAIN CONTENT (scrollable) ===== */
+/* ===== MAIN CONTENT (scrollable, footer inside) ===== */
 .app-main {
     grid-area: main;
     background: var(--bg-color);
@@ -244,19 +244,14 @@ p {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
     overflow-y: auto;
     overflow-x: hidden;
-    height: 100%;
+    min-height: 0;
 }
 
-/* ===== FOOTER (separate grid area) ===== */
+/* ===== FOOTER (inside main, scrolls with content) ===== */
 .app-footer {
-    grid-area: footer;
-    background: var(--bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    margin-top: 60px;
+    padding-top: 30px;
+    border-top: 1px solid var(--border-color);
 }
 
 .footer-content {
@@ -293,20 +288,19 @@ p {
 /* ===== SINGLE BREAKPOINT - MOBILE ===== */
 @media (max-width: 800px) {
     :root {
-        --shell-padding: 12px;
-        --shell-gap: 12px;
+        --shell-padding-sides: 8px;
+        --shell-gap: 8px;
         --header-height: 60px;
-        --footer-height: 50px;
     }
 
-    /* Mobile grid: single column, footer at bottom */
+    /* Mobile grid: single column */
     .app-shell {
         grid-template-columns: 1fr;
-        grid-template-rows: var(--header-height) 1fr var(--footer-height);
+        grid-template-rows: var(--header-height) 1fr;
         grid-template-areas:
             "header"
-            "main"
-            "footer";
+            "main";
+        padding: 0 var(--shell-padding-sides) var(--shell-padding-sides) var(--shell-padding-sides);
     }
 
     /* Show hamburger on mobile */
@@ -331,9 +325,9 @@ p {
     /* Sidebar becomes slide-down panel BELOW header */
     .app-sidebar {
         position: fixed;
-        top: calc(var(--header-height) + var(--shell-padding) + var(--shell-gap));
-        left: var(--shell-padding);
-        right: var(--shell-padding);
+        top: calc(var(--header-height) + var(--shell-gap));
+        left: var(--shell-padding-sides);
+        right: var(--shell-padding-sides);
         width: auto;
         max-height: 0;
         overflow: hidden;
@@ -342,10 +336,12 @@ p {
         padding: 0;
         border-radius: var(--border-radius);
         transition: max-height 0.3s ease, padding 0.3s ease;
+        align-self: unset;
+        height: auto;
     }
 
     .app-sidebar.open {
-        max-height: calc(100vh - var(--header-height) - var(--shell-padding) * 2 - var(--shell-gap) * 2 - 20px);
+        max-height: calc(100vh - var(--header-height) - var(--shell-padding-sides) - var(--shell-gap) * 2 - 20px);
         padding: 12px 10px;
         overflow-y: auto;
     }
@@ -354,10 +350,10 @@ p {
     .sidebar-overlay {
         display: none;
         position: fixed;
-        top: calc(var(--header-height) + var(--shell-padding) + var(--shell-gap));
+        top: calc(var(--header-height) + var(--shell-gap));
         left: 0;
         width: 100%;
-        height: calc(100% - var(--header-height) - var(--shell-padding) - var(--shell-gap));
+        height: calc(100% - var(--header-height) - var(--shell-gap));
         background: rgba(0, 0, 0, 0.5);
         z-index: 998;
         opacity: 0;
@@ -371,6 +367,11 @@ p {
 
     .app-main {
         padding: 20px 14px;
+    }
+
+    .app-footer {
+        margin-top: 40px;
+        padding-top: 24px;
     }
 
     .footer-content {
