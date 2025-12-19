@@ -12,6 +12,10 @@
     --text-color: #111;
     --hover-bg: rgba(0, 0, 0, 0.05);
     --active-bg: rgba(0, 0, 0, 0.1);
+
+    /* Mint accent for nav active */
+    --mint: #7FFFD4;
+    --mint-soft: rgba(127,255,212,.18);
 }
 
 /* Prevent body scroll - only main content scrolls */
@@ -207,25 +211,27 @@ p {
 }
 
 .sidebar-link:hover {
-    background: var(--hover-bg);
+    /* Keep the pop/slide, but no background highlight */
+    background: transparent;
     opacity: 1;
-    transform: translateX(2px);
+    transform: translateX(3px);
+    text-decoration: none;
 }
 
 .sidebar-link.active {
-    background: var(--active-bg);
+    /* Mint active highlight */
+    background: linear-gradient(180deg, var(--mint-soft), rgba(255,255,255,0));
+    border: 1px solid rgba(127,255,212,.55);
     opacity: 1;
 }
 
-.link-icon {
-    font-size: 17px;
-    width: 22px;
-    text-align: center;
-    flex-shrink: 0;
-}
-
-.link-text {
-    flex: 1;
+/* Ensure no underline ever appears in sidebar links */
+.sidebar-link,
+.sidebar-link:hover,
+.sidebar-link:focus,
+.sidebar-link:active,
+.sidebar-link:visited {
+    text-decoration: none;
 }
 
 /* Sidebar Overlay (hidden on desktop) */
