@@ -381,19 +381,42 @@
     border-radius: 16px;
     padding: 14px;
     box-shadow: 0 10px 22px rgba(0,0,0,.05);
-    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), 
-                box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    will-change: transform, box-shadow;
+    transition:
+        transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+        box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+        border-color 0.35s ease;
+}
+
+/* subtle "shine" overlay */
+.cv-project::before {
+    content: "";
+    position: absolute;
+    inset: -40% -60%;
+    background: radial-gradient(circle at 30% 20%, rgba(127,255,212,.35), rgba(255,255,255,0) 55%);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    pointer-events: none;
 }
 
     .cv-project:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        transform: translateY(-6px) scale(1.015);
+        border-color: rgba(127,255,212,.45);
+        box-shadow: 0 18px 44px rgba(0,0,0,.10);
+    }
+
+    .cv-project:hover::before {
+        opacity: 1;
+        transform: translateY(0);
     }
 
 .cv-project-title {
     font-weight: 950;
     color: rgba(0,0,0,.86);
-    text-align: center; /* som du ville */
+    text-align: center;
     letter-spacing: -0.01em;
 }
 
@@ -403,9 +426,14 @@
     color: rgba(0,0,0,.66);
     font-weight: 650;
     line-height: 1.55;
-    /* Gemini: fixar “sjuka mellanrum” i justify */
-    text-align: justify;
-    hyphens: auto;
+
+    /* Fix the weird gaps: avoid full justification */
+    text-align: left;
+    text-justify: auto;
+    word-spacing: normal;
+
+    /* Professional wrapping */
+    hyphens: manual;
     overflow-wrap: anywhere;
 }
 
