@@ -1,38 +1,38 @@
-﻿/* =========================
-   MyCV — Apple-ish, enhetligt med Home
-   ========================= */
-
-:root {
-    --cv-max: 900px; /* matchar Home max */
+﻿:root {
+    /* Matcha Home: samma maxbredd (900px) */
+    --cv-max: 900px;
+    /* Banner */
+    --cv-banner-h: 190px;
+    /* Layout */
     --cv-radius: 24px;
-    --cv-border: 1px solid rgba(0,0,0,0.08);
-    --cv-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
-    --cv-soft: rgba(255,255,255,0.95);
-    --cv-banner-h: 190px; /* matchar Home banner-höjd */
+    --cv-border: 1px solid rgba(0,0,0,.10);
+    --cv-shadow: 0 20px 40px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.04);
     --cv-pad: 18px;
-    --cv-text: 16px;
-    --cv-title: 30px;
+    /* Mint accent */
+    --mint: #7FFFD4;
+    --mint-soft: rgba(127,255,212,.18);
+    --mint-soft-2: rgba(127,255,212,.10);
 }
 
-/* Page wrapper (lik Home) */
+/* Page */
 .cv-page {
-    max-width: var(--cv-max);
-    margin: 0 auto;
-    padding: 22px 18px 28px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    align-items: center;
+    padding: 22px 18px 28px; /* samma känsla som home */
+    gap: 12px;
 }
 
 /* Banner */
 .cv-banner {
     width: 100%;
+    max-width: var(--cv-max);
+    height: var(--cv-banner-h);
     border-radius: var(--cv-radius);
     overflow: hidden;
     border: var(--cv-border);
-    background: rgba(255,255,255,0.95);
-    box-shadow: 0 18px 38px rgba(0,0,0,0.07), 0 2px 6px rgba(0,0,0,0.04);
-    height: var(--cv-banner-h);
+    background: rgba(255,255,255,.95);
+    box-shadow: 0 18px 38px rgba(0,0,0,.07), 0 2px 6px rgba(0,0,0,.04);
 }
 
 .cv-banner-img {
@@ -43,14 +43,17 @@
     object-position: center 20%;
 }
 
-/* Main card */
+/* CV card */
 .cv-card {
     width: 100%;
-    background: var(--cv-soft);
+    max-width: var(--cv-max);
+    background: rgba(255,255,255,.96);
     border: var(--cv-border);
     border-radius: var(--cv-radius);
     box-shadow: var(--cv-shadow);
-    padding: var(--cv-pad);
+    box-sizing: border-box; /* <-- Gemini: exakt linje med banner */
+    padding: 0; /* <-- Gemini: edge-to-edge, paddingen flyttas in */
+    overflow: hidden;
 }
 
 /* Topbar */
@@ -59,161 +62,165 @@
     align-items: center;
     justify-content: space-between;
     gap: 14px;
-    padding: 4px 6px 10px;
+    padding: 16px var(--cv-pad);
 }
 
 .cv-visits {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 8px;
-    font-weight: 760;
-    color: rgba(0,0,0,0.72);
-}
-
-.cv-visits-label {
     font-size: 13px;
-    font-weight: 760;
-    color: rgba(0,0,0,0.62);
+    font-weight: 800;
+    color: rgba(0,0,0,.70);
 }
 
-.cv-visits-value {
-    font-size: 14px;
+.cv-visits-num {
     font-weight: 900;
-    color: rgba(0,0,0,0.82);
+    color: rgba(0,0,0,.82);
 }
 
+/* Divider: utan margin så mint-panelen kan nå upp */
+.cv-divider {
+    height: 1px;
+    background: rgba(0,0,0,.08);
+    margin: 0; /* <-- Gemini */
+}
+
+/* Grid: align-items stretch ger lika hög vänster/höger */
+.cv-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    align-items: stretch; /* <-- Gemini */
+    gap: 0; /* edge-to-edge */
+}
+
+/* LEFT mint-panel */
+.cv-left {
+    padding: var(--cv-pad);
+    background: linear-gradient(180deg, var(--mint-soft) 0%, rgba(255,255,255,0) 75%);
+    border-right: 1px solid rgba(0,0,0,.06);
+}
+
+/* RIGHT */
+.cv-right {
+    padding: var(--cv-pad);
+    background: rgba(255,255,255,.96);
+}
+
+/* =========================
+   Toggle (mint, kortare, ingen bleed)
+   ========================= */
 .cv-privacy {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: flex-end;
+    gap: 12px;
 }
 
 .cv-privacy-label {
     font-size: 13px;
     font-weight: 800;
-    color: rgba(0,0,0,0.72);
+    color: rgba(0,0,0,.70);
 }
 
-/* Toggle */
 .cv-toggle {
-    border: 0;
-    background: transparent;
-    padding: 0;
+    --h: 32px;
+    --w: 104px; /* kortare */
+    --pad: 2px;
+    --knob: 28px;
+    position: relative;
+    width: var(--w);
+    height: var(--h);
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,.14);
+    background: rgba(0,0,0,.08);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.10);
     cursor: pointer;
+    padding: 0;
+    overflow: hidden; /* stoppar blödning */
     user-select: none;
 }
 
-.cv-toggle-track {
-    position: relative;
-    width: 112px;
-    height: 34px;
-    border-radius: 999px;
-    border: 1px solid rgba(0,0,0,0.14);
-    background: rgba(0,0,0,0.06);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+.cv-toggle__label {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    display: flex;
     align-items: center;
-    padding: 0 10px; /* gör att text aldrig klipps */
-    box-shadow: inset 2px 2px 4px rgba(0,0,0,0.10), inset -2px -2px 4px rgba(255,255,255,0.85);
-}
-
-.cv-toggle-text {
     font-size: 12px;
     font-weight: 900;
     letter-spacing: -0.01em;
-    color: rgba(0,0,0,0.55);
-    z-index: 2;
+    line-height: 1;
+    pointer-events: none;
+    z-index: 1;
+    color: rgba(0,0,0,.72);
 }
 
-.cv-toggle-text--off {
-    text-align: left;
+.cv-toggle__label--off {
+    left: 12px;
 }
 
-.cv-toggle-text--on {
-    text-align: right;
+.cv-toggle__label--on {
+    right: 12px;
 }
 
-.cv-toggle-knob {
+.cv-toggle__knob {
     position: absolute;
-    top: 4px;
-    left: 4px;
-    width: 26px;
-    height: 26px;
+    top: var(--pad);
+    left: var(--pad);
+    width: var(--knob);
+    height: var(--knob);
     border-radius: 999px;
-    background: rgba(255,255,255,0.95);
-    border: 1px solid rgba(0,0,0,0.10);
-    box-shadow: 0 10px 18px rgba(0,0,0,0.14);
-    transition: left .18s ease, background .18s ease;
+    background: rgba(255,255,255,.98);
+    box-shadow: 0 2px 8px rgba(0,0,0,.18);
+    transition: transform .18s ease; /* Gemini: transform */
+    z-index: 2; /* ligger över text */
 }
 
-/* ON state */
-.cv-toggle.is-on .cv-toggle-track {
-    background: rgba(34,197,94,0.92);
-    border-color: rgba(0,0,0,0.10);
+/* PÅ-läge */
+.cv-toggle.is-on {
+    background: var(--mint);
+    border-color: rgba(0,0,0,.10);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.10), 0 0 0 3px rgba(127,255,212,.22);
 }
 
-.cv-toggle.is-on .cv-toggle-text--on {
-    color: rgba(255,255,255,0.95);
+    .cv-toggle.is-on .cv-toggle__knob {
+        transform: translateX(calc(var(--w) - (var(--knob) + (var(--pad) * 2))));
+    }
+
+    .cv-toggle.is-on .cv-toggle__label--off {
+        opacity: .55;
+    }
+
+.cv-toggle:not(.is-on) .cv-toggle__label--on {
+    opacity: .55;
 }
 
-.cv-toggle.is-on .cv-toggle-text--off {
-    color: rgba(0,0,0,0.45);
-}
-
-.cv-toggle.is-on .cv-toggle-knob {
-    left: calc(100% - 30px);
-}
-
-/* Divider */
-.cv-divider {
-    height: 1px;
-    background: rgba(0,0,0,0.08);
-    margin: 6px 0 14px;
-}
-
-/* Grid */
-.cv-grid {
-    display: grid;
-    grid-template-columns: 320px 1fr;
-    gap: 16px;
-    align-items: stretch; /* gör att vänsterpanel fyller hela höjden */
-}
-
-/* LEFT PANEL (fyll hela området) */
-.cv-left {
-    border-radius: 18px;
-    padding: 14px;
-    border: 1px solid rgba(0,0,0,0.06);
-    background: linear-gradient(180deg, rgba(52, 211, 153, 0.14) 0%, rgba(52, 211, 153, 0.08) 35%, rgba(255,255,255,0.0) 100%);
-}
-
-/* Profile card inside left panel */
+/* =========================
+   Left profile card
+   ========================= */
 .cv-profile-card {
-    border: 1px solid rgba(0,0,0,0.08);
+    background: rgba(255,255,255,.92);
+    border: 1px solid rgba(0,0,0,.08);
     border-radius: 18px;
-    background: rgba(255,255,255,0.92);
     padding: 14px;
-    box-shadow: 0 12px 26px rgba(0,0,0,0.06);
-    text-align: center;
-    margin-bottom: 12px;
+    box-shadow: 0 10px 24px rgba(0,0,0,.06);
+    margin-bottom: 14px;
 }
 
-/* Avatar */
 .cv-avatar {
     width: 100%;
     height: 240px;
     border-radius: 16px;
-    border: 1px solid rgba(0,0,0,0.10);
-    background: rgba(0,0,0,0.03);
+    border: 1px solid rgba(0,0,0,.12);
+    background: rgba(0,0,0,.02);
     overflow: hidden;
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .cv-avatar-placeholder {
     font-weight: 900;
     font-size: 22px;
-    color: rgba(0,0,0,0.60);
+    color: rgba(0,0,0,.55);
 }
 
 .cv-avatar-img {
@@ -223,54 +230,53 @@
     display: block;
 }
 
-.cv-profile-name {
+.cv-hero-text {
     margin-top: 10px;
-    font-size: 20px;
-    font-weight: 900;
-    letter-spacing: -0.01em;
-    color: rgba(0,0,0,0.86);
+    text-align: center; /* fixar att namn hamnar centrerat */
 }
 
-.cv-profile-role {
-    margin-top: 2px;
+.cv-name {
+    font-size: 24px;
+    font-weight: 950;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    margin: 0;
+    word-break: break-word; /* lång namn-safe */
+}
+
+.cv-role {
+    margin-top: 6px;
     font-size: 13px;
     font-weight: 750;
-    color: rgba(0,0,0,0.62);
+    color: rgba(0,0,0,.62);
 }
 
-/* Boxes (right + left) */
+/* Boxes */
 .cv-box {
-    background: rgba(255,255,255,0.92);
-    border: 1px solid rgba(0,0,0,0.08);
+    background: rgba(255,255,255,.92);
+    border: 1px solid rgba(0,0,0,.08);
     border-radius: 18px;
     padding: 16px;
-    margin-bottom: 12px;
-}
-
-/* Left boxes a bit softer */
-.cv-box--left {
-    background: rgba(255,255,255,0.90);
+    margin-bottom: 14px;
 }
 
 .cv-box-title {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 900;
     margin: 0 0 10px;
-    color: rgba(0,0,0,0.86);
 }
 
-/* Paragraph */
 .cv-paragraph {
     margin: 0;
     font-size: 14px;
-    color: rgba(0,0,0,0.74);
+    color: rgba(0,0,0,.78);
     font-weight: 600;
-    line-height: 1.6;
+    line-height: 1.55;
 }
 
 .cv-paragraph-muted {
     margin-top: 6px;
-    color: rgba(0,0,0,0.58);
+    color: rgba(0,0,0,.62);
 }
 
 /* Contact list */
@@ -280,15 +286,14 @@
     gap: 10px;
 }
 
-.cv-contact-row {
-    display: grid;
-    grid-template-columns: 38px 1fr;
+.cv-contact-item {
+    display: flex;
     gap: 10px;
     align-items: center;
-    padding: 10px 10px;
-    border-radius: 14px;
-    border: 1px solid rgba(0,0,0,0.08);
-    background: rgba(255,255,255,0.94);
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,.08);
+    background: rgba(255,255,255,.95);
 }
 
 .cv-contact-ico {
@@ -297,83 +302,72 @@
     border-radius: 12px;
     display: grid;
     place-items: center;
-    background: rgba(0,0,0,0.03);
-    border: 1px solid rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,.10);
+    background: rgba(0,0,0,.03);
     font-size: 14px;
 }
 
 .cv-contact-k {
     font-size: 12px;
-    font-weight: 850;
-    color: rgba(0,0,0,0.58);
+    font-weight: 800;
+    color: rgba(0,0,0,.62);
+    line-height: 1.1;
 }
 
 .cv-contact-v {
     font-size: 13px;
-    font-weight: 850;
-    color: rgba(0,0,0,0.82);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-weight: 900;
+    color: rgba(0,0,0,.82);
+    line-height: 1.2;
 }
 
-/* Chips (Kompetenser) — piller med “inner shadow magic” */
-.cv-chips {
-    display: flex;
-    flex-wrap: wrap;
+/* Skills: fasta “slots” så spacing blir enhetligt */
+.cv-skill-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
 }
 
-.cv-chips--uniform .cv-chip {
-    width: 86px; /* samma bredd oavsett text */
+.cv-skill-pill {
+    display: flex;
     justify-content: center;
-}
-
-.cv-chip {
-    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    padding: 7px 10px;
+    height: 34px;
     border-radius: 999px;
-    border: 1px solid rgba(0,0,0,0.12);
-    background: rgba(255,255,255,0.92);
+    border: 1px solid rgba(0,0,0,.12);
+    background: rgba(255,255,255,.95);
     font-weight: 900;
     font-size: 12px;
-    color: rgba(0,0,0,0.78);
-    box-shadow: inset 1px 1px 2px rgba(0,0,0,0.10), inset -1px -1px 2px rgba(255,255,255,0.85);
+    color: rgba(0,0,0,.76);
+    box-shadow: inset 0 2px 3px rgba(0,0,0,.06), inset 0 -2px 3px rgba(255,255,255,.7);
 }
 
-/* Items (education/experience) */
+/* Items (education/experience blocks) */
 .cv-item {
-    padding: 12px 12px;
+    padding: 12px;
     border-radius: 14px;
-    border: 1px solid rgba(0,0,0,0.08);
-    background: rgba(255,255,255,0.95);
+    border: 1px solid rgba(0,0,0,.08);
+    background: rgba(255,255,255,.95);
     margin-top: 10px;
 }
 
 .cv-item-title {
     font-weight: 900;
-    color: rgba(0,0,0,0.84);
+    color: rgba(0,0,0,.82);
 }
 
 .cv-item-sub {
     margin-top: 4px;
     font-weight: 700;
     font-size: 13px;
-    color: rgba(0,0,0,0.62);
+    color: rgba(0,0,0,.62);
 }
 
 .cv-item-muted {
-    opacity: 0.96;
+    opacity: .95;
 }
 
-/* ===== Projects (centered title + justified text + centered divider + small tiles) ===== */
-.cv-projects-intro {
-    text-align: justify;
-    text-justify: inter-word;
-}
-
+/* Projects */
 .cv-projects {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -382,67 +376,77 @@
 }
 
 .cv-project {
-    border: 1px solid rgba(0,0,0,0.08);
-    background: rgba(255,255,255,0.95);
+    border: 1px solid rgba(0,0,0,.08);
+    background: rgba(255,255,255,.95);
     border-radius: 16px;
-    padding: 16px;
+    padding: 14px;
+    box-shadow: 0 10px 22px rgba(0,0,0,.05);
+    transition: transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s cubic-bezier(.2,.9,.2,1);
 }
+
+    .cv-project:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 26px rgba(0,0,0,.08);
+    }
 
 .cv-project-title {
     font-weight: 950;
-    color: rgba(0,0,0,0.86);
-    text-align: center;
+    color: rgba(0,0,0,.86);
+    text-align: center; /* som du ville */
     letter-spacing: -0.01em;
 }
 
 .cv-project-desc {
     margin: 10px 0 0;
-    font-size: 14px;
-    color: rgba(0,0,0,0.70);
+    font-size: 13.5px;
+    color: rgba(0,0,0,.66);
     font-weight: 650;
-    line-height: 1.6;
+    line-height: 1.55;
+    /* Gemini: fixar “sjuka mellanrum” i justify */
     text-align: justify;
-    text-justify: inter-word;
+    hyphens: auto;
+    overflow-wrap: anywhere;
 }
 
-.cv-project-divider {
-    width: 62%;
+.cv-project-sep {
     height: 1px;
-    margin: 14px auto 12px;
-    background: rgba(0,0,0,0.12);
-    border-radius: 999px;
+    width: 70%;
+    margin: 12px auto 10px; /* centrerad */
+    background: rgba(0,0,0,.10);
 }
 
-.cv-techstack {
+/* Tech icons row */
+.cv-tech-row {
     display: flex;
     justify-content: center;
     gap: 10px;
-    flex-wrap: wrap;
+    padding-bottom: 2px;
 }
 
 .cv-tech-tile {
-    width: 38px;
-    height: 38px;
+    width: 34px; /* mindre “vita lådan” */
+    height: 34px;
     border-radius: 12px;
-    border: 1px solid rgba(0,0,0,0.10);
-    background: rgba(255,255,255,0.92);
+    border: 1px solid rgba(0,0,0,.10);
+    background: rgba(255,255,255,.92);
     display: grid;
     place-items: center;
-    box-shadow: inset 0.8px 0.8px 1.4px rgba(0,0,0,0.10), inset -1px -1px 1.6px rgba(255,255,255,0.90);
+    box-shadow: 0 6px 14px rgba(0,0,0,.06);
 }
 
 .cv-tech-icon {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     display: block;
 }
 
 /* Edit button container */
 .cv-edit-button-container {
     width: 100%;
+    max-width: var(--cv-max);
     display: flex;
     justify-content: center;
-    margin-top: 6px;
+    margin-top: 8px;
 }
 
     .cv-edit-button-container .btn-primary-custom {
@@ -456,35 +460,22 @@
             color: #fff;
         }
 
-/* Responsive — matcha Home breakpoint */
+/* Responsive (matcha Home: 800px breakpoint) */
 @media (max-width: 800px) {
-    .cv-page {
-        padding: 18px 14px 24px;
-    }
-
-    :root {
-        --cv-banner-h: 160px;
+    .cv-banner {
+        height: 160px;
     }
 
     .cv-grid {
         grid-template-columns: 1fr;
     }
 
+    .cv-left {
+        border-right: 0;
+        border-bottom: 1px solid rgba(0,0,0,.06);
+    }
+
     .cv-projects {
         grid-template-columns: 1fr;
-    }
-
-    .cv-project-divider {
-        width: 70%;
-    }
-
-    .cv-tech-tile {
-        width: 36px;
-        height: 36px;
-    }
-
-    .cv-tech-icon {
-        width: 19px;
-        height: 19px;
     }
 }

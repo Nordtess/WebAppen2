@@ -1,10 +1,10 @@
-﻿@{
-    ViewData["Title"] = "Mitt CV";
-}
-
-@section Styles {
+﻿@section Styles {
     <link rel="stylesheet" href="~/css/pages/mycv.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/components.css" asp-append-version="true" />
+}
+
+@{
+    ViewData["Title"] = "Mitt CV";
 }
 
 <div class="cv-page">
@@ -16,30 +16,27 @@
              class="cv-banner-img" />
     </div>
 
-    <!-- CV "SIDA" / KORT -->
+    <!-- CV CARD -->
     <div class="cv-card">
 
-        <!-- TOP BAR: Besök + Toggle -->
+        <!-- TOP BAR: visits (left) + privacy toggle (right) -->
         <div class="cv-topbar">
-            <div class="cv-visits" aria-label="Antal besök">
-                <span class="cv-visits-label">Antal besök:</span>
-                <span class="cv-visits-value">10</span>
+            <div class="cv-visits">
+                Antal besök: <span class="cv-visits-num">10</span>
             </div>
 
-            <!-- Toggle (placeholder tills SQL-koppling) -->
             <div class="cv-privacy">
                 <span class="cv-privacy-label">Privat läge</span>
 
-                <button class="cv-toggle is-on"
-                        type="button"
+                <!-- Startar som PÅ tills ni kopplar SQL -->
+                <button type="button"
+                        class="cv-toggle is-on"
                         role="switch"
                         aria-checked="true"
-                        aria-label="Växla privat läge">
-                    <span class="cv-toggle-track">
-                        <span class="cv-toggle-text cv-toggle-text--off">Av</span>
-                        <span class="cv-toggle-text cv-toggle-text--on">På</span>
-                        <span class="cv-toggle-knob" aria-hidden="true"></span>
-                    </span>
+                        aria-label="Privat läge">
+                    <span class="cv-toggle__label cv-toggle__label--off">Av</span>
+                    <span class="cv-toggle__label cv-toggle__label--on">På</span>
+                    <span class="cv-toggle__knob" aria-hidden="true"></span>
                 </button>
             </div>
         </div>
@@ -48,50 +45,52 @@
 
         <div class="cv-grid">
 
-            <!-- LEFT PANEL -->
-            <aside class="cv-left">
+            <!-- LEFT (mint panel) -->
+            <div class="cv-left">
 
                 <!-- Profile card -->
                 <div class="cv-profile-card">
-
                     <div class="cv-avatar" aria-label="Profilbild">
-                        <!-- ✅ BYT TILL RIKTIG BILD:
-                             1) Lägg en bild i t.ex. wwwroot/images/profiles/jamie.jpg
+
+                        <!-- ✅ SÅ HÄR BYTER DU TILL RIKTIG BILD:
+                             1) Lägg en bild i: wwwroot/images/profiles/jamie.jpg (eller valfritt namn)
                              2) Avkommentera <img> nedan
-                             3) Kommentera/ta bort placeholder-diven
+                             3) Kommentera bort / ta bort <div class="cv-avatar-placeholder">JL</div>
                         -->
                         @* <img class="cv-avatar-img" src="~/images/profiles/jamie.jpg" alt="Profilbild" /> *@
+
                         <div class="cv-avatar-placeholder">JL</div>
                     </div>
 
-                    <div class="cv-profile-name">Jamie Larsson</div>
-                    <div class="cv-profile-role">Systemvetenskap • Fullstack</div>
+                    <div class="cv-hero-text">
+                        <div class="cv-name">Jamie Larsson</div>
+                        <div class="cv-role">Systemvetenskap • Fullstack</div>
+                    </div>
                 </div>
 
-                <!-- Contact -->
-                <section class="cv-box cv-box--left">
+                <section class="cv-box">
                     <h3 class="cv-box-title">Kontakt</h3>
 
                     <div class="cv-contact-list">
-                        <div class="cv-contact-row">
-                            <div class="cv-contact-ico" aria-hidden="true">✉</div>
-                            <div class="cv-contact-text">
+                        <div class="cv-contact-item">
+                            <span class="cv-contact-ico">✉</span>
+                            <div>
                                 <div class="cv-contact-k">Email</div>
                                 <div class="cv-contact-v">jamie@example.se</div>
                             </div>
                         </div>
 
-                        <div class="cv-contact-row">
-                            <div class="cv-contact-ico" aria-hidden="true">📍</div>
-                            <div class="cv-contact-text">
+                        <div class="cv-contact-item">
+                            <span class="cv-contact-ico">📍</span>
+                            <div>
                                 <div class="cv-contact-k">Plats</div>
                                 <div class="cv-contact-v">Örebro, Sverige</div>
                             </div>
                         </div>
 
-                        <div class="cv-contact-row">
-                            <div class="cv-contact-ico" aria-hidden="true">☎</div>
-                            <div class="cv-contact-text">
+                        <div class="cv-contact-item">
+                            <span class="cv-contact-ico">☎</span>
+                            <div>
                                 <div class="cv-contact-k">Telefon</div>
                                 <div class="cv-contact-v">+46 70 123 45 67</div>
                             </div>
@@ -99,29 +98,28 @@
                     </div>
                 </section>
 
-                <!-- Kompetenser -->
-                <section class="cv-box cv-box--left">
+                <section class="cv-box">
                     <h3 class="cv-box-title">Kompetenser</h3>
-
-                    <div class="cv-chips cv-chips--uniform" aria-label="Kompetenser">
-                        <span class="cv-chip">ASP.NET</span>
-                        <span class="cv-chip">MVC</span>
-                        <span class="cv-chip">C#</span>
-                        <span class="cv-chip">SQL</span>
-                        <span class="cv-chip">Fullstack</span>
-                        <span class="cv-chip">Git</span>
+                    <div class="cv-skill-grid">
+                        <span class="cv-skill-pill">ASP.NET</span>
+                        <span class="cv-skill-pill">MVC</span>
+                        <span class="cv-skill-pill">C#</span>
+                        <span class="cv-skill-pill">SQL</span>
+                        <span class="cv-skill-pill">Fullstack</span>
+                        <span class="cv-skill-pill">Git</span>
                     </div>
                 </section>
 
-            </aside>
+            </div>
 
-            <!-- RIGHT CONTENT -->
-            <main class="cv-right">
+            <!-- RIGHT -->
+            <div class="cv-right">
 
                 <section class="cv-box">
                     <h3 class="cv-box-title">Profil</h3>
                     <p class="cv-paragraph">
-                        Placeholder-text: Kort sammanfattning av vem man är, vad man söker och vad man är bra på.
+                        Kort sammanfattning av vem du är, vad du söker och vad du är bra på.
+                        (Placeholder tills ni hämtar från SQL.)
                     </p>
                 </section>
 
@@ -153,89 +151,112 @@
                     </div>
                 </section>
 
-                <!-- PROJECTS (med ikoner under avskiljare) -->
                 <section class="cv-box">
                     <h3 class="cv-box-title">Projekt</h3>
-                    <p class="cv-paragraph cv-paragraph-muted cv-projects-intro">
+                    <p class="cv-paragraph cv-paragraph-muted">
                         Exempelprojekt (placeholder). Senare hämtas projekt + tech stack från SQL.
                     </p>
 
                     <div class="cv-projects">
-
+                        <!-- Projekt 1 -->
                         <article class="cv-project">
                             <div class="cv-project-title">NotLinkedIn — WebApp</div>
                             <p class="cv-project-desc">
-                                Webbaserad plattform där användare skapar CV-profiler, kopplar projekt och kan kommunicera via privata meddelanden.
+                                Webbplattform där användare skapar CV-profiler, kopplar projekt och kan kommunicera via privata meddelanden.
                                 Fokus på ren Apple-ish UI, tydlig struktur och snabb upplevelse.
                             </p>
 
-                            <div class="cv-project-divider" aria-hidden="true"></div>
+                            <div class="cv-project-sep" aria-hidden="true"></div>
 
-                            <div class="cv-techstack" aria-label="Tech stack">
-                                <span class="cv-tech-tile"><img class="cv-tech-icon" src="~/images/svg/techstack/csharp.svg" alt="C#" /></span>
-                                <span class="cv-tech-tile"><img class="cv-tech-icon" src="~/images/svg/techstack/mysql.svg" alt="MySQL" /></span>
-                                <span class="cv-tech-tile"><img class="cv-tech-icon" src="~/images/svg/techstack/mongodb.svg" alt="MongoDB" /></span>
+                            <div class="cv-tech-row" aria-label="Tech stack">
+                                <span class="cv-tech-tile">
+                                    <img class="cv-tech-icon" src="~/images/svg/techstack/csharp.svg" alt="C#" />
+                                </span>
+                                <span class="cv-tech-tile">
+                                    <img class="cv-tech-icon" src="~/images/svg/techstack/mongodb.svg" alt="MongoDB" />
+                                </span>
+                                <span class="cv-tech-tile">
+                                    <img class="cv-tech-icon" src="~/images/svg/techstack/mysql.svg" alt="MySQL" />
+                                </span>
                             </div>
                         </article>
 
+                        <!-- Projekt 2 -->
                         <article class="cv-project">
                             <div class="cv-project-title">AES GUI — Kryptering</div>
                             <p class="cv-project-desc">
-                                GUI-app som krypterar/dekrypterar text och ger tydliga statusmeddelanden, validering och robust felhantering.
+                                GUI-app som krypterar/dekrypterar text med tydlig input/feedback, validering och robust felhantering.
+                                Byggd så att funktionalitet kan skalas upp senare.
                             </p>
 
-                            <div class="cv-project-divider" aria-hidden="true"></div>
+                            <div class="cv-project-sep" aria-hidden="true"></div>
 
-                            <div class="cv-techstack" aria-label="Tech stack">
-                                <span class="cv-tech-tile"><img class="cv-tech-icon" src="~/images/svg/techstack/csharp.svg" alt="C#" /></span>
-                                <span class="cv-tech-tile"><img class="cv-tech-icon" src="~/images/svg/techstack/cplusplus.svg" alt="C++" /></span>
+                            <div class="cv-tech-row" aria-label="Tech stack">
+                                <span class="cv-tech-tile">
+                                    <img class="cv-tech-icon" src="~/images/svg/techstack/csharp.svg" alt="C#" />
+                                </span>
+                                <span class="cv-tech-tile">
+                                    <img class="cv-tech-icon" src="~/images/svg/techstack/cplusplus.svg" alt="C++" />
+                                </span>
                             </div>
                         </article>
 
+                        <!-- Projekt 3 -->
                         <article class="cv-project">
                             <div class="cv-project-title">Linux & Nätverk — IPv6 / Wireshark</div>
                             <p class="cv-project-desc">
-                                Rapport + labb där trafik analyseras i hemmanätverk. Fokus på adressering, protokoll och verifiering av paketflöden.
+                                Rapport + labb där trafik analyseras i hemmanätverk. Fokus på adressering, protokoll
+                                och verifiering av paketflöden i realistisk miljö.
                             </p>
 
-                            <div class="cv-project-divider" aria-hidden="true"></div>
+                            <div class="cv-project-sep" aria-hidden="true"></div>
 
-                            <div class="cv-techstack" aria-label="Tech stack">
-                                <span class="cv-tech-tile"><img class="cv-tech-icon" src="~/images/svg/techstack/python.svg" alt="Python" /></span>
-                                <span class="cv-tech-tile"><img class="cv-tech-icon" src="~/images/svg/techstack/java.svg" alt="Java" /></span>
+                            <div class="cv-tech-row" aria-label="Tech stack">
+                                <span class="cv-tech-tile">
+                                    <img class="cv-tech-icon" src="~/images/svg/techstack/python.svg" alt="Python" />
+                                </span>
+                                <span class="cv-tech-tile">
+                                    <img class="cv-tech-icon" src="~/images/svg/techstack/java.svg" alt="Java" />
+                                </span>
                             </div>
                         </article>
 
+                        <!-- Projekt 4 -->
                         <article class="cv-project">
                             <div class="cv-project-title">Mini Dashboard — Frontend/Logik</div>
                             <p class="cv-project-desc">
-                                Liten demo för att visa struktur: komponenter, state och tydlig dataflödeslogik. Byggd för att vara enkel att vidareutveckla.
+                                Liten demo för att visa struktur: komponenter, state och tydlig dataflödeslogik.
+                                Byggd för att vara lätt att vidareutveckla när fler widgets behövs.
                             </p>
 
-                            <div class="cv-project-divider" aria-hidden="true"></div>
+                            <div class="cv-project-sep" aria-hidden="true"></div>
 
-                            <div class="cv-techstack" aria-label="Tech stack">
-                                <span class="cv-tech-tile"><img class="cv-tech-icon" src="~/images/svg/techstack/javascript.svg" alt="JavaScript" /></span>
-                                <span class="cv-tech-tile"><img class="cv-tech-icon" src="~/images/svg/techstack/python.svg" alt="Python" /></span>
+                            <div class="cv-tech-row" aria-label="Tech stack">
+                                <span class="cv-tech-tile">
+                                    <img class="cv-tech-icon" src="~/images/svg/techstack/javascript.svg" alt="JavaScript" />
+                                </span>
+                                <span class="cv-tech-tile">
+                                    <img class="cv-tech-icon" src="~/images/svg/techstack/python.svg" alt="Python" />
+                                </span>
                             </div>
                         </article>
-
                     </div>
                 </section>
 
-            </main>
+            </div>
         </div>
     </div>
 
     <!-- EDIT BUTTON -->
     <div class="cv-edit-button-container">
         <a href="@Url.Action("Index", "EditCV")" class="btn-primary-custom">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
             </svg>
             Redigera CV
         </a>
     </div>
+
 </div>
 
 @section Scripts {
