@@ -103,14 +103,19 @@
                                         <div class="editcv-profile-fields">
                                             <div class="editcv-field">
                                                 <label class="editcv-label" asp-for="FullName">Namn</label>
-                                                <input class="editcv-input" asp-for="FullName" placeholder="Förnamn Efternamn" />
-                                                <span class="editcv-error" asp-validation-for="FullName"></span>
+                                                <input class="editcv-input" asp-for="FullName" placeholder="Förnamn Efternamn"
+                                                       required maxlength="60" pattern="^(?=.*[A-Za-zÅÄÖåäö])[A-Za-zÅÄÖåäö'\- ]{2,60}$"
+                                                       data-val-required="Namn är obligatoriskt."
+                                                       data-val-maxlength="Namn får max vara 60 tecken."
+                                                       data-val-pattern="Ange ett giltigt namn (endast bokstäver och mellanslag)." />
+                                                <span class="editcv-error" asp-validation-for="FullName" data-valmsg-for="FullName"></span>
                                             </div>
 
                                             <div class="editcv-field">
                                                 <label class="editcv-label" asp-for="Headline">Rubrik</label>
-                                                <input class="editcv-input" asp-for="Headline" placeholder="Systemvetenskap • Fullstack" />
-                                                <span class="editcv-error" asp-validation-for="Headline"></span>
+                                                <input class="editcv-input" asp-for="Headline" placeholder="Systemvetenskap • Fullstack"
+                                                       maxlength="60" />
+                                                <span class="editcv-error" asp-validation-for="Headline" data-valmsg-for="Headline"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -127,26 +132,36 @@
                                 <div class="editcv-two-col">
                                     <div class="editcv-field">
                                         <label class="editcv-label" asp-for="Email">Email</label>
-                                        <input class="editcv-input" asp-for="Email" placeholder="jamie@example.se" />
-                                        <span class="editcv-error" asp-validation-for="Email"></span>
+                                        <input class="editcv-input" asp-for="Email" placeholder="jamie@example.se"
+                                               required maxlength="254" type="email"
+                                               data-val-required="E-post är obligatoriskt."
+                                               data-val-email="Ange en giltig e-postadress (t.ex. mail@exempel.com)." />
+                                        <span class="editcv-error" asp-validation-for="Email" data-valmsg-for="Email"></span>
                                     </div>
 
                                     <div class="editcv-field">
                                         <label class="editcv-label" asp-for="Phone">Telefon</label>
-                                        <input class="editcv-input" asp-for="Phone" placeholder="+46 70 123 45 67" />
-                                        <span class="editcv-error" asp-validation-for="Phone"></span>
+                                        <input class="editcv-input" asp-for="Phone" placeholder="+46 70 123 45 67"
+                                               maxlength="30" pattern="^[0-9+() \-]{6,30}$"
+                                               data-val-maxlength="Telefon får max vara 30 tecken."
+                                               data-val-pattern="Ange ett giltigt telefonnummer." />
+                                        <span class="editcv-error" asp-validation-for="Phone" data-valmsg-for="Phone"></span>
                                     </div>
 
                                     <div class="editcv-field">
                                         <label class="editcv-label" asp-for="Location">Plats</label>
-                                        <input class="editcv-input" asp-for="Location" placeholder="Örebro, Sverige" />
-                                        <span class="editcv-error" asp-validation-for="Location"></span>
+                                        <input class="editcv-input" asp-for="Location" placeholder="Örebro, Sverige" maxlength="60"
+                                               data-val-maxlength="Plats får max vara 60 tecken." />
+                                        <span class="editcv-error" asp-validation-for="Location" data-valmsg-for="Location"></span>
                                     </div>
 
                                     <div class="editcv-field">
                                         <label class="editcv-label" asp-for="LinkedIn">LinkedIn</label>
-                                        <input class="editcv-input" asp-for="LinkedIn" placeholder="linkedin.com/in/..." />
-                                        <span class="editcv-error" asp-validation-for="LinkedIn"></span>
+                                        <input class="editcv-input" asp-for="LinkedIn" placeholder="linkedin.com/in/..." maxlength="120"
+                                               pattern="^$|^(https?:\\/\\/)?(www\\.)?linkedin\\.com\\/.+$"
+                                               data-val-maxlength="LinkedIn får max vara 120 tecken."
+                                               data-val-pattern="Ange en giltig LinkedIn-länk (t.ex. linkedin.com/in/dittnamn)." />
+                                        <span class="editcv-error" asp-validation-for="LinkedIn" data-valmsg-for="LinkedIn"></span>
                                     </div>
                                 </div>
                             </section>
@@ -183,10 +198,13 @@
                                               asp-for="AboutMe"
                                               rows="6"
                                               maxlength="500"
-                                              id="aboutMe"></textarea>
+                                              id="aboutMe"
+                                              required
+                                              data-val-required="Om mig är obligatoriskt."
+                                              data-val-maxlength="Om mig får max vara 500 tecken."></textarea>
 
                                     <div class="editcv-under">
-                                        <span class="editcv-error" asp-validation-for="AboutMe"></span>
+                                        <span class="editcv-error" asp-validation-for="AboutMe" data-valmsg-for="AboutMe"></span>
                                         <span class="editcv-counter"><span id="aboutCount">0</span>/500</span>
                                     </div>
                                 </div>

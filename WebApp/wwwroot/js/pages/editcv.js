@@ -2,6 +2,83 @@
     const form = document.getElementById("editcvForm");
     if (!form) return;
 
+    // ---------- Blur-only validation (no keyup) ----------
+    // This implementation uses HTML5 constraint validation APIs so it works without jQuery.
+    // We set custom messages (sv) using data attributes emitted by the view.
+
+    /** @param {HTMLInputElement|HTMLTextAreaElement} el */
+    function getMessage(el) {
+        const v = el.validity;
+        if (v.valueMissing) return el.dataset.valRequired || "Fältet är obligatoriskt.";
+        if (v.typeMismatch) return el.dataset.valEmail || el.dataset.valUrl || "Ogiltigt format.";
+        if (v.patternMismatch) return el.dataset.valPattern || "Ogiltigt format.";
+        if (v.tooLong) return el.dataset.valMaxlength || "För långt värde.";
+        if (v.tooShort) return el.dataset.valMinlength || "För kort värde.";
+        return "";
+    }
+
+    /** @param {HTMLInputElement|HTMLTextAreaElement} el */
+    function findErrorSpan(el) {
+        // Map by name to the asp-validation-for span classes
+        const name = el.getAttribute("name");
+        if (!name) return null;
+
+        // If property is nested, MVC uses underscores in class names.
+        const cls = "field-validation-valid";
+        const selector = `span[data-valmsg-for="${CSS.escape(name)}"], span[class*="field-validation"][data-valmsg-for="${CSS.escape(name)}"]`;
+        return form.querySelector(selector) || el.closest(".editcv-field")?.querySelector(".editcv-error") || null;
+    }
+
+    /** @param {HTMLInputElement|HTMLTextAreaElement} el */
+    function setFieldState(el, isValid, message) {
+        el.classList.toggle("input-validation-error", !isValid);
+        el.classList.toggle("valid", isValid && (el.value || "").trim().length > 0);
+        el.setAttribute("aria-invalid", isValid ? "false" : "true");
+
+        const span = findErrorSpan(el);
+        if (span) {
+            span.textContent = message || "";
+            span.classList.toggle("field-validation-error", !isValid);
+            span.classList.toggle("field-validation-valid", isValid);
+        }
+    }
+
+    /** @param {HTMLInputElement|HTMLTextAreaElement} el */
+    function validateField(el) {
+        // Do not validate disabled/hidden fields
+        if (el.disabled) return true;
+        if (el.type === "hidden") return true;
+
+        const ok = el.checkValidity();
+        const msg = ok ? "" : getMessage(el);
+        setFieldState(el, ok, msg);
+        return ok;
+    }
+
+    function validateForm() {
+        const fields = Array.from(form.querySelectorAll(".editcv-input, .editcv-textarea"));
+        let ok = true;
+        for (const f of fields) {
+            // Only enforce after interaction (blur triggers); but for button state we can still evaluate
+            ok = validateField(f) && ok;
+        }
+        return ok;
+    }
+
+    // Prevent browser default tooltip bubbles
+    form.addEventListener("invalid", (e) => {
+        e.preventDefault();
+    }, true);
+
+    // Validate on blur only
+    form.addEventListener("focusout", (e) => {
+        const target = e.target;
+        if (!(target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement)) return;
+        if (!target.classList.contains("editcv-input") && !target.classList.contains("editcv-textarea")) return;
+        validateField(target);
+        updateSaveButtons();
+    });
+
     // ---------- Autosave indicator (UI-only) ----------
     const autosaveStatus = document.getElementById("autosaveStatus");
     const statusText = autosaveStatus?.querySelector(".editcv-status-text");
@@ -318,21 +395,18 @@
     const saveBtnBottom = document.getElementById("saveBtnBottom");
 
     function updateSaveButtons() {
-        // HTML5 validity + (jQuery validate will show messages on blur)
-        const valid = form.checkValidity();
+        const valid = validateForm();
         if (saveBtn) saveBtn.disabled = !valid;
         if (saveBtnBottom) saveBtnBottom.disabled = !valid;
     }
 
-    // Update on blur and on input
-    form.addEventListener("blur", updateSaveButtons, true);
-    form.addEventListener("input", updateSaveButtons);
+    // Initial
     updateSaveButtons();
 
     // If you want: mark saved after submit (UI-only)
     form.addEventListener("submit", () => {
-        // Om du vill att UI ska visa "Sparad" direkt när man submitar:
+        // If you want UI to show "Sparad" immediately when submitting:
         // setSaveState("saved");
-        // Men bättre att bara göra detta efter redirect/TempData senare.
+        // Better to do this after redirect/TempData later.
     });
 })();

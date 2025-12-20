@@ -298,14 +298,27 @@
     box-shadow: 0 0 0 4px rgba(255,59,48,0.14) !important;
 }
 
-.editcv-error {
-    font-size: 12px;
-    font-weight: 750;
-    color: var(--danger);
-    min-height: 14px;
+/* Valid styling (unobtrusive adds .input-validation-valid on valid inputs) */
+.input-validation-valid {
+    border-color: rgba(0,0,0,0.10);
 }
 
-.field-validation-valid {
+/* When a field has been validated and is valid, give a subtle mint cue */
+.editcv-input.valid,
+.editcv-textarea.valid {
+    border-color: rgba(127,255,212,0.55);
+    box-shadow: 0 0 0 3px rgba(127,255,212,0.10);
+}
+
+/* Validation message styling (Tag Helpers render these spans) */
+.field-validation-error,
+.editcv-error.field-validation-error {
+    color: var(--danger);
+    font-weight: 800;
+}
+
+.field-validation-valid,
+.editcv-error.field-validation-valid {
     min-height: 14px;
 }
 
