@@ -251,6 +251,18 @@
     outline: none;
 }
 
+/* Make typed text match the (lighter) placeholder vibe */
+.editcv-input,
+.editcv-textarea {
+    color: rgba(0,0,0,0.72);
+}
+
+.editcv-input::placeholder,
+.editcv-textarea::placeholder {
+    color: rgba(0,0,0,0.42);
+    font-weight: 520;
+}
+
     .editcv-input:focus,
     .editcv-textarea:focus {
         /* Stronger mint focus ring (closer to sidebar active highlight) */
@@ -327,7 +339,12 @@
     margin: 0 auto;
 }
 
-/* Matcha MyCV: fyrkantig kort-bild istället för rund */
+/* In Profile card: keep image narrow but let the fields below use full card width */
+.editcv-avatar-wrap .editcv-profile-fields {
+    width: 100%;
+    max-width: none;
+}
+
 .editcv-avatar {
     width: 100%;
     /* Slightly smaller than MyCV (240px) to account for EditCV padding/layout */
@@ -665,6 +682,7 @@
 .editcv-draft-actions {
     margin-top: 10px;
     padding-top: 4px;
+    margin-bottom: 10px; /* add breathing room before helper text */
 }
 
 .editcv-draft-actions .btn-secondary-custom {
