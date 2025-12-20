@@ -12,7 +12,7 @@
     --edit-banner-h: 190px;
 
     /* Profile image sizing (MyCV-left panel feel) */
-    --edit-profile-max: 330px; /* Slightly narrower to match MyCV avatar feel */
+    --edit-profile-max: 320px; /* Slightly narrower to match MyCV avatar feel */
 }
 
 /* Page shell */
