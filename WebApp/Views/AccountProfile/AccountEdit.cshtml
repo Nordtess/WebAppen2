@@ -1,0 +1,57 @@
+@model WebApp.Models.AccountEditViewModel
+
+@{
+    ViewData["Title"] = "Ändra uppgifter";
+}
+
+<section style="max-width: 900px; margin: 24px auto; padding: 0 18px;">
+    <div style="background: rgba(255,255,255,.96); border: 1px solid rgba(0,0,0,.16); border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.04); overflow: hidden;">
+        <div style="padding: 18px; border-bottom: 1px solid rgba(0,0,0,.08);">
+            <h1 style="margin:0; font-weight: 950; letter-spacing: -0.02em;">Ändra uppgifter</h1>
+        </div>
+
+        <form asp-controller="AccountProfile" asp-action="Edit" method="post" style="padding: 18px; display:grid; gap: 12px;">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <div>
+                <label asp-for="FirstName" style="display:block; font-weight: 800; margin-bottom: 6px;"></label>
+                <input asp-for="FirstName" class="form-control" autocomplete="given-name" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="LastName" style="display:block; font-weight: 800; margin-bottom: 6px;"></label>
+                <input asp-for="LastName" class="form-control" autocomplete="family-name" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="PhoneNumberDisplay" style="display:block; font-weight: 800; margin-bottom: 6px;">Telefonnummer</label>
+                <input asp-for="PhoneNumberDisplay" class="form-control" autocomplete="tel" placeholder="070-1234567" />
+                <span asp-validation-for="PhoneNumberDisplay" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="City" style="display:block; font-weight: 800; margin-bottom: 6px;"></label>
+                <input asp-for="City" class="form-control" autocomplete="address-level2" placeholder="Örebro" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="PostalCode" style="display:block; font-weight: 800; margin-bottom: 6px;">Postnummer</label>
+                <input asp-for="PostalCode" class="form-control" inputmode="numeric" autocomplete="postal-code" placeholder="71412" />
+                <span asp-validation-for="PostalCode" class="text-danger"></span>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap: 10px; padding-top: 6px;">
+                <a class="btn-secondary-custom" asp-controller="AccountProfile" asp-action="Index">Ångra</a>
+                <button type="submit" class="btn-primary-custom">Bekräfta</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

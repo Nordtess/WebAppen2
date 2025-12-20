@@ -108,6 +108,10 @@
                         <span class="link-icon">💬</span>
                         <span class="link-text">Meddelanden</span>
                     </a>
+                    <a class="sidebar-link @Active("AccountProfile")" asp-controller="AccountProfile" asp-action="Index">
+                        <span class="link-icon">⚙️</span>
+                        <span class="link-text">Mitt konto</span>
+                    </a>
 
                     <form asp-controller="Account" asp-action="Logout" method="post" style="margin:0;">
                         @Html.AntiForgeryToken()

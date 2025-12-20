@@ -39,26 +39,6 @@
                 <input asp-for="Input.Email" type="email" autocomplete="username" aria-required="true" placeholder="namn@exempel.se" />
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
 
-                <label asp-for="Input.FirstName">Förnamn</label>
-                <input asp-for="Input.FirstName" autocomplete="given-name" aria-required="true" placeholder="Förnamn" />
-                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-
-                <label asp-for="Input.LastName">Efternamn</label>
-                <input asp-for="Input.LastName" autocomplete="family-name" aria-required="true" placeholder="Efternamn" />
-                <span asp-validation-for="Input.LastName" class="text-danger"></span>
-
-                <label asp-for="Input.PhoneNumberDisplay">Telefonnummer</label>
-                <input asp-for="Input.PhoneNumberDisplay" autocomplete="tel" placeholder="070-1234567" />
-                <span asp-validation-for="Input.PhoneNumberDisplay" class="text-danger"></span>
-
-                <label asp-for="Input.City">Stad</label>
-                <input asp-for="Input.City" autocomplete="address-level2" aria-required="true" placeholder="Örebro" />
-                <span asp-validation-for="Input.City" class="text-danger"></span>
-
-                <label asp-for="Input.PostalCode">Postnummer</label>
-                <input asp-for="Input.PostalCode" inputmode="numeric" autocomplete="postal-code" aria-required="true" placeholder="71412" />
-                <span asp-validation-for="Input.PostalCode" class="text-danger"></span>
-
                 <label asp-for="Input.Password">Lösenord</label>
                 <input asp-for="Input.Password" type="password" autocomplete="new-password" aria-required="true" placeholder="••••••••" />
                 <span asp-validation-for="Input.Password" class="text-danger"></span>

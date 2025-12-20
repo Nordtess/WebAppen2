@@ -59,35 +59,6 @@ namespace WebApp.Areas.Identity.Pages.Account
             [Display(Name = "E-post")]
             public string Email { get; set; }
 
-            [Required(ErrorMessage = "Förnamn är obligatoriskt.")]
-            [StringLength(50, ErrorMessage = "Förnamn får vara max {1} tecken.")]
-            [RegularExpression("^[A-Za-zÅÄÖåäö-]+$", ErrorMessage = "Förnamn får bara innehålla bokstäver och bindestreck.")]
-            [Display(Name = "Förnamn")]
-            public string FirstName { get; set; }
-
-            [Required(ErrorMessage = "Efternamn är obligatoriskt.")]
-            [StringLength(50, ErrorMessage = "Efternamn får vara max {1} tecken.")]
-            [RegularExpression("^[A-Za-zÅÄÖåäö-]+$", ErrorMessage = "Efternamn får bara innehålla bokstäver och bindestreck.")]
-            [Display(Name = "Efternamn")]
-            public string LastName { get; set; }
-
-            [Phone(ErrorMessage = "Telefonnummer har fel format.")]
-            [StringLength(20, ErrorMessage = "Telefonnummer får vara max {1} tecken.")]
-            [RegularExpression("^[0-9+\\- ]+$", ErrorMessage = "Telefonnummer får bara innehålla siffror, mellanslag, + och -.")]
-            [Display(Name = "Telefonnummer")]
-            public string PhoneNumberDisplay { get; set; }
-
-            [Required(ErrorMessage = "Stad är obligatoriskt.")]
-            [StringLength(100, ErrorMessage = "Stad får vara max {1} tecken.")]
-            [RegularExpression("^[A-Za-zÅÄÖåäö -]+$", ErrorMessage = "Stad får bara innehålla bokstäver, mellanslag och bindestreck.")]
-            [Display(Name = "Stad")]
-            public string City { get; set; }
-
-            [Required(ErrorMessage = "Postnummer är obligatoriskt.")]
-            [RegularExpression("^[0-9]{5}$", ErrorMessage = "Postnummer måste vara exakt 5 siffror (ex: 71412).")]
-            [Display(Name = "Postnummer")]
-            public string PostalCode { get; set; }
-
             [Required(ErrorMessage = "Lösenord är obligatoriskt.")]
             [StringLength(100, ErrorMessage = "Lösenordet måste vara minst {2} och max {1} tecken.", MinimumLength = 6)]
             [DataType(DataType.Password)]
@@ -116,12 +87,6 @@ namespace WebApp.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                user.FirstName = Input.FirstName;
-                user.LastName = Input.LastName;
-                user.City = Input.City;
-                user.PostalCode = Input.PostalCode;
-                user.PhoneNumberDisplay = Input.PhoneNumberDisplay;
-
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
@@ -147,11 +112,11 @@ namespace WebApp.Areas.Identity.Pages.Account
                     {
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
                     }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }
+
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    // Force user to complete profile before using the site.
+                    return RedirectToAction("Edit", "AccountProfile");
                 }
 
                 foreach (var error in result.Errors)

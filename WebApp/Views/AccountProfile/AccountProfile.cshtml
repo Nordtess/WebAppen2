@@ -1,0 +1,26 @@
+@model WebApp.Domain.Identity.ApplicationUser
+
+@{
+    ViewData["Title"] = "Mitt konto";
+}
+
+<section style="max-width: 900px; margin: 24px auto; padding: 0 18px;">
+    <div style="background: rgba(255,255,255,.96); border: 1px solid rgba(0,0,0,.16); border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.04); overflow: hidden;">
+        <div style="padding: 18px; border-bottom: 1px solid rgba(0,0,0,.08);">
+            <h1 style="margin:0; font-weight: 950; letter-spacing: -0.02em;">Mitt konto</h1>
+        </div>
+
+        <div style="padding: 18px; display:grid; gap: 10px; color: rgba(0,0,0,.72); font-weight: 650;">
+            <div><strong>E-post:</strong> @Model.Email</div>
+            <div><strong>Förnamn:</strong> @Model.FirstName</div>
+            <div><strong>Efternamn:</strong> @Model.LastName</div>
+            <div><strong>Telefonnummer:</strong> @Model.PhoneNumberDisplay</div>
+            <div><strong>Stad:</strong> @Model.City</div>
+            <div><strong>Postnummer:</strong> @Model.PostalCode</div>
+        </div>
+
+        <div style="padding: 18px; border-top: 1px solid rgba(0,0,0,.08); display:flex; justify-content:flex-end;">
+            <a class="btn-primary-custom" asp-controller="AccountProfile" asp-action="Edit">Ändra uppgifter</a>
+        </div>
+    </div>
+</section>
