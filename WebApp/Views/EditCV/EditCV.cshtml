@@ -289,19 +289,11 @@
                 <!-- Bottom sticky actions -->
                 <div class="editcv-bottom">
                     <div class="editcv-bottom-inner">
-                        <a class="btn-secondary-custom" href="@Url.Action("Index", "MyCV")">
-                            Ångra
+                        <a class="btn-primary-custom" href="@Url.Action("Index", "MyCV")" style="text-decoration:none;">
+                            Tillbaka
                         </a>
 
                         <div class="editcv-bottom-right">
-                            <button type="submit"
-                                    class="btn-secondary-custom"
-                                    formaction="@Url.Action("Preview", "EditCV")"
-                                    formtarget="_blank"
-                                    formnovalidate>
-                                Förhandsvisa
-                            </button>
-
                             <button type="submit"
                                     class="btn-primary-custom"
                                     id="saveBtnBottom"

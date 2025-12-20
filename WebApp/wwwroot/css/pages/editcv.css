@@ -618,20 +618,23 @@
     margin-top: 16px;
 }
 
+/* Ensure link-buttons in sticky bar don't inherit global <a> color */
+.editcv-bottom-inner .btn-secondary-custom,
+.editcv-bottom-inner .btn-secondary-custom:hover,
+.editcv-bottom-inner .btn-secondary-custom:visited {
+    color: inherit;
+    text-decoration: none;
+}
+
 .editcv-bottom-inner {
-    border: 1px solid var(--edit-border);
+    border: 1px solid rgba(0,0,0,0.22);
     border-radius: var(--edit-card-radius);
     background: rgba(255,255,255,0.96);
-    box-shadow: var(--edit-shadow);
+    box-shadow: 0 22px 44px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06);
     padding: 12px 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
-}
-
-.editcv-bottom-right {
-    display: flex;
     gap: 10px;
 }
 
