@@ -12,7 +12,7 @@
     --edit-banner-h: 190px;
 
     /* Profile image sizing (MyCV-left panel feel) */
-    --edit-profile-max: 360px;
+    --edit-profile-max: 330px; /* Slightly narrower to match MyCV avatar feel */
 }
 
 /* Page shell */
@@ -481,7 +481,19 @@
     cursor: pointer;
     font-weight: 900;
     color: rgba(0,0,0,0.55);
+    padding: 0;
+    line-height: 1;
     transition: transform 140ms ease;
+}
+
+.editcv-draft-remove {
+    /* Ensure the glyph is visually centered */
+    font-size: 18px;
+}
+
+.editcv-draft-remove::before {
+    /* Normalize baseline differences across fonts */
+    content: none;
 }
 
     .editcv-draft-remove:hover {
