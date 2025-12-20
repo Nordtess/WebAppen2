@@ -1,0 +1,10 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"
+     fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <!-- X outline (black) -->
+  <path d="M20 20 L44 44 M44 20 L20 44"
+        stroke="#000" stroke-width="7" />
+
+  <!-- X (red) -->
+  <path d="M20 20 L44 44 M44 20 L20 44"
+        stroke="#ef4444" stroke-width="5" />
+</svg>
