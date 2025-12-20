@@ -19,16 +19,14 @@
                 Logga in för att hantera ditt CV, kontakta andra och använda privata meddelanden.
             </p>
 
-            <form id="account" method="post" class="login-form">
+            <form id="account" method="post" class="login-form" novalidate>
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
 
                 <label asp-for="Input.Email">Användarnamn</label>
-                <input asp-for="Input.Email" autocomplete="username" aria-required="true" placeholder="namn@exempel.se" />
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                <input asp-for="Input.Email" autocomplete="username" placeholder="namn@exempel.se" />
 
                 <label asp-for="Input.Password">Lösenord</label>
-                <input asp-for="Input.Password" type="password" autocomplete="current-password" aria-required="true" placeholder="••••••••" />
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                <input asp-for="Input.Password" type="password" autocomplete="current-password" placeholder="••••••••" />
 
                 <div class="login-actions">
                     <button class="btn-primary-custom" id="login-submit" type="submit">
@@ -40,15 +38,11 @@
                     </a>
                 </div>
 
-                <div class="login-actions" style="margin-top:10px;">
-                    <label style="display:flex; gap:8px; align-items:center;">
-                        <input asp-for="Input.RememberMe" />
-                        <span>@Html.DisplayNameFor(m => m.Input.RememberMe)</span>
+                <div class="login-actions" style="margin-top:10px; justify-content:flex-start;">
+                    <label class="remember-me" style="display:flex; gap:10px; align-items:center; font-weight:650;">
+                        <input asp-for="Input.RememberMe" style="width:auto;" />
+                        <span>Kom ihåg mig</span>
                     </label>
-                </div>
-
-                <div style="margin-top:10px;">
-                    <a id="forgot-password" asp-page="./ForgotPassword">Glömt lösenord?</a>
                 </div>
             </form>
         </div>
@@ -64,7 +58,3 @@
 
     </div>
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}

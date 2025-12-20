@@ -1,0 +1,114 @@
+/* Shared custom buttons
+   Primary/secondary are based on the provided Uiverse "button" style.
+   Danger keeps the warning-red vibe for destructive actions.
+*/
+
+/* Base: Uiverse-like */
+.btn-primary-custom,
+.btn-secondary-custom,
+a.btn-primary-custom,
+a.btn-secondary-custom {
+    cursor: pointer;
+    padding: 1em;
+    font-size: 1em;
+    min-width: 7em;
+    aspect-ratio: 1 / 0.25;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55em;
+
+    color: white;
+    background: #212121;
+    background-size: cover;
+    background-blend-mode: overlay;
+
+    border-radius: 0.5em;
+    outline: 0.1em solid #353535;
+    border: 0;
+
+    box-shadow: 0 0 1em 1em rgba(0, 0, 0, 0.10);
+    transition: all 0.3s ease-in-out;
+    position: relative;
+
+    text-decoration: none;
+}
+
+.btn-primary-custom:hover,
+a.btn-primary-custom:hover,
+.btn-secondary-custom:hover,
+a.btn-secondary-custom:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 1em 0.45em rgba(0, 0, 0, 0.10);
+    background: radial-gradient(
+        circle at bottom,
+        rgba(50, 100, 180, 0.50) 10%,
+        #212121 70%
+    );
+    outline: 0;
+}
+
+/* Secondary: slightly lighter and more "outlined" feel */
+.btn-secondary-custom,
+a.btn-secondary-custom {
+    background: #2a2a2a;
+    outline-color: rgba(255,255,255,0.15);
+}
+
+.btn-secondary-custom:hover,
+a.btn-secondary-custom:hover {
+    background: radial-gradient(
+        circle at bottom,
+        rgba(255, 255, 255, 0.18) 10%,
+        #2a2a2a 70%
+    );
+}
+
+/* Optional icon inside button */
+.btn-icon {
+    fill: white;
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+}
+
+/* Disabled */
+.btn-primary-custom:disabled,
+.btn-secondary-custom:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Danger button (used for Deactivate confirm) */
+.btn-danger-custom,
+a.btn-danger-custom {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0.75rem 1.2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.18);
+
+    font-weight: 850;
+    font-size: 0.98rem;
+    text-decoration: none;
+
+    color: #fff;
+    background: #dc3545;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.16);
+
+    cursor: pointer;
+    transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
+}
+
+.btn-danger-custom:hover,
+a.btn-danger-custom:hover {
+    transform: translateY(-1px);
+    background: #c82333;
+    box-shadow:
+        0 14px 30px rgba(0,0,0,0.22),
+        0 0 0 4px rgba(255,255,255,0.08);
+}

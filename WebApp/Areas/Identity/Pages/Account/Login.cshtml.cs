@@ -18,11 +18,16 @@ namespace WebApp.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(
+            SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManager,
+            ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
             _logger = logger;
         }
 
@@ -38,17 +43,12 @@ namespace WebApp.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required(ErrorMessage = "E-post är obligatoriskt.")]
-            [EmailAddress(ErrorMessage = "E-postadressen har fel format.")]
-            [Display(Name = "E-post")]
+            // Keep properties simple; we don't want client-side/field-level validation here.
             public string Email { get; set; }
 
-            [Required(ErrorMessage = "Lösenord är obligatoriskt.")]
             [DataType(DataType.Password)]
-            [Display(Name = "Lösenord")]
             public string Password { get; set; }
 
-            [Display(Name = "Kom ihåg mig")]
             public bool RememberMe { get; set; }
         }
 
@@ -75,30 +75,55 @@ namespace WebApp.Areas.Identity.Pages.Account
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            if (ModelState.IsValid)
+            var rawLogin = (Input?.Email ?? string.Empty).Trim();
+            var password = Input?.Password ?? string.Empty;
+
+            // Always use one generic message for "no match" cases.
+            const string genericError = "Kunde inte hitta någon med det användarnamnet eller lösenordet. Vänligen försök igen.";
+
+            if (string.IsNullOrWhiteSpace(rawLogin) || string.IsNullOrWhiteSpace(password))
             {
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
-                }
-
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
-
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
-                }
-
-                ModelState.AddModelError(string.Empty, "Fel e-post eller lösenord.");
+                ModelState.AddModelError(string.Empty, genericError);
                 return Page();
             }
 
+            // Case-insensitive lookup via Identity normalizers.
+            var normalizedUserName = _userManager.NormalizeName(rawLogin);
+            var normalizedEmail = _userManager.NormalizeEmail(rawLogin);
+
+            var user = await _userManager.FindByNameAsync(rawLogin)
+                       ?? await _userManager.FindByEmailAsync(rawLogin)
+                       ?? (normalizedUserName is null ? null : await _userManager.FindByNameAsync(normalizedUserName))
+                       ?? (normalizedEmail is null ? null : await _userManager.FindByEmailAsync(normalizedEmail));
+
+            if (user is not null && user.IsDeactivated)
+            {
+                ModelState.AddModelError(string.Empty, genericError);
+                return Page();
+            }
+
+            // Use canonical username for sign-in.
+            var userNameForSignIn = user?.UserName ?? rawLogin;
+
+            var result = await _signInManager.PasswordSignInAsync(userNameForSignIn, password, isPersistent: Input.RememberMe, lockoutOnFailure: false);
+            if (result.Succeeded)
+            {
+                _logger.LogInformation("User logged in.");
+                return LocalRedirect(returnUrl);
+            }
+
+            if (result.RequiresTwoFactor)
+            {
+                return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+            }
+
+            if (result.IsLockedOut)
+            {
+                _logger.LogWarning("User account locked out.");
+                return RedirectToPage("./Lockout");
+            }
+
+            ModelState.AddModelError(string.Empty, genericError);
             return Page();
         }
     }

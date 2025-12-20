@@ -20,6 +20,10 @@ public class ApplicationUser : IdentityUser
     [RegularExpression("^[A-Za-zÅÄÖåäö-]+$", ErrorMessage = "Efternamn får bara innehålla bokstäver och bindestreck.")]
     public string LastName { get; set; } = "";
 
+    // For fast/predictable case-insensitive searching/filtering.
+    public string FirstNameNormalized { get; set; } = "";
+    public string LastNameNormalized { get; set; } = "";
+
     [Phone(ErrorMessage = "Telefonnummer har fel format.")]
     [StringLength(20, ErrorMessage = "Telefonnummer får vara max {1} tecken.")]
     [RegularExpression("^[0-9+\\- ]+$", ErrorMessage = "Telefonnummer får bara innehålla siffror, mellanslag, + och -.")]
@@ -33,4 +37,9 @@ public class ApplicationUser : IdentityUser
     [Required(ErrorMessage = "Postnummer är obligatoriskt.")]
     [RegularExpression("^[0-9]{5}$", ErrorMessage = "Postnummer måste vara exakt 5 siffror (ex: 71412).")]
     public string PostalCode { get; set; } = "";
+
+    /// <summary>
+    /// Soft-deactivation (VG): deactivated users should not appear in listings/search.
+    /// </summary>
+    public bool IsDeactivated { get; set; }
 }

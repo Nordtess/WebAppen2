@@ -32,7 +32,7 @@
                 </div>
             </div>
 
-            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="register-form">
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="register-form" novalidate>
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
 
                 <label asp-for="Input.Email">Email</label>
@@ -70,7 +70,3 @@
 
     </div>
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}

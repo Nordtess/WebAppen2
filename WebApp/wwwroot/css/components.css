@@ -1,77 +1,59 @@
-﻿.btn-primary-custom {
-    cursor: pointer;
-    padding: 0.75em 1.5em;
+﻿/* Shared input style (Apple-like + mint glow) */
+input.form-control,
+textarea.form-control,
+select.form-control,
+.register-form input,
+.login-form input
+{
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.18);
+    background: rgba(255,255,255,0.95);
+    padding: 0.85rem 1rem;
     font-size: 1rem;
-    font-weight: 600;
-    color: #fff;
-    background: #212121;
-    border: none;
-    border-radius: 10px;
-    outline: 1px solid #353535;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, outline 0.25s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-}
-
-    
-.btn-primary-custom:hover {
-        transform: scale(1.06);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-        background: radial-gradient( circle at bottom, rgba(50, 100, 180, 0.45) 10%, #212121 70% );
-        outline: none;
-}
-
-    
-.btn-primary-custom:active {
-        transform: scale(0.98);
-}
-
-    
-.btn-primary-custom:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-}
-
-    
-.btn-primary-custom svg {
-        width: 1em;
-        height: 1em;
-        fill: white;
-}
-
-.btn-secondary-custom {
-    cursor: pointer;
-    padding: 0.75em 1.5em;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #212121;
-    background: rgba(255,255,255,0.96);
-    border: 1px solid rgba(0,0,0,0.16);
-    border-radius: 10px;
     outline: none;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.10);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    text-decoration: none;
+    transition: box-shadow 0.20s ease, border-color 0.20s ease, transform 0.20s ease;
 }
 
-.btn-secondary-custom:hover {
-    transform: scale(1.06);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.14);
-    background: rgba(255,255,255,1);
-    border-color: rgba(0,0,0,0.22);
-    text-decoration: none;
+/* Mint glow on focus (match EditCV vibe) */
+input.form-control:focus,
+textarea.form-control:focus,
+select.form-control:focus,
+.register-form input:focus,
+.login-form input:focus
+{
+    border-color: rgba(40, 220, 160, 0.65);
+    box-shadow: 0 0 0 4px rgba(40, 220, 160, 0.18), 0 10px 25px rgba(0,0,0,0.10);
 }
 
-.btn-secondary-custom:active {
-    transform: scale(0.98);
+/* Validation UI wrappers */
+.field-wrap
+{
+    position: relative;
 }
 
-.btn-secondary-custom:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+.field-status-icon
+{
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    display: none;
+    opacity: 0.95;
+}
+
+.field-wrap.is-valid input,
+.field-wrap.is-valid textarea,
+.field-wrap.is-valid select
+{
+    border-color: rgba(40, 220, 160, 0.55);
+}
+
+.field-wrap.is-invalid input,
+.field-wrap.is-invalid textarea,
+.field-wrap.is-invalid select
+{
+    border-color: rgba(235, 60, 84, 0.55);
 }

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebApp.Domain.Identity;
 using WebApp.Infrastructure.Data;
+using WebApp.Middleware;
 
 namespace WebApp;
 
@@ -46,6 +47,9 @@ public class Program
 
         app.UseAuthentication();
         app.UseAuthorization();
+
+        // Enforce user profile completion after login
+        app.UseMiddleware<ProfileCompletionMiddleware>();
 
         // Identity UI endpoints
         app.MapRazorPages();
