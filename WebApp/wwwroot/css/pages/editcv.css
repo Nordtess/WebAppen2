@@ -1,204 +1,187 @@
 ﻿:root {
     --edit-max: 1100px;
-    --edit-banner-h: 200px;
-    --edit-card-pad: 28px;
-    --edit-radius-lg: 24px;
-    --edit-radius-md: 18px;
+    --edit-card-radius: 22px;
     --edit-border: rgba(0,0,0,0.08);
-    --edit-soft: rgba(0,0,0,0.04);
-    --edit-text: rgba(0,0,0,0.80);
-    --edit-muted: rgba(0,0,0,0.60);
-    --edit-mint: #7FFFD4; /* samma accent som du gillar */
-    --edit-mint-soft: rgba(127,255,212,0.22);
+    --edit-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+    --mint: #7FFFD4;
+    --mint-soft: rgba(127,255,212,0.18);
+    --danger: #ff3b30;
 }
 
-/* Page */
+/* Page shell */
 .editcv-page {
+    padding: 34px 18px 90px;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 54px 20px;
-    gap: 18px;
+    justify-content: center;
 }
 
-/* Banner */
-.editcv-banner {
+.editcv-shell {
     width: 100%;
     max-width: var(--edit-max);
-    height: var(--edit-banner-h);
-    border-radius: var(--edit-radius-lg);
-    overflow: hidden;
-    border: 1px solid var(--edit-border);
-    background: rgba(255,255,255,0.95);
-    box-shadow: 0 18px 38px rgba(0,0,0,0.07), 0 2px 6px rgba(0,0,0,0.04);
 }
 
-.editcv-banner-img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-    object-position: center 20%;
-}
-
-/* Main card */
-.editcv-card {
-    width: 100%;
-    max-width: var(--edit-max);
-    background: rgba(255,255,255,0.95);
-    border: 1px solid var(--edit-border);
-    border-radius: var(--edit-radius-lg);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
-    padding: var(--edit-card-pad);
-}
-
-/* Header */
-.editcv-header {
+/* Topbar */
+.editcv-topbar {
     display: flex;
-    align-items: flex-start;
     justify-content: space-between;
+    align-items: flex-start;
     gap: 18px;
+    margin-bottom: 14px;
 }
 
 .editcv-title {
     margin: 0;
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 900;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.2px;
 }
 
-.editcv-subtitle {
-    margin: 8px 0 0;
-    color: var(--edit-muted);
-    font-weight: 600;
-    line-height: 1.45;
-    max-width: 60ch;
-}
-
-.editcv-req {
-    color: rgba(255,59,48,0.95);
-    font-weight: 900;
-}
-
-.editcv-status {
+.editcv-pill-group {
+    margin-top: 8px;
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
-.editcv-status-pill {
+.editcv-pill {
     display: inline-flex;
     align-items: center;
+    gap: 8px;
     padding: 8px 12px;
     border-radius: 999px;
-    background: rgba(255,255,255,0.92);
-    border: 1px solid var(--edit-border);
-    color: rgba(0,0,0,0.70);
-    font-weight: 750;
+    border: 1px solid rgba(0,0,0,0.10);
+    background: rgba(255,255,255,0.95);
+    color: rgba(0,0,0,0.78);
+    font-weight: 650;
     font-size: 13px;
 }
 
-.editcv-divider {
-    height: 1px;
-    background: var(--edit-border);
-    margin: 18px 0 18px;
-}
-
-/* Alerts */
-.editcv-alertwrap {
+.editcv-topbar-right {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 12px;
+    align-items: center;
+    gap: 12px;
 }
 
-.editcv-alert {
-    display: none;
-    padding: 12px 14px;
-    border-radius: 14px;
+.editcv-topbar-btn {
+    text-decoration: none;
+}
+
+/* Autosave indicator (UI-only) */
+.editcv-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,0.10);
+    background: rgba(255,255,255,0.95);
+    font-weight: 750;
+    font-size: 13px;
+    color: rgba(0,0,0,0.75);
+}
+
+.editcv-status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.28);
+}
+
+.editcv-status[data-state="dirty"] .editcv-status-dot {
+    background: rgba(255,149,0,0.95);
+}
+
+.editcv-status[data-state="saved"] .editcv-status-dot {
+    background: rgba(52,199,89,0.95);
+}
+
+/* Actions bar */
+.editcv-actions-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
     border: 1px solid var(--edit-border);
-    background: rgba(255,255,255,0.92);
-    color: var(--edit-text);
-    font-weight: 650;
+    border-radius: var(--edit-card-radius);
+    background: rgba(255,255,255,0.95);
+    box-shadow: var(--edit-shadow);
+    margin-bottom: 16px;
 }
 
-.editcv-alert-error {
-    display: block;
-    border-color: rgba(255,59,48,0.25);
-    background: rgba(255,59,48,0.06);
-}
-
-/* Form sections (cards) */
-.editcv-form {
+.editcv-mini-info {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 2px;
 }
 
-.editcv-section {
-    border: 1px solid var(--edit-border);
-    background: rgba(255,255,255,0.92);
-    border-radius: var(--edit-radius-md);
-    padding: 18px;
-}
-
-.editcv-section-head {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 12px;
-}
-
-    .editcv-section-head h2 {
-        margin: 0;
-        font-size: 16px;
-        font-weight: 900;
-    }
-
-    .editcv-section-head p {
-        margin: 0;
-        color: var(--edit-muted);
-        font-weight: 600;
-        line-height: 1.45;
-    }
-
-/* Fields */
-.editcv-grid2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px 14px;
-}
-
-.editcv-field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.editcv-field-full {
-    grid-column: 1 / -1;
-}
-
-.editcv-label {
-    font-weight: 800;
+.editcv-mini-label {
+    font-weight: 850;
     color: rgba(0,0,0,0.78);
     font-size: 13px;
 }
 
-.editcv-labelrow {
+.editcv-mini-muted {
+    font-weight: 650;
+    color: rgba(0,0,0,0.55);
+    font-size: 12px;
+}
+
+.editcv-actions-right {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
     gap: 10px;
 }
 
-.editcv-counter {
-    font-size: 12px;
-    color: var(--edit-muted);
-    font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 999px;
+/* Grid layout */
+.editcv-grid {
+    display: grid;
+    grid-template-columns: 0.92fr 1.25fr;
+    gap: 16px;
+    align-items: start;
+}
+
+/* Cards */
+.editcv-card {
     border: 1px solid var(--edit-border);
-    background: rgba(255,255,255,0.9);
+    border-radius: var(--edit-card-radius);
+    background: rgba(255,255,255,0.95);
+    box-shadow: var(--edit-shadow);
+    padding: 18px;
+    margin-bottom: 16px;
+}
+
+.editcv-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.editcv-card-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 900;
+    color: rgba(0,0,0,0.82);
+}
+
+.editcv-card-sub {
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(0,0,0,0.50);
+}
+
+/* Inputs */
+.editcv-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.editcv-label {
+    font-size: 13px;
+    font-weight: 850;
+    color: rgba(0,0,0,0.75);
 }
 
 .editcv-input,
@@ -206,133 +189,421 @@
     width: 100%;
     border-radius: 14px;
     border: 1px solid rgba(0,0,0,0.10);
-    background: rgba(255,255,255,0.98);
+    background: rgba(255,255,255,0.96);
     padding: 12px 12px;
-    font-size: 15px;
     font-weight: 650;
-    color: rgba(0,0,0,0.82);
+    font-size: 14px;
     outline: none;
-    transition: box-shadow 160ms ease, border-color 160ms ease, transform 160ms ease;
-}
-
-.editcv-textarea {
-    resize: vertical;
-    min-height: 96px;
-    line-height: 1.45;
 }
 
     .editcv-input:focus,
     .editcv-textarea:focus {
-        border-color: rgba(127,255,212,0.55);
-        box-shadow: 0 0 0 4px var(--edit-mint-soft);
+        border-color: rgba(0,0,0,0.18);
+        box-shadow: 0 0 0 4px rgba(127,255,212,0.18);
     }
+
+.editcv-textarea {
+    resize: vertical;
+    min-height: 120px;
+}
 
 .editcv-help {
     font-size: 12px;
-    color: var(--edit-muted);
-    font-weight: 600;
-    line-height: 1.35;
+    font-weight: 650;
+    color: rgba(0,0,0,0.55);
+    margin-top: 6px;
 }
 
-/* Validation messages (unobtrusive) */
-.editcv-valmsg {
-    min-height: 16px;
-    font-size: 12px;
-    font-weight: 700;
-    color: rgba(255,59,48,0.95);
+/* Two-column fields inside cards */
+.editcv-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 12px;
 }
 
-/* When invalid: MVC adds input-validation-error class */
+/* Error styling (ASP.NET adds .input-validation-error) */
 .input-validation-error {
-    border-color: rgba(255,59,48,0.45) !important;
-    box-shadow: 0 0 0 4px rgba(255,59,48,0.10) !important;
+    border: 1px solid var(--danger) !important;
+    box-shadow: 0 0 0 4px rgba(255,59,48,0.14) !important;
 }
 
-/* Project list (placeholder) */
-.editcv-projectlist {
+.editcv-error {
+    font-size: 12px;
+    font-weight: 750;
+    color: var(--danger);
+    min-height: 14px;
+}
+
+.field-validation-valid {
+    min-height: 14px;
+}
+
+/* Under row (error + counter) */
+.editcv-under {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.editcv-counter {
+    font-size: 12px;
+    font-weight: 750;
+    color: rgba(0,0,0,0.55);
+}
+
+/* Profile layout */
+.editcv-profile {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 14px;
+    align-items: start;
+}
+
+.editcv-avatar-wrap {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.editcv-check {
+.editcv-avatar {
+    width: 140px;
+    height: 140px;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,0.10);
+    background: radial-gradient(circle at 30% 20%, rgba(127,255,212,0.22), rgba(0,0,0,0.02));
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+}
+
+.editcv-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.editcv-avatar-fallback {
+    font-weight: 900;
+    font-size: 22px;
+    color: rgba(0,0,0,0.55);
+}
+
+.editcv-avatar-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 12px;
+    background: linear-gradient(to top, rgba(0,0,0,0.35), rgba(0,0,0,0));
+    opacity: 0;
+    transition: opacity 160ms ease;
+}
+
+.editcv-avatar:hover .editcv-avatar-overlay {
+    opacity: 1;
+}
+
+.editcv-avatar-overlay-text {
+    font-size: 12px;
+    font-weight: 850;
+    color: rgba(255,255,255,0.95);
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(255,255,255,0.18);
+}
+
+.editcv-file {
+    display: none;
+}
+
+.editcv-profile-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Draft list cards */
+.editcv-draft-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.editcv-draft-card {
+    border: 1px solid rgba(0,0,0,0.10);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.96);
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.editcv-draft-title {
+    font-weight: 900;
+    color: rgba(0,0,0,0.80);
+    margin: 0;
+    font-size: 14px;
+}
+
+.editcv-draft-sub {
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(0,0,0,0.55);
+}
+
+.editcv-draft-remove {
+    border: 1px solid rgba(0,0,0,0.10);
+    background: rgba(255,255,255,0.95);
+    border-radius: 999px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: 900;
+    color: rgba(0,0,0,0.55);
+    transition: transform 140ms ease;
+}
+
+    .editcv-draft-remove:hover {
+        transform: translateY(-1px);
+    }
+
+/* Collapsible add form */
+.editcv-collapse {
+    margin-top: 12px;
+    display: none;
+}
+
+    .editcv-collapse.is-open {
+        display: block;
+    }
+
+.editcv-mini-form {
+    border: 1px dashed rgba(0,0,0,0.14);
+    border-radius: 18px;
+    background: rgba(127,255,212,0.10);
+    padding: 12px;
+}
+
+.editcv-mini-form-actions {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 12px 12px;
-    border-radius: 14px;
-    border: 1px solid var(--edit-border);
-    background: rgba(255,255,255,0.95);
-    font-weight: 700;
-    color: rgba(0,0,0,0.78);
+    flex-wrap: wrap;
+    margin-top: 10px;
 }
 
-    .editcv-check input {
-        width: 16px;
-        height: 16px;
+.editcv-mini-error {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--danger);
+}
+
+/* Projects toolbar */
+.editcv-projects-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.editcv-search {
+    flex: 1 1 auto;
+}
+
+/* Project grid */
+.editcv-project-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.editcv-project-card {
+    border: 1px solid rgba(0,0,0,0.10);
+    border-radius: 18px;
+    background: rgba(255,255,255,0.96);
+    padding: 14px;
+    position: relative;
+    transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+    .editcv-project-card:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 18px 34px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
     }
 
-/* Sticky actions */
-.editcv-actions {
-    position: sticky;
-    bottom: 14px;
-    margin-top: 12px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    padding: 12px;
-    border-radius: 16px;
-    border: 1px solid var(--edit-border);
-    background: rgba(255,255,255,0.88);
-    backdrop-filter: blur(10px);
+.editcv-project-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 950;
+    color: rgba(0,0,0,0.82);
+    text-align: center;
 }
 
-.btn-secondary-custom {
-    display: inline-flex;
+.editcv-project-desc {
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 650;
+    color: rgba(0,0,0,0.62);
+    line-height: 1.45;
+    text-align: justify;
+    hyphens: auto;
+}
+
+.editcv-project-divider {
+    width: 76%;
+    height: 1px;
+    background: rgba(0,0,0,0.10);
+    margin: 12px auto 10px;
+}
+
+/* Tech icons row */
+.editcv-tech-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.editcv-tech-tile {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.10);
+    background: rgba(255,255,255,0.96);
+    display: flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 16px;
-    border-radius: 14px;
-    border: 1px solid rgba(0,0,0,0.10);
-    background: rgba(255,255,255,0.92);
-    color: rgba(0,0,0,0.82);
-    font-weight: 800;
-    text-decoration: none;
-    transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
 }
 
-    .btn-secondary-custom:hover {
-        transform: translateY(-1px);
-        border-color: rgba(0,0,0,0.14);
-        box-shadow: 0 10px 22px rgba(0,0,0,0.08);
-        text-decoration: none;
-        color: rgba(0,0,0,0.82);
+.editcv-tech-icon {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+/* Toggle overlay (project visible on CV) */
+.editcv-project-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.editcv-toggle {
+    position: relative;
+    width: 54px;
+    height: 28px;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,0.10);
+    background: rgba(0,0,0,0.10);
+    display: flex;
+    align-items: center;
+    padding: 3px;
+    cursor: pointer;
+    user-select: none;
+}
+
+    .editcv-toggle[data-on="true"] {
+        background: rgba(127,255,212,0.55);
+        border-color: rgba(0,0,0,0.08);
     }
 
-    .btn-secondary-custom:visited {
-        color: rgba(0,0,0,0.82);
-        text-decoration: none;
+.editcv-toggle-knob {
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.95);
+    border: 1px solid rgba(0,0,0,0.10);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+    transform: translateX(0);
+    transition: transform 160ms ease;
+}
+
+.editcv-toggle[data-on="true"] .editcv-toggle-knob {
+    transform: translateX(24px);
+}
+
+.editcv-project-card.is-off {
+    opacity: 0.65;
+}
+
+    .editcv-project-card.is-off::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 18px;
+        background: rgba(255,255,255,0.55);
+        pointer-events: none;
     }
+
+/* Bottom sticky bar */
+.editcv-bottom {
+    position: sticky;
+    bottom: 10px;
+    margin-top: 16px;
+}
+
+.editcv-bottom-inner {
+    border: 1px solid var(--edit-border);
+    border-radius: var(--edit-card-radius);
+    background: rgba(255,255,255,0.96);
+    box-shadow: var(--edit-shadow);
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.editcv-bottom-right {
+    display: flex;
+    gap: 10px;
+}
 
 /* Responsive */
 @media (max-width: 900px) {
-    :root {
-        --edit-banner-h: 150px;
-    }
-
-    .editcv-card {
-        padding: 18px;
-    }
-
-    .editcv-grid2 {
+    .editcv-grid {
         grid-template-columns: 1fr;
     }
 
-    .editcv-subtitle {
-        max-width: 100%;
+    .editcv-two-col {
+        grid-template-columns: 1fr;
     }
 
-    .editcv-actions {
-        justify-content: space-between;
+    .editcv-project-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .editcv-profile {
+        grid-template-columns: 1fr;
+    }
+
+    .editcv-avatar {
+        width: 120px;
+        height: 120px;
+    }
+
+    .editcv-actions-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .editcv-actions-right {
+        justify-content: flex-end;
     }
 }

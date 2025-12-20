@@ -1,71 +1,338 @@
 ﻿(function () {
-    // Kräver jQuery + jQuery Validate + Unobtrusive (via _ValidationScriptsPartial)
-    function configureValidationBlurOnly() {
-        if (!window.jQuery || !jQuery.validator) return;
+    const form = document.getElementById("editcvForm");
+    if (!form) return;
 
-        // Blur-only validation (inte varje tangenttryck)
-        jQuery.validator.setDefaults({
-            onkeyup: false,
-            onclick: false,
-            onfocusout: function (element) {
-                // Validera när man lämnar fältet
-                this.element(element);
+    // ---------- Autosave indicator (UI-only) ----------
+    const autosaveStatus = document.getElementById("autosaveStatus");
+    const statusText = autosaveStatus?.querySelector(".editcv-status-text");
+
+    function setSaveState(state) {
+        if (!autosaveStatus) return;
+        autosaveStatus.dataset.state = state;
+
+        if (!statusText) return;
+        statusText.textContent = state === "saved" ? "Sparad" : "Ej sparad";
+    }
+
+    function markDirty() {
+        setSaveState("dirty");
+    }
+
+    // Mark dirty on any input change
+    form.addEventListener("input", markDirty);
+    form.addEventListener("change", markDirty);
+
+    // ---------- AboutMe counter ----------
+    const about = document.getElementById("aboutMe");
+    const aboutCount = document.getElementById("aboutCount");
+
+    function updateCount() {
+        if (!about || !aboutCount) return;
+        aboutCount.textContent = String(about.value.length);
+    }
+    updateCount();
+    about?.addEventListener("input", updateCount);
+
+    // ---------- Profile image uploader ----------
+    const avatarBtn = document.getElementById("avatarBtn");
+    const avatarFile = document.getElementById("AvatarFile");
+    const avatarPreview = document.getElementById("avatarPreview");
+    const avatarFallback = document.getElementById("avatarFallback");
+
+    avatarBtn?.addEventListener("click", () => avatarFile?.click());
+
+    avatarFile?.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            if (avatarPreview) {
+                avatarPreview.src = String(reader.result);
+                avatarPreview.style.display = "block";
             }
+            if (avatarFallback) avatarFallback.style.display = "none";
+            markDirty();
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // ---------- Education (staged saving) ----------
+    const eduJsonInput = document.getElementById("EducationJson");
+    const eduList = document.getElementById("eduList");
+    const eduToggleBtn = document.getElementById("eduToggleBtn");
+    const eduFormWrap = document.getElementById("eduFormWrap");
+    const eduAddBtn = document.getElementById("eduAddBtn");
+    const eduCancelBtn = document.getElementById("eduCancelBtn");
+    const eduMiniError = document.getElementById("eduMiniError");
+
+    const eduSchool = document.getElementById("eduSchool");
+    const eduProgram = document.getElementById("eduProgram");
+    const eduYears = document.getElementById("eduYears");
+    const eduNote = document.getElementById("eduNote");
+
+    let educations = [];
+
+    // Placeholder start
+    educations = [
+        { school: "Örebro universitet", program: "Systemvetenskap • Webbutveckling", years: "2024 – Pågående", note: "" }
+    ];
+    syncEduJson();
+    renderEdu();
+
+    function openEduForm(open) {
+        if (!eduFormWrap) return;
+        eduFormWrap.classList.toggle("is-open", open);
+        eduFormWrap.setAttribute("aria-hidden", open ? "false" : "true");
+        if (eduMiniError) eduMiniError.textContent = "";
+    }
+
+    eduToggleBtn?.addEventListener("click", () => {
+        const open = !eduFormWrap?.classList.contains("is-open");
+        openEduForm(open);
+    });
+
+    eduCancelBtn?.addEventListener("click", () => {
+        clearEduMiniForm();
+        openEduForm(false);
+    });
+
+    eduAddBtn?.addEventListener("click", () => {
+        const school = (eduSchool?.value || "").trim();
+        const program = (eduProgram?.value || "").trim();
+        const years = (eduYears?.value || "").trim();
+        const note = (eduNote?.value || "").trim();
+
+        if (!school || !program || !years) {
+            if (eduMiniError) eduMiniError.textContent = "Fyll i Skola, Program och År.";
+            return;
+        }
+
+        educations.unshift({ school, program, years, note });
+        syncEduJson();
+        renderEdu();
+        markDirty();
+
+        clearEduMiniForm();
+        openEduForm(false);
+    });
+
+    function clearEduMiniForm() {
+        if (eduSchool) eduSchool.value = "";
+        if (eduProgram) eduProgram.value = "";
+        if (eduYears) eduYears.value = "";
+        if (eduNote) eduNote.value = "";
+        if (eduMiniError) eduMiniError.textContent = "";
+    }
+
+    function syncEduJson() {
+        if (!eduJsonInput) return;
+        eduJsonInput.value = JSON.stringify(educations);
+    }
+
+    function renderEdu() {
+        if (!eduList) return;
+        eduList.innerHTML = "";
+
+        if (educations.length === 0) {
+            eduList.innerHTML = `<div class="editcv-help">Inga utbildningar ännu. Klicka “Lägg till utbildning”.</div>`;
+            return;
+        }
+
+        educations.forEach((e, idx) => {
+            const card = document.createElement("div");
+            card.className = "editcv-draft-card";
+
+            const left = document.createElement("div");
+            const title = document.createElement("div");
+            title.className = "editcv-draft-title";
+            title.textContent = e.school;
+
+            const sub = document.createElement("div");
+            sub.className = "editcv-draft-sub";
+            sub.textContent = `${e.years} • ${e.program}${e.note ? " • " + e.note : ""}`;
+
+            left.appendChild(title);
+            left.appendChild(sub);
+
+            const remove = document.createElement("button");
+            remove.type = "button";
+            remove.className = "editcv-draft-remove";
+            remove.textContent = "×";
+            remove.setAttribute("aria-label", "Ta bort utbildning");
+            remove.addEventListener("click", () => {
+                educations.splice(idx, 1);
+                syncEduJson();
+                renderEdu();
+                markDirty();
+            });
+
+            card.appendChild(left);
+            card.appendChild(remove);
+
+            eduList.appendChild(card);
         });
     }
 
-    function wireTextareaCounters() {
-        const counters = document.querySelectorAll(".editcv-counter[data-for]");
-        counters.forEach(counter => {
-            const id = counter.getAttribute("data-for");
-            const field = document.getElementById(id);
-            if (!field) return;
+    // ---------- Projects picker (gallery) ----------
+    const projectGrid = document.getElementById("projectGrid");
+    const projectSearch = document.getElementById("projectSearch");
+    const selectedProjectsJson = document.getElementById("SelectedProjectsJson");
+    const manageProjectsBtn = document.getElementById("manageProjectsBtn");
 
-            const max = field.getAttribute("maxlength") || "—";
-            const update = () => {
-                const len = (field.value || "").length;
-                counter.textContent = `${len}/${max}`;
-            };
+    // Placeholder project library
+    const projects = [
+        {
+            id: "p1",
+            title: "NotLinkedIn — WebApp",
+            desc: "Webbplattform där användare skapar CV-profiler, kopplar projekt och kan kommunicera via privata meddelanden. Ren Apple-ish UI och tydlig struktur.",
+            tech: ["csharp", "mysql", "mongodb"]
+        },
+        {
+            id: "p2",
+            title: "AES GUI — Kryptering",
+            desc: "GUI-app som krypterar/dekrypterar text med tydlig input/feedback, validering och robust felhantering. Byggd för att kunna skalas upp.",
+            tech: ["csharp", "cplusplus"]
+        },
+        {
+            id: "p3",
+            title: "Linux & Nätverk — IPv6/Wireshark",
+            desc: "Rapport + labb där trafik analyseras i hemmanätverk. Fokus på adressering, protokoll och verifiering av paketflöden.",
+            tech: ["python", "java"]
+        },
+        {
+            id: "p4",
+            title: "Mini Dashboard — Frontend/Logik",
+            desc: "Liten demo för att visa struktur: komponenter, state och tydlig dataflödeslogik. Byggd för att vara lätt att vidareutveckla.",
+            tech: ["javascript", "python"]
+        }
+    ];
 
-            field.addEventListener("input", update);
-            update();
+    // Default selection (placeholder)
+    let selected = new Set(["p1", "p2", "p3"]);
+
+    function syncSelectedProjects() {
+        if (!selectedProjectsJson) return;
+        selectedProjectsJson.value = JSON.stringify(Array.from(selected));
+    }
+
+    function techIconPath(key) {
+        // folder: wwwroot/images/svg/techstack/<name>.svg
+        // key must match your filenames (csharp.svg, mysql.svg, mongodb.svg, etc)
+        return `/images/svg/techstack/${key}.svg`;
+    }
+
+    function renderProjects(filter = "") {
+        if (!projectGrid) return;
+        projectGrid.innerHTML = "";
+
+        const f = filter.trim().toLowerCase();
+        const filtered = !f
+            ? projects
+            : projects.filter(p =>
+                (p.title + " " + p.desc).toLowerCase().includes(f)
+            );
+
+        filtered.forEach(p => {
+            const card = document.createElement("div");
+            card.className = "editcv-project-card";
+            const isOn = selected.has(p.id);
+            card.classList.toggle("is-off", !isOn);
+
+            const toggleWrap = document.createElement("div");
+            toggleWrap.className = "editcv-project-toggle";
+
+            const toggle = document.createElement("div");
+            toggle.className = "editcv-toggle";
+            toggle.dataset.on = String(isOn);
+
+            const knob = document.createElement("div");
+            knob.className = "editcv-toggle-knob";
+
+            toggle.appendChild(knob);
+
+            toggle.addEventListener("click", () => {
+                const currentlyOn = selected.has(p.id);
+                if (currentlyOn) selected.delete(p.id);
+                else selected.add(p.id);
+
+                syncSelectedProjects();
+                renderProjects(projectSearch?.value || "");
+                markDirty();
+            });
+
+            toggleWrap.appendChild(toggle);
+
+            const title = document.createElement("h3");
+            title.className = "editcv-project-title";
+            title.textContent = p.title;
+
+            const desc = document.createElement("p");
+            desc.className = "editcv-project-desc";
+            desc.textContent = p.desc;
+
+            const divider = document.createElement("div");
+            divider.className = "editcv-project-divider";
+
+            const techRow = document.createElement("div");
+            techRow.className = "editcv-tech-row";
+
+            (p.tech || []).forEach(t => {
+                const tile = document.createElement("div");
+                tile.className = "editcv-tech-tile";
+
+                const img = document.createElement("img");
+                img.className = "editcv-tech-icon";
+                img.alt = t;
+                img.src = techIconPath(t);
+
+                tile.appendChild(img);
+                techRow.appendChild(tile);
+            });
+
+            card.appendChild(toggleWrap);
+            card.appendChild(title);
+            card.appendChild(desc);
+            card.appendChild(divider);
+            card.appendChild(techRow);
+
+            projectGrid.appendChild(card);
         });
     }
 
-    function scrollToFirstError(form) {
-        const firstInvalid = form.querySelector(".input-validation-error");
-        if (!firstInvalid) return;
+    projectSearch?.addEventListener("input", () => {
+        renderProjects(projectSearch.value);
+    });
 
-        firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
-        firstInvalid.focus({ preventScroll: true });
+    manageProjectsBtn?.addEventListener("click", (e) => {
+        // Placeholder: byt till riktig route senare
+        e.preventDefault();
+        alert("Placeholder: här kan du länka till Projektsidan (skapa/anslut projekt).");
+    });
+
+    syncSelectedProjects();
+    renderProjects();
+
+    // ---------- Save button enabled/disabled (optional UI) ----------
+    const saveBtn = document.getElementById("saveBtn");
+    const saveBtnBottom = document.getElementById("saveBtnBottom");
+
+    function updateSaveButtons() {
+        // HTML5 validity + (jQuery validate will show messages on blur)
+        const valid = form.checkValidity();
+        if (saveBtn) saveBtn.disabled = !valid;
+        if (saveBtnBottom) saveBtnBottom.disabled = !valid;
     }
 
-    function wireSubmitGuard() {
-        const form = document.querySelector(".editcv-form");
-        if (!form) return;
+    // Update on blur and on input
+    form.addEventListener("blur", updateSaveButtons, true);
+    form.addEventListener("input", updateSaveButtons);
+    updateSaveButtons();
 
-        form.addEventListener("submit", function (e) {
-            // Om unobtrusive finns, kör den valideringen:
-            if (window.jQuery && jQuery.validator) {
-                const $form = jQuery(form);
-                if ($form.valid && !$form.valid()) {
-                    e.preventDefault();
-                    scrollToFirstError(form);
-                    return;
-                }
-            }
-
-            // Fallback: HTML5 (om validate-lib saknas)
-            if (!form.checkValidity()) {
-                e.preventDefault();
-                scrollToFirstError(form);
-            }
-        });
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        configureValidationBlurOnly();
-        wireTextareaCounters();
-        wireSubmitGuard();
+    // If you want: mark saved after submit (UI-only)
+    form.addEventListener("submit", () => {
+        // Om du vill att UI ska visa "Sparad" direkt när man submitar:
+        // setSaveState("saved");
+        // Men bättre att bara göra detta efter redirect/TempData senare.
     });
 })();
