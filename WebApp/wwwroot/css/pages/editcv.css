@@ -11,7 +11,7 @@
     /* Matcha MyCV */
     --edit-banner-h: 190px;
 
-    /* Profile block sizing (MyCV-left panel feel) */
+    /* Profile image sizing (MyCV-left panel feel) */
     --edit-profile-max: 360px;
 }
 
@@ -259,8 +259,9 @@
 
 .editcv-input::placeholder,
 .editcv-textarea::placeholder {
-    color: rgba(0,0,0,0.42);
-    font-weight: 520;
+    /* Slightly more intense than before (still softer than typed text) */
+    color: rgba(0,0,0,0.52);
+    font-weight: 560;
 }
 
     .editcv-input:focus,
@@ -334,7 +335,12 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    /* Make the avatar block feel narrower like MyCV's left panel */
+    /* Allow fields to be full card width (like Kontakt) */
+    max-width: none;
+}
+
+/* Keep ONLY the avatar itself narrower like MyCV */
+.editcv-avatar {
     max-width: var(--edit-profile-max);
     margin: 0 auto;
 }
@@ -709,7 +715,7 @@
     }
 
     .editcv-avatar {
-        height: 190px;
+        max-width: 100%;
     }
 
     .editcv-actions-bar {
