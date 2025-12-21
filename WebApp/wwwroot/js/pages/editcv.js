@@ -2,50 +2,46 @@
     const form = document.getElementById("editcvForm");
     if (!form) return;
 
-    // ---------- Blur-only validation (no keyup) ----------
-    // This implementation uses HTML5 constraint validation APIs so it works without jQuery.
-    // We set custom messages (sv) using data attributes emitted by the view.
+    // Validering vid blur (ingen keyup) via HTML5 Constraint Validation API.
 
-    /** @param {HTMLInputElement|HTMLTextAreaElement} el */
+    /** @param {HTMLInputElement | HTMLTextAreaElement} el */
     function getMessage(el) {
         const v = el.validity;
+
         if (v.valueMissing) return el.dataset.valRequired || "Fältet är obligatoriskt.";
         if (v.typeMismatch) return el.dataset.valEmail || el.dataset.valUrl || "Ogiltigt format.";
         if (v.patternMismatch) return el.dataset.valPattern || "Ogiltigt format.";
         if (v.tooLong) return el.dataset.valMaxlength || "För långt värde.";
         if (v.tooShort) return el.dataset.valMinlength || "För kort värde.";
+
         return "";
     }
 
-    /** @param {HTMLInputElement|HTMLTextAreaElement} el */
+    /** @param {HTMLInputElement | HTMLTextAreaElement} el */
     function findErrorSpan(el) {
-        // Map by name to the asp-validation-for span classes
         const name = el.getAttribute("name");
         if (!name) return null;
 
-        // If property is nested, MVC uses underscores in class names.
-        const cls = "field-validation-valid";
         const selector = `span[data-valmsg-for="${CSS.escape(name)}"], span[class*="field-validation"][data-valmsg-for="${CSS.escape(name)}"]`;
-        return form.querySelector(selector) || el.closest(".editcv-field")?.querySelector(".editcv-error") || null;
+        return form.querySelector(selector) ?? el.closest(".editcv-field")?.querySelector(".editcv-error") ?? null;
     }
 
-    /** @param {HTMLInputElement|HTMLTextAreaElement} el */
+    /** @param {HTMLInputElement | HTMLTextAreaElement} el */
     function setFieldState(el, isValid, message) {
         el.classList.toggle("input-validation-error", !isValid);
         el.classList.toggle("valid", isValid && (el.value || "").trim().length > 0);
         el.setAttribute("aria-invalid", isValid ? "false" : "true");
 
         const span = findErrorSpan(el);
-        if (span) {
-            span.textContent = message || "";
-            span.classList.toggle("field-validation-error", !isValid);
-            span.classList.toggle("field-validation-valid", isValid);
-        }
+        if (!span) return;
+
+        span.textContent = message || "";
+        span.classList.toggle("field-validation-error", !isValid);
+        span.classList.toggle("field-validation-valid", isValid);
     }
 
-    /** @param {HTMLInputElement|HTMLTextAreaElement} el */
+    /** @param {HTMLInputElement | HTMLTextAreaElement} el */
     function validateField(el) {
-        // Do not validate disabled/hidden fields
         if (el.disabled) return true;
         if (el.type === "hidden") return true;
 
@@ -57,34 +53,39 @@
 
     function validateForm() {
         const fields = Array.from(form.querySelectorAll(".editcv-input, .editcv-textarea"));
+
         let ok = true;
-        for (const f of fields) {
-            // Only enforce after interaction (blur triggers); but for button state we can still evaluate
-            ok = validateField(f) && ok;
+        for (const field of fields) {
+            ok = validateField(field) && ok;
         }
+
         return ok;
     }
 
-    // Prevent browser default tooltip bubbles
-    form.addEventListener("invalid", (e) => {
-        e.preventDefault();
-    }, true);
+    form.addEventListener(
+        "invalid",
+        (e) => {
+            e.preventDefault();
+        },
+        true
+    );
 
-    // Validate on blur only
     form.addEventListener("focusout", (e) => {
         const target = e.target;
+
         if (!(target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement)) return;
         if (!target.classList.contains("editcv-input") && !target.classList.contains("editcv-textarea")) return;
+
         validateField(target);
         updateSaveButtons();
     });
 
-    // ---------- Autosave indicator (UI-only) ----------
     const autosaveStatus = document.getElementById("autosaveStatus");
     const statusText = autosaveStatus?.querySelector(".editcv-status-text");
 
     function setSaveState(state) {
         if (!autosaveStatus) return;
+
         autosaveStatus.dataset.state = state;
 
         if (!statusText) return;
@@ -95,11 +96,9 @@
         setSaveState("dirty");
     }
 
-    // Mark dirty on any input change
     form.addEventListener("input", markDirty);
     form.addEventListener("change", markDirty);
 
-    // ---------- AboutMe counter ----------
     const about = document.getElementById("aboutMe");
     const aboutCount = document.getElementById("aboutCount");
 
@@ -107,10 +106,10 @@
         if (!about || !aboutCount) return;
         aboutCount.textContent = String(about.value.length);
     }
+
     updateCount();
     about?.addEventListener("input", updateCount);
 
-    // ---------- Profile image uploader ----------
     const avatarBtn = document.getElementById("avatarBtn");
     const avatarFile = document.getElementById("AvatarFile");
     const avatarPreview = document.getElementById("avatarPreview");
@@ -128,13 +127,17 @@
                 avatarPreview.src = String(reader.result);
                 avatarPreview.style.display = "block";
             }
-            if (avatarFallback) avatarFallback.style.display = "none";
+
+            if (avatarFallback) {
+                avatarFallback.style.display = "none";
+            }
+
             markDirty();
         };
+
         reader.readAsDataURL(file);
     });
 
-    // ---------- Education (staged saving) ----------
     const eduJsonInput = document.getElementById("EducationJson");
     const eduList = document.getElementById("eduList");
     const eduToggleBtn = document.getElementById("eduToggleBtn");
@@ -150,18 +153,28 @@
 
     let educations = [];
 
-    // Placeholder start
+    // Tillfällig startdata för UI:t (ersätts när det kopplas till backend).
     educations = [
-        { school: "Örebro universitet", program: "Systemvetenskap • Webbutveckling", years: "2024 – Pågående", note: "" }
+        {
+            school: "Örebro universitet",
+            program: "Systemvetenskap • Webbutveckling",
+            years: "2024 – Pågående",
+            note: ""
+        }
     ];
+
     syncEduJson();
     renderEdu();
 
     function openEduForm(open) {
         if (!eduFormWrap) return;
+
         eduFormWrap.classList.toggle("is-open", open);
         eduFormWrap.setAttribute("aria-hidden", open ? "false" : "true");
-        if (eduMiniError) eduMiniError.textContent = "";
+
+        if (eduMiniError) {
+            eduMiniError.textContent = "";
+        }
     }
 
     eduToggleBtn?.addEventListener("click", () => {
@@ -216,18 +229,19 @@
             return;
         }
 
-        educations.forEach((e, idx) => {
+        educations.forEach((education, idx) => {
             const card = document.createElement("div");
             card.className = "editcv-draft-card";
 
             const left = document.createElement("div");
+
             const title = document.createElement("div");
             title.className = "editcv-draft-title";
-            title.textContent = e.school;
+            title.textContent = education.school;
 
             const sub = document.createElement("div");
             sub.className = "editcv-draft-sub";
-            sub.textContent = `${e.years} • ${e.program}${e.note ? " • " + e.note : ""}`;
+            sub.textContent = `${education.years} • ${education.program}${education.note ? " • " + education.note : ""}`;
 
             left.appendChild(title);
             left.appendChild(sub);
@@ -251,13 +265,12 @@
         });
     }
 
-    // ---------- Projects picker (gallery) ----------
     const projectGrid = document.getElementById("projectGrid");
     const projectSearch = document.getElementById("projectSearch");
     const selectedProjectsJson = document.getElementById("SelectedProjectsJson");
     const manageProjectsBtn = document.getElementById("manageProjectsBtn");
 
-    // Placeholder project library
+    // Tillfälliga projekt (ersätts när det kopplas till backend).
     const projects = [
         {
             id: "p1",
@@ -285,7 +298,6 @@
         }
     ];
 
-    // Default selection (placeholder)
     let selected = new Set(["p1", "p2", "p3"]);
 
     function syncSelectedProjects() {
@@ -294,8 +306,6 @@
     }
 
     function techIconPath(key) {
-        // folder: wwwroot/images/svg/techstack/<name>.svg
-        // key must match your filenames (csharp.svg, mysql.svg, mongodb.svg, etc)
         return `/images/svg/techstack/${key}.svg`;
     }
 
@@ -304,16 +314,13 @@
         projectGrid.innerHTML = "";
 
         const f = filter.trim().toLowerCase();
-        const filtered = !f
-            ? projects
-            : projects.filter(p =>
-                (p.title + " " + p.desc).toLowerCase().includes(f)
-            );
+        const filtered = !f ? projects : projects.filter((p) => (p.title + " " + p.desc).toLowerCase().includes(f));
 
-        filtered.forEach(p => {
+        filtered.forEach((project) => {
             const card = document.createElement("div");
             card.className = "editcv-project-card";
-            const isOn = selected.has(p.id);
+
+            const isOn = selected.has(project.id);
             card.classList.toggle("is-off", !isOn);
 
             const toggleWrap = document.createElement("div");
@@ -329,9 +336,9 @@
             toggle.appendChild(knob);
 
             toggle.addEventListener("click", () => {
-                const currentlyOn = selected.has(p.id);
-                if (currentlyOn) selected.delete(p.id);
-                else selected.add(p.id);
+                const currentlyOn = selected.has(project.id);
+                if (currentlyOn) selected.delete(project.id);
+                else selected.add(project.id);
 
                 syncSelectedProjects();
                 renderProjects(projectSearch?.value || "");
@@ -342,11 +349,11 @@
 
             const title = document.createElement("h3");
             title.className = "editcv-project-title";
-            title.textContent = p.title;
+            title.textContent = project.title;
 
             const desc = document.createElement("p");
             desc.className = "editcv-project-desc";
-            desc.textContent = p.desc;
+            desc.textContent = project.desc;
 
             const divider = document.createElement("div");
             divider.className = "editcv-project-divider";
@@ -354,7 +361,7 @@
             const techRow = document.createElement("div");
             techRow.className = "editcv-tech-row";
 
-            (p.tech || []).forEach(t => {
+            (project.tech || []).forEach((t) => {
                 const tile = document.createElement("div");
                 tile.className = "editcv-tech-tile";
 
@@ -382,7 +389,6 @@
     });
 
     manageProjectsBtn?.addEventListener("click", (e) => {
-        // Placeholder: byt till riktig route senare
         e.preventDefault();
         alert("Placeholder: här kan du länka till Projektsidan (skapa/anslut projekt).");
     });
@@ -390,7 +396,6 @@
     syncSelectedProjects();
     renderProjects();
 
-    // ---------- Save button enabled/disabled (optional UI) ----------
     const saveBtn = document.getElementById("saveBtn");
     const saveBtnBottom = document.getElementById("saveBtnBottom");
 
@@ -400,13 +405,9 @@
         if (saveBtnBottom) saveBtnBottom.disabled = !valid;
     }
 
-    // Initial
     updateSaveButtons();
 
-    // If you want: mark saved after submit (UI-only)
     form.addEventListener("submit", () => {
-        // If you want UI to show "Sparad" immediately when submitting:
-        // setSaveState("saved");
-        // Better to do this after redirect/TempData later.
+        // Tomt medvetet. UI-state hanteras annars av redirect/TempData.
     });
 })();

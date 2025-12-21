@@ -1,99 +1,113 @@
-// Generic UI helper for inputs using ASP.NET unobtrusive validation.
-// Adds checkmark/error icons to the right of the input depending on validity.
-// Only runs on forms that opt-in with: data-validation-ui="true"
-
 (function () {
-    function ensureWrapper(input) {
-        var parent = input.parentElement;
+    // UI-hjälpare för formulär som opt-in:ar med `data-validation-ui="true"`.
+    // Visar en ikon (check/fel) baserat på HTML5-validering + eventuella servermeddelanden.
 
-        if (parent && parent.classList.contains('field-wrap')) {
+    /** @param {HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement} input */
+    function ensureWrapper(input) {
+        const parent = input.parentElement;
+
+        if (parent && parent.classList.contains("field-wrap")) {
             return parent;
         }
 
-        var wrapper = document.createElement('div');
-        wrapper.className = 'field-wrap';
+        const wrapper = document.createElement("div");
+        wrapper.className = "field-wrap";
 
         input.parentNode.insertBefore(wrapper, input);
         wrapper.appendChild(input);
 
-        var icon = document.createElement('img');
-        icon.className = 'field-status-icon';
-        icon.alt = '';
-        icon.setAttribute('aria-hidden', 'true');
+        const icon = document.createElement("img");
+        icon.className = "field-status-icon";
+        icon.alt = "";
+        icon.setAttribute("aria-hidden", "true");
         wrapper.appendChild(icon);
 
         return wrapper;
     }
 
-    function getValidationMessage(input) {
-        var name = input.getAttribute('name');
+    /** @param {HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement} input */
+    function getValidationMessageElement(input) {
+        const name = input.getAttribute("name");
         if (!name) return null;
 
-        return document.querySelector('[data-valmsg-for="' + CSS.escape(name) + '"]');
+        return document.querySelector(`[data-valmsg-for="${CSS.escape(name)}"]`);
     }
 
+    /** @param {HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement} input */
     function updateState(input) {
-        var wrapper = ensureWrapper(input);
-        var icon = wrapper.querySelector('.field-status-icon');
-        var msg = getValidationMessage(input);
+        const wrapper = ensureWrapper(input);
+        const icon = wrapper.querySelector(".field-status-icon");
+        const messageElement = getValidationMessageElement(input);
 
-        var isEmpty = !input.value || input.value.trim().length === 0;
-        var required = input.hasAttribute('data-val-required') || input.required;
+        const isEmpty = !input.value || input.value.trim().length === 0;
+        const isRequired = input.hasAttribute("data-val-required") || input.required;
 
-        var hasServerMessage = msg && msg.textContent && msg.textContent.trim().length > 0;
-        var htmlValid = input.checkValidity();
+        const hasServerMessage =
+            !!messageElement && !!messageElement.textContent && messageElement.textContent.trim().length > 0;
 
-        var isValid = !hasServerMessage && htmlValid && (!required || !isEmpty);
-        var isInvalid = hasServerMessage || (!isEmpty && !htmlValid) || (required && isEmpty);
+        const htmlValid = input.checkValidity();
 
-        wrapper.classList.toggle('is-valid', isValid);
-        wrapper.classList.toggle('is-invalid', isInvalid && !isValid);
+        const isValid = !hasServerMessage && htmlValid && (!isRequired || !isEmpty);
+        const isInvalid = hasServerMessage || (!isEmpty && !htmlValid) || (isRequired && isEmpty);
+
+        wrapper.classList.toggle("is-valid", isValid);
+        wrapper.classList.toggle("is-invalid", isInvalid && !isValid);
+
+        if (!icon) {
+            return;
+        }
 
         if (isValid) {
-            icon.src = '/images/svg/icons/checkmark.svg';
-            icon.style.display = 'block';
-        } else if (isInvalid) {
-            icon.src = '/images/svg/icons/error.svg';
-            icon.style.display = 'block';
-        } else {
-            icon.style.display = 'none';
+            icon.src = "/images/svg/icons/checkmark.svg";
+            icon.style.display = "block";
+            return;
         }
+
+        if (isInvalid) {
+            icon.src = "/images/svg/icons/error.svg";
+            icon.style.display = "block";
+            return;
+        }
+
+        icon.style.display = "none";
     }
 
+    /** @param {HTMLFormElement} form */
     function wireForm(form) {
-        var inputs = form.querySelectorAll('input, textarea, select');
+        const inputs = form.querySelectorAll("input, textarea, select");
 
-        inputs.forEach(function (input) {
+        inputs.forEach((input) => {
             ensureWrapper(input);
 
-            input.addEventListener('input', function () {
+            input.addEventListener("input", () => {
                 updateState(input);
             });
 
-            input.addEventListener('blur', function () {
+            input.addEventListener("blur", () => {
                 updateState(input);
             });
 
-            input.addEventListener('focus', function () {
-                input.classList.add('is-focused');
+            input.addEventListener("focus", () => {
+                input.classList.add("is-focused");
             });
 
-            input.addEventListener('focusout', function () {
-                input.classList.remove('is-focused');
+            input.addEventListener("focusout", () => {
+                input.classList.remove("is-focused");
             });
 
-            // initial
             updateState(input);
         });
 
-        form.addEventListener('submit', function () {
-            setTimeout(function () {
+        form.addEventListener("submit", () => {
+            setTimeout(() => {
                 inputs.forEach(updateState);
             }, 0);
         });
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('form[data-validation-ui="true"]').forEach(wireForm);
+    document.addEventListener("DOMContentLoaded", () => {
+        document
+            .querySelectorAll("form[data-validation-ui=\"true\"]")
+            .forEach((form) => wireForm(form));
     });
 })();
