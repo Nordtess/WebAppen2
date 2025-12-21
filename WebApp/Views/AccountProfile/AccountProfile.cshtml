@@ -1,51 +1,44 @@
 @model WebApp.Domain.Identity.ApplicationUser
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/newuser.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/account-profile.css" asp-append-version="true" />
 }
 
 @{
     ViewData["Title"] = "Mitt konto";
 }
 
-<div class="register-page">
-    <div class="register-card">
+<div class="account-page">
 
-        <div class="register-left">
-            <h1 class="register-title">Mitt konto</h1>
-
-            <div class="register-benefits">
-                <div class="benefit-item">
-                    <span class="benefit-text">Här ser du dina kontouppgifter</span>
-                </div>
-                <div class="benefit-item">
-                    <span class="benefit-text">Du kan ändra uppgifter och byta lösenord</span>
-                </div>
-            </div>
-
-            <div class="register-form" style="display:grid; gap: 10px;">
-                <div><strong>E-post:</strong> @Model.Email</div>
-                <div><strong>Förnamn:</strong> @Model.FirstName</div>
-                <div><strong>Efternamn:</strong> @Model.LastName</div>
-                <div><strong>Telefonnummer:</strong> @Model.PhoneNumberDisplay</div>
-                <div><strong>Stad:</strong> @Model.City</div>
-                <div><strong>Postnummer:</strong> @Model.PostalCode</div>
-
-                <div class="register-actions" style="margin-top: 10px; gap: 10px; flex-wrap: wrap;">
-                    <a class="btn-primary-custom" asp-controller="AccountProfile" asp-action="Edit">Ändra uppgifter</a>
-                    <a class="btn-secondary-custom" asp-controller="AccountProfile" asp-action="ChangePassword">Byt lösenord</a>
-                    <a class="btn-primary-custom" asp-controller="AccountProfile" asp-action="Deactivate">Deaktivera konto</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="register-right">
-            <div class="register-illustration-wrap">
-                <img src="~/images/viewimages/register.png"
-                     alt="Illustration"
-                     class="register-illustration" />
-            </div>
-        </div>
-
+    <div class="account-banner" aria-label="Kontobanner">
+        <img src="~/images/bannersandicons/mycv3.png"
+             alt="Banner"
+             class="account-banner-img" />
     </div>
+
+    <section class="account-card" aria-label="Kontokort">
+        <div class="account-card-inner">
+            <h1 class="account-title">Mitt konto</h1>
+
+            <div class="account-benefits">
+                <div class="account-benefit">Här ser du dina kontouppgifter</div>
+                <div class="account-benefit">Du kan ändra uppgifter och byta lösenord</div>
+            </div>
+
+            <div class="account-info" aria-label="Kontouppgifter">
+                <div class="account-row"><div class="account-label">E-post:</div><div class="account-value">@Model.Email</div></div>
+                <div class="account-row"><div class="account-label">Förnamn:</div><div class="account-value">@Model.FirstName</div></div>
+                <div class="account-row"><div class="account-label">Efternamn:</div><div class="account-value">@Model.LastName</div></div>
+                <div class="account-row"><div class="account-label">Telefonnummer:</div><div class="account-value">@Model.PhoneNumberDisplay</div></div>
+                <div class="account-row"><div class="account-label">Stad:</div><div class="account-value">@Model.City</div></div>
+                <div class="account-row"><div class="account-label">Postnummer:</div><div class="account-value">@Model.PostalCode</div></div>
+            </div>
+
+            <div class="account-actions" aria-label="Åtgärder">
+                <a class="btn-primary-custom" asp-controller="AccountProfile" asp-action="Edit">Ändra uppgifter</a>
+                <a class="btn-secondary-custom" asp-controller="AccountProfile" asp-action="ChangePassword">Byt lösenord</a>
+                <a class="btn-primary-custom" asp-controller="AccountProfile" asp-action="Deactivate">Deaktivera konto</a>
+            </div>
+        </div>
+    </section>
 </div>

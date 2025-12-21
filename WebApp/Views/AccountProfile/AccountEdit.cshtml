@@ -1,29 +1,31 @@
 @model WebApp.Models.AccountEditViewModel
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/newuser.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/account-profile.css" asp-append-version="true" />
 }
 
 @{
     ViewData["Title"] = "Ändra uppgifter";
 }
 
-<div class="register-page">
-    <div class="register-card">
+<div class="account-page">
 
-        <div class="register-left">
-            <h1 class="register-title">Ändra uppgifter</h1>
+    <div class="account-banner" aria-label="Kontobanner">
+        <img src="~/images/bannersandicons/mycv3.png"
+             alt="Banner"
+             class="account-banner-img" />
+    </div>
 
-            <div class="register-benefits">
-                <div class="benefit-item">
-                    <span class="benefit-text">Uppdatera dina grunduppgifter</span>
-                </div>
-                <div class="benefit-item">
-                    <span class="benefit-text">Behövs för privata profiler och meddelanden</span>
-                </div>
+    <section class="account-card" aria-label="Ändra uppgifter">
+        <div class="account-card-inner">
+            <h1 class="account-title">Ändra uppgifter</h1>
+
+            <div class="account-benefits">
+                <div class="account-benefit">Uppdatera dina grunduppgifter</div>
+                <div class="account-benefit">Behövs för privata profiler och meddelanden</div>
             </div>
 
-            <form asp-controller="AccountProfile" asp-action="Edit" method="post" class="register-form">
+            <form asp-controller="AccountProfile" asp-action="Edit" method="post" class="account-form">
                 @Html.AntiForgeryToken()
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
 
@@ -47,22 +49,13 @@
                 <input asp-for="PostalCode" inputmode="numeric" autocomplete="postal-code" placeholder="71412" />
                 <span asp-validation-for="PostalCode" class="text-danger"></span>
 
-                <div class="register-actions" style="margin-top: 10px;">
+                <div class="account-actions">
                     <a class="btn-secondary-custom" asp-controller="AccountProfile" asp-action="Index">Ångra</a>
                     <button type="submit" class="btn-primary-custom">Bekräfta</button>
                 </div>
             </form>
         </div>
-
-        <div class="register-right">
-            <div class="register-illustration-wrap">
-                <img src="~/images/viewimages/register.png"
-                     alt="Illustration"
-                     class="register-illustration" />
-            </div>
-        </div>
-
-    </div>
+    </section>
 </div>
 
 @section Scripts {

@@ -3,42 +3,39 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/newuser.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/account-profile.css" asp-append-version="true" />
 }
 
-<div class="register-page">
-    <div class="register-card">
-        <div class="register-left">
-            <h1 class="register-title">Deaktivera konto</h1>
+<div class="account-page">
 
-            <div class="register-benefits">
-                <div class="benefit-item">
-                    <span class="benefit-text">
-                        Om du deaktiverar ditt konto kommer du loggas ut och din information kommer inte synas på sidan eller i sökningar
-                        tills du loggar in igen.
-                    </span>
+    <div class="account-banner" aria-label="Kontobanner">
+        <img src="~/images/bannersandicons/mycv3.png"
+             alt="Banner"
+             class="account-banner-img" />
+    </div>
+
+    <section class="account-card" aria-label="Deaktivera konto">
+        <div class="account-card-inner">
+            <h1 class="account-title">Deaktivera konto</h1>
+
+            <div class="account-benefits">
+                <div class="account-benefit">
+                    Om du deaktiverar ditt konto kommer du loggas ut och din information kommer inte synas på sidan eller i sökningar
+                    tills du loggar in igen.
                 </div>
             </div>
 
-            <div class="register-form" style="display:flex; flex-direction:column; gap:12px;">
+            <div class="account-info" style="gap:12px;">
                 <p style="margin:0; font-weight:650; color: rgba(0,0,0,0.75);">
                     Är du säker på att du vill deaktivera ditt konto?
                 </p>
 
-                <form asp-controller="AccountProfile" asp-action="DeactivateConfirmed" method="post" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                <form asp-controller="AccountProfile" asp-action="DeactivateConfirmed" method="post" class="account-actions">
                     @Html.AntiForgeryToken()
                     <button type="submit" class="btn-danger-custom">Ja, deaktivera</button>
                     <a class="btn-secondary-custom" asp-controller="AccountProfile" asp-action="Index">Nej, avbryt</a>
                 </form>
             </div>
         </div>
-
-        <div class="register-right">
-            <div class="register-illustration-wrap">
-                <img src="~/images/viewimages/register.png"
-                     alt="Illustration"
-                     class="register-illustration" />
-            </div>
-        </div>
-    </div>
+    </section>
 </div>
