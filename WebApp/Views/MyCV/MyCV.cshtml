@@ -1,4 +1,6 @@
-﻿@section Styles {
+﻿@model WebApp.Controllers.MyCvController.MyCvProfileViewModel
+
+@section Styles {
     <link rel="stylesheet" href="~/css/pages/mycv.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/components.css" asp-append-version="true" />
 }
@@ -58,11 +60,11 @@
                         -->
                         @* <img class="cv-avatar-img" src="~/images/profiles/jamie.jpg" alt="Profilbild" /> *@
 
-                        <div class="cv-avatar-placeholder">JL</div>
+                        <div class="cv-avatar-placeholder">@Model.Initials</div>
                     </div>
 
                     <div class="cv-hero-text">
-                        <div class="cv-name">Jamie Larsson</div>
+                        <div class="cv-name">@Model.FullName</div>
                         <div class="cv-role">Systemvetenskap • Fullstack</div>
                     </div>
                 </div>
@@ -75,7 +77,7 @@
                             <span class="cv-contact-ico">✉</span>
                             <div>
                                 <div class="cv-contact-k">Email</div>
-                                <div class="cv-contact-v">jamie@example.se</div>
+                                <div class="cv-contact-v">@Model.Email</div>
                             </div>
                         </div>
 
@@ -83,7 +85,7 @@
                             <span class="cv-contact-ico">📍</span>
                             <div>
                                 <div class="cv-contact-k">Plats</div>
-                                <div class="cv-contact-v">Örebro, Sverige</div>
+                                <div class="cv-contact-v">@Model.Location</div>
                             </div>
                         </div>
 
@@ -91,7 +93,7 @@
                             <span class="cv-contact-ico">☎</span>
                             <div>
                                 <div class="cv-contact-k">Telefon</div>
-                                <div class="cv-contact-v">+46 70 123 45 67</div>
+                                <div class="cv-contact-v">@Model.PhoneNumber</div>
                             </div>
                         </div>
                     </div>
