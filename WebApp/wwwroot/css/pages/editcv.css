@@ -498,6 +498,15 @@
     margin-top: 10px;
 }
 
+/* Unify sizes for mini-form action buttons ("Lägg till i listan" / "Avbryt") */
+.editcv-mini-form-actions .btn-primary-custom,
+.editcv-mini-form-actions .btn-secondary-custom {
+    padding: 0.6em 1.0em;
+    font-size: 0.92rem;
+    font-weight: 850;
+    min-height: 42px;
+}
+
 .editcv-mini-error {
     font-size: 12px;
     font-weight: 800;
