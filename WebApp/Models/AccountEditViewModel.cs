@@ -14,10 +14,11 @@ public class AccountEditViewModel
     [RegularExpression("^[A-Za-zÅÄÖåäö-]+$", ErrorMessage = "Efternamn får bara innehålla bokstäver och bindestreck.")]
     public string LastName { get; set; } = "";
 
+    [Required(ErrorMessage = "Telefonnummer är obligatoriskt.")]
     [Phone(ErrorMessage = "Telefonnummer har fel format.")]
     [StringLength(20, ErrorMessage = "Telefonnummer får vara max {1} tecken.")]
     [RegularExpression("^[0-9+\\- ]+$", ErrorMessage = "Telefonnummer får bara innehålla siffror, mellanslag, + och -.")]
-    public string? PhoneNumberDisplay { get; set; }
+    public string PhoneNumberDisplay { get; set; } = "";
 
     [Required(ErrorMessage = "Stad är obligatoriskt.")]
     [StringLength(100, ErrorMessage = "Stad får vara max {1} tecken.")]

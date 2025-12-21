@@ -55,8 +55,10 @@ namespace WebApp.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required(ErrorMessage = "E-post är obligatoriskt.")]
-            [EmailAddress(ErrorMessage = "E-postadressen har fel format.")]
             [Display(Name = "E-post")]
+            [EmailAddress(ErrorMessage = "E-postadressen har fel format.")]
+            // Require at least one '.' after the '@' part (e.g. namn@exempel.se)
+            [RegularExpression(@"^[^\s@]+@[^\s@]+\.[^\s@]+$", ErrorMessage = "E-postadressen har fel format. Ex: namn@exempel.se")]
             public string Email { get; set; }
 
             [Required(ErrorMessage = "Lösenord är obligatoriskt.")]
@@ -105,8 +107,8 @@ namespace WebApp.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    await _emailSender.SendEmailAsync(Input.Email, "Bekräfta din e-post",
+                        $"Vänligen bekräfta ditt konto genom att <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>klicka här</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
@@ -115,7 +117,7 @@ namespace WebApp.Areas.Identity.Pages.Account
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
-                    // Force user to complete profile before using the site.
+                    // Tvinga användaren att slutföra sin profil innan den använder webbplatsen.
                     return RedirectToAction("Edit", "AccountProfile");
                 }
 
