@@ -10,6 +10,10 @@
 
     // Används för att styra visuell status i UI baserat på TempData, utan att påverka backend-logik.
     var initialSaveState = TempData["Saved"]?.ToString() == "1" ? "saved" : "dirty";
+
+    var avatarSrc = string.IsNullOrWhiteSpace(Model.ProfileImagePath)
+        ? Url.Content("~/images/bannersandicons/cvplaceholder.png")
+        : Url.Content(Model.ProfileImagePath);
 }
 
 <div class="editcv-page">
@@ -35,11 +39,12 @@
                 <div class="editcv-topbar-right"></div>
             </div>
 
-            <form id="editcvForm" class="editcv-form" method="post">
+            <form id="editcvForm" class="editcv-form" method="post" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
 
-                <input type="hidden" id="EducationJson" name="EducationJson" value="[]" />
-                <input type="hidden" id="SelectedProjectsJson" name="SelectedProjectsJson" value="[]" />
+                <input type="hidden" asp-for="EducationJson" id="EducationJson" />
+                <input type="hidden" asp-for="SelectedProjectsJson" id="SelectedProjectsJson" />
+                <input type="hidden" asp-for="SkillsJson" id="SkillsJson" />
 
                 <div class="editcv-actions-bar">
                     <div class="editcv-actions-left">
@@ -69,7 +74,7 @@
                                 <div class="editcv-profile">
                                     <div class="editcv-avatar-wrap">
                                         <button type="button" class="editcv-avatar" id="avatarBtn" aria-label="Byt profilbild">
-                                            <img id="avatarPreview" class="editcv-avatar-img" alt="Profilbild" src="~/images/bannersandicons/cvplaceholder.png" />
+                                            <img id="avatarPreview" class="editcv-avatar-img" alt="Profilbild" src="@avatarSrc" />
                                             <div class="editcv-avatar-overlay">
                                                 <span class="editcv-avatar-overlay-text">Ladda upp bild</span>
                                             </div>
@@ -85,17 +90,11 @@
 
                                         <div class="editcv-profile-fields">
                                             <div class="editcv-field">
-                                                <label class="editcv-label" asp-for="FullName">Namn</label>
+                                                <label class="editcv-label" asp-for="FullName">Namn (konto)</label>
                                                 <input class="editcv-input"
                                                        asp-for="FullName"
-                                                       placeholder="Förnamn Efternamn"
-                                                       required
-                                                       maxlength="60"
-                                                       pattern="^(?=.*[A-Za-zÅÄÖåäö])[A-Za-zÅÄÖåäö'\- ]{2,60}$"
-                                                       data-val-required="Namn är obligatoriskt."
-                                                       data-val-maxlength="Namn får max vara 60 tecken."
-                                                       data-val-pattern="Ange ett giltigt namn (endast bokstäver och mellanslag)." />
-                                                <span class="editcv-error" asp-validation-for="FullName" data-valmsg-for="FullName"></span>
+                                                       readonly
+                                                       tabindex="-1" />
                                             </div>
 
                                             <div class="editcv-field">
@@ -111,55 +110,23 @@
                             <section class="editcv-card">
                                 <div class="editcv-card-head">
                                     <h2 class="editcv-card-title">Kontakt</h2>
-                                    <span class="editcv-card-sub">Så att rekryterare kan nå dig snabbt</span>
+                                    <span class="editcv-card-sub">Hämtas från ditt konto</span>
                                 </div>
 
                                 <div class="editcv-two-col">
                                     <div class="editcv-field">
-                                        <label class="editcv-label" asp-for="Email">Email</label>
-                                        <input class="editcv-input"
-                                               asp-for="Email"
-                                               placeholder="jamie@example.se"
-                                               required
-                                               maxlength="254"
-                                               type="email"
-                                               data-val-required="E-post är obligatoriskt."
-                                               data-val-email="Ange en giltig e-postadress (t.ex. mail@exempel.com)." />
-                                        <span class="editcv-error" asp-validation-for="Email" data-valmsg-for="Email"></span>
+                                        <label class="editcv-label" asp-for="Email">Email (konto)</label>
+                                        <input class="editcv-input" asp-for="Email" readonly tabindex="-1" />
                                     </div>
 
                                     <div class="editcv-field">
-                                        <label class="editcv-label" asp-for="Phone">Telefon</label>
-                                        <input class="editcv-input"
-                                               asp-for="Phone"
-                                               placeholder="+46 70 123 45 67"
-                                               maxlength="30"
-                                               pattern="^[0-9+() \-]{6,30}$"
-                                               data-val-maxlength="Telefon får max vara 30 tecken."
-                                               data-val-pattern="Ange ett giltigt telefonnummer." />
-                                        <span class="editcv-error" asp-validation-for="Phone" data-valmsg-for="Phone"></span>
+                                        <label class="editcv-label" asp-for="Phone">Telefon (konto)</label>
+                                        <input class="editcv-input" asp-for="Phone" readonly tabindex="-1" />
                                     </div>
 
                                     <div class="editcv-field">
-                                        <label class="editcv-label" asp-for="Location">Plats</label>
-                                        <input class="editcv-input"
-                                               asp-for="Location"
-                                               placeholder="Örebro, Sverige"
-                                               maxlength="60"
-                                               data-val-maxlength="Plats får max vara 60 tecken." />
-                                        <span class="editcv-error" asp-validation-for="Location" data-valmsg-for="Location"></span>
-                                    </div>
-
-                                    <div class="editcv-field">
-                                        <label class="editcv-label" asp-for="LinkedIn">LinkedIn</label>
-                                        <input class="editcv-input"
-                                               asp-for="LinkedIn"
-                                               placeholder="linkedin.com/in/..."
-                                               maxlength="120"
-                                               pattern="^$|^(https?:\/\/)?(www\.)?linkedin\.com\/.+$"
-                                               data-val-maxlength="LinkedIn får max vara 120 tecken."
-                                               data-val-pattern="Ange en giltig LinkedIn-länk (t.ex. linkedin.com/in/dittnamn)." />
-                                        <span class="editcv-error" asp-validation-for="LinkedIn" data-valmsg-for="LinkedIn"></span>
+                                        <label class="editcv-label" asp-for="Location">Plats (konto)</label>
+                                        <input class="editcv-input" asp-for="Location" readonly tabindex="-1" />
                                     </div>
                                 </div>
                             </section>
@@ -167,14 +134,21 @@
                             <section class="editcv-card">
                                 <div class="editcv-card-head">
                                     <h2 class="editcv-card-title">Kompetenser</h2>
-                                    <span class="editcv-card-sub">Skriv t.ex. “C#, SQL, ASP.NET”</span>
+                                    <span class="editcv-card-sub">Lägg till som pills (unika)</span>
                                 </div>
 
                                 <div class="editcv-field">
-                                    <label class="editcv-label" for="SkillsText">Lista (komma-separerad)</label>
-                                    <input class="editcv-input" id="SkillsText" name="SkillsText" placeholder="C#, SQL, ASP.NET, MVC..." />
-                                    <div class="editcv-help">Detta är endast en placeholder i UI tills riktigt fält kopplas till databasen.</div>
+                                    <label class="editcv-label" for="skillInput">Lägg till kompetens</label>
+
+                                    <div class="editcv-two-col" style="grid-template-columns: 1fr auto; gap: 10px;">
+                                        <input class="editcv-input" id="skillInput" type="text" placeholder="C#, SQL, ASP.NET..." maxlength="50" />
+                                        <button type="button" class="btn-secondary-custom" id="skillAddBtn">Lägg till</button>
+                                    </div>
+
+                                    <div class="editcv-help">Tryck Enter eller klicka “Lägg till”. Dubletter tas bort automatiskt.</div>
                                 </div>
+
+                                <div class="editcv-draft-list" id="skillList"></div>
                             </section>
                         </aside>
 

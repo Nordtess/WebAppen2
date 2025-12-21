@@ -7,6 +7,14 @@
 
 @{
     ViewData["Title"] = "Mitt CV";
+
+    var avatarSrc = string.IsNullOrWhiteSpace(Model.ProfileImagePath)
+        ? Url.Content("~/images/bannersandicons/cvplaceholder.png")
+        : Url.Content(Model.ProfileImagePath);
+
+    var headline = string.IsNullOrWhiteSpace(Model.Headline)
+        ? "Systemvetenskap • Fullstack"
+        : Model.Headline;
 }
 
 @Html.AntiForgeryToken()
@@ -44,15 +52,15 @@
             <div class="cv-left">
                 <div class="cv-profile-card">
                     <div class="cv-avatar" aria-label="Profilbild">
-                        <img class="cv-avatar-img" src="~/images/bannersandicons/cvplaceholder.png" alt="Profilbild" />
+                        <img class="cv-avatar-img" src="@avatarSrc" alt="Profilbild" />
                         <div class="cv-avatar-overlay">
-                            <div class="cv-avatar-overlay-text">Öppna redigeraren för att ladda upp bild</div>
+                            <div class="cv-avatar-overlay-text">Öppna redigeraren för att ändra bild</div>
                         </div>
                     </div>
 
                     <div class="cv-hero-text">
                         <div class="cv-name">@Model.FullName</div>
-                        <div class="cv-role">Systemvetenskap • Fullstack</div>
+                        <div class="cv-role">@headline</div>
                     </div>
                 </div>
 
@@ -89,12 +97,17 @@
                 <section class="cv-box">
                     <h3 class="cv-box-title">Kompetenser</h3>
                     <div class="cv-skill-grid">
-                        <span class="cv-skill-pill">ASP.NET</span>
-                        <span class="cv-skill-pill">MVC</span>
-                        <span class="cv-skill-pill">C#</span>
-                        <span class="cv-skill-pill">SQL</span>
-                        <span class="cv-skill-pill">Fullstack</span>
-                        <span class="cv-skill-pill">Git</span>
+                        @if (Model.Skills is { Length: > 0 })
+                        {
+                            foreach (var skill in Model.Skills)
+                            {
+                                <span class="cv-skill-pill">@skill</span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="cv-paragraph cv-paragraph-muted">Inga kompetenser ännu.</span>
+                        }
                     </div>
                 </section>
             </div>
@@ -102,10 +115,14 @@
             <div class="cv-right">
                 <section class="cv-box">
                     <h3 class="cv-box-title">Profil</h3>
-                    <p class="cv-paragraph">
-                        Kort sammanfattning av vem du är, vad du söker och vad du är bra på.
-                        (Placeholder tills ni hämtar från SQL.)
-                    </p>
+                    @if (!string.IsNullOrWhiteSpace(Model.AboutMe))
+                    {
+                        <p class="cv-paragraph">@Model.AboutMe</p>
+                    }
+                    else
+                    {
+                        <p class="cv-paragraph cv-paragraph-muted">Ingen profiltext ännu. Öppna redigeraren för att lägga till.</p>
+                    }
                 </section>
 
                 <section class="cv-box">

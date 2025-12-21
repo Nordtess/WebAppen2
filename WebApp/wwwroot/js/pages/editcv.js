@@ -44,6 +44,7 @@
     function validateField(el) {
         if (el.disabled) return true;
         if (el.type === "hidden") return true;
+        if (el.hasAttribute("readonly")) return true;
 
         const ok = el.checkValidity();
         const msg = ok ? "" : getMessage(el);
@@ -96,8 +97,24 @@
         setSaveState("dirty");
     }
 
-    form.addEventListener("input", markDirty);
-    form.addEventListener("change", markDirty);
+    form.addEventListener("input", (e) => {
+        // Read-only (konto) fält ska inte trigga "dirty".
+        const t = e.target;
+        if (t instanceof HTMLInputElement || t instanceof HTMLTextAreaElement) {
+            if (t.hasAttribute("readonly")) return;
+        }
+
+        markDirty();
+    });
+
+    form.addEventListener("change", (e) => {
+        const t = e.target;
+        if (t instanceof HTMLInputElement || t instanceof HTMLTextAreaElement) {
+            if (t.hasAttribute("readonly")) return;
+        }
+
+        markDirty();
+    });
 
     const about = document.getElementById("aboutMe");
     const aboutCount = document.getElementById("aboutCount");
@@ -132,6 +149,109 @@
         reader.readAsDataURL(file);
     });
 
+    // Skills (pills + dedupe)
+    const skillsJsonInput = document.getElementById("SkillsJson");
+    const skillList = document.getElementById("skillList");
+    const skillInput = document.getElementById("skillInput");
+    const skillAddBtn = document.getElementById("skillAddBtn");
+
+    /** @type {string[]} */
+    let skills = [];
+
+    function loadSkillsFromHidden() {
+        if (!skillsJsonInput) return;
+
+        try {
+            const parsed = JSON.parse(skillsJsonInput.value || "[]");
+            if (Array.isArray(parsed)) {
+                skills = parsed.filter((s) => typeof s === "string");
+            }
+        } catch {
+            skills = [];
+        }
+
+        skills = normalizeSkills(skills);
+        syncSkillsJson();
+    }
+
+    function normalizeSkills(items) {
+        const map = new Map();
+        for (const raw of items) {
+            const v = String(raw || "").trim();
+            if (!v) continue;
+
+            const key = v.toLocaleLowerCase();
+            if (!map.has(key)) map.set(key, v);
+        }
+
+        return Array.from(map.values());
+    }
+
+    function syncSkillsJson() {
+        if (!skillsJsonInput) return;
+        skillsJsonInput.value = JSON.stringify(skills);
+    }
+
+    function renderSkills() {
+        if (!skillList) return;
+        skillList.innerHTML = "";
+
+        if (skills.length === 0) {
+            skillList.innerHTML = `<div class="editcv-help">Inga kompetenser ännu. Lägg till en kompetens ovan.</div>`;
+            return;
+        }
+
+        skills.forEach((skill, idx) => {
+            const pill = document.createElement("div");
+            pill.className = "editcv-draft-card";
+
+            const label = document.createElement("div");
+            label.className = "editcv-draft-title";
+            label.textContent = skill;
+
+            const remove = document.createElement("button");
+            remove.type = "button";
+            remove.className = "editcv-draft-remove";
+            remove.textContent = "×";
+            remove.setAttribute("aria-label", "Ta bort kompetens");
+
+            remove.addEventListener("click", () => {
+                skills.splice(idx, 1);
+                syncSkillsJson();
+                renderSkills();
+                markDirty();
+            });
+
+            pill.appendChild(label);
+            pill.appendChild(remove);
+            skillList.appendChild(pill);
+        });
+    }
+
+    function tryAddSkill(text) {
+        const v = String(text || "").trim();
+        if (!v) return;
+
+        skills = normalizeSkills([v, ...skills]);
+        syncSkillsJson();
+        renderSkills();
+        markDirty();
+
+        if (skillInput) skillInput.value = "";
+    }
+
+    skillAddBtn?.addEventListener("click", () => tryAddSkill(skillInput?.value));
+
+    skillInput?.addEventListener("keydown", (e) => {
+        if (e.key !== "Enter") return;
+        e.preventDefault();
+        tryAddSkill(skillInput.value);
+    });
+
+    loadSkillsFromHidden();
+    renderSkills();
+
+    // Education JSON + UI
     const eduJsonInput = document.getElementById("EducationJson");
     const eduList = document.getElementById("eduList");
     const eduToggleBtn = document.getElementById("eduToggleBtn");
@@ -145,20 +265,22 @@
     const eduYears = document.getElementById("eduYears");
     const eduNote = document.getElementById("eduNote");
 
+    /** @type {{school:string, program:string, years:string, note?:string}[]} */
     let educations = [];
 
-    // Tillfällig startdata för UI:t (ersätts när det kopplas till backend).
-    educations = [
-        {
-            school: "Örebro universitet",
-            program: "Systemvetenskap • Webbutveckling",
-            years: "2024 – Pågående",
-            note: ""
+    function loadEduFromHidden() {
+        if (!eduJsonInput) return;
+        try {
+            const parsed = JSON.parse(eduJsonInput.value || "[]");
+            if (Array.isArray(parsed)) {
+                educations = parsed;
+            }
+        } catch {
+            educations = [];
         }
-    ];
 
-    syncEduJson();
-    renderEdu();
+        syncEduJson();
+    }
 
     function openEduForm(open) {
         if (!eduFormWrap) return;
@@ -259,6 +381,10 @@
         });
     }
 
+    loadEduFromHidden();
+    renderEdu();
+
+    // Projects selection
     const projectGrid = document.getElementById("projectGrid");
     const projectSearch = document.getElementById("projectSearch");
     const selectedProjectsJson = document.getElementById("SelectedProjectsJson");
@@ -292,7 +418,23 @@
         }
     ];
 
-    let selected = new Set(["p1", "p2", "p3"]);
+    /** @type {Set<string>} */
+    let selected = new Set();
+
+    function loadSelectedFromHidden() {
+        if (!selectedProjectsJson) return;
+
+        try {
+            const parsed = JSON.parse(selectedProjectsJson.value || "[]");
+            if (Array.isArray(parsed)) {
+                selected = new Set(parsed.map((x) => String(x)));
+            }
+        } catch {
+            selected = new Set();
+        }
+
+        syncSelectedProjects();
+    }
 
     function syncSelectedProjects() {
         if (!selectedProjectsJson) return;
@@ -387,7 +529,7 @@
         alert("Placeholder: här kan du länka till Projektsidan (skapa/anslut projekt).");
     });
 
-    syncSelectedProjects();
+    loadSelectedFromHidden();
     renderProjects();
 
     const saveBtn = document.getElementById("saveBtn");

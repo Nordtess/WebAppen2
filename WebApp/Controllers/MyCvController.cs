@@ -38,6 +38,10 @@ public class MyCvController : Controller
             return RedirectToAction("Index", "EditCV");
         }
 
+        var profile = await _db.Profiler
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Id == link.ProfileId);
+
         var visits = await _db.ProfilBesok
             .AsNoTracking()
             .CountAsync(v => v.ProfileId == link.ProfileId);
@@ -50,7 +54,12 @@ public class MyCvController : Controller
             City = user.City ?? string.Empty,
             PhoneNumber = user.PhoneNumberDisplay ?? user.PhoneNumber ?? string.Empty,
             IsPrivate = user.IsProfilePrivate,
-            VisitCount = visits
+            VisitCount = visits,
+
+            Headline = profile?.Headline,
+            AboutMe = profile?.AboutMe,
+            ProfileImagePath = profile?.ProfileImagePath ?? user.ProfileImagePath,
+            Skills = ParseSkills(profile?.SkillsCsv)
         };
 
         return View("MyCV", model);
@@ -79,6 +88,16 @@ public class MyCvController : Controller
         return Ok(new { isPrivate = user.IsProfilePrivate });
     }
 
+    private static string[] ParseSkills(string? csv)
+    {
+        if (string.IsNullOrWhiteSpace(csv)) return Array.Empty<string>();
+
+        return csv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Where(s => !string.IsNullOrWhiteSpace(s))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+    }
+
     public sealed class MyCvProfileViewModel
     {
         public string FirstName { get; init; } = string.Empty;
@@ -88,6 +107,12 @@ public class MyCvController : Controller
         public string PhoneNumber { get; init; } = string.Empty;
         public bool IsPrivate { get; init; }
         public int VisitCount { get; init; }
+
+        // CV-owned
+        public string? Headline { get; init; }
+        public string? AboutMe { get; init; }
+        public string? ProfileImagePath { get; init; }
+        public string[] Skills { get; init; } = Array.Empty<string>();
 
         public string FullName => string.Join(' ', new[] { FirstName, LastName }.Where(s => !string.IsNullOrWhiteSpace(s)));
 
