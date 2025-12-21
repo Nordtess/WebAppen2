@@ -1,29 +1,26 @@
 ﻿:root {
     --home-max: 900px;
     --home-radius: 14px;
-    --home-border: 1px solid rgba(0,0,0,.22);
-    --home-shadow: 0 10px 26px rgba(0,0,0,.06);
+    --home-border: 1px solid rgba(0, 0, 0, 0.22);
+    --home-shadow: 0 10px 26px rgba(0, 0, 0, 0.06);
     --home-pad: 18px;
-    /* Carousel */
+
     --carousel-h: 340px;
     --slide-w: 520px;
     --slide-h: 210px;
     --side-scale: 0.86;
     --side-x: 320px;
     --side-tilt: 0deg;
-    --card-border-strong: 2px solid rgba(0,0,0,.92);
-    /* ✅ NYTT: finjustera pilarnas höjd (minus = upp) */
+    --card-border-strong: 2px solid rgba(0, 0, 0, 0.92);
     --nav-offset-y: -26px;
 }
 
-/* Page wrapper */
 .home-page {
     max-width: var(--home-max);
     margin: 0 auto;
     padding: 22px 18px 28px;
 }
 
-/* Hero */
 .home-hero {
     text-align: center;
 }
@@ -43,7 +40,6 @@
     letter-spacing: -0.02em;
 }
 
-/* Titles + subtitles OUTSIDE cards */
 .home-h2 {
     margin: 22px 0 10px;
     text-align: center;
@@ -58,11 +54,10 @@
     text-align: center;
     font-size: 14px;
     line-height: 1.55;
-    color: rgba(0,0,0,.65);
+    color: rgba(0, 0, 0, 0.65);
     font-weight: 560;
 }
 
-/* Shared card */
 .home-card {
     background: #fff;
     border: var(--home-border);
@@ -71,21 +66,19 @@
     padding: var(--home-pad);
 }
 
-/* Split card with banner */
 .home-split-card {
     padding: 0;
-    overflow: hidden; /* for welcome/message banners */
+    overflow: hidden;
 }
 
 .home-card-body {
     padding: 18px;
 }
 
-/* Banner style (same size everywhere) */
 .home-banner {
     height: 190px;
-    border-bottom: 1px solid rgba(0,0,0,.12);
-    background: rgba(0,0,0,.03);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    background: rgba(0, 0, 0, 0.03);
     overflow: hidden;
 }
 
@@ -96,10 +89,6 @@
     object-fit: cover;
 }
 
-/* ======= BANNER POSITION TWEAKS =======
-   ÄNDRA HÄR för att "trycka ned" bilden.
-   Ex: 35% visar MER av toppen, 65% visar MER av botten.
-*/
 .home-banner-img--welcome {
     object-position: center 40%;
 }
@@ -108,17 +97,14 @@
     object-position: center 35%;
 }
 
-/* <-- DENNA ÄR DIN CV-BANNER: tryck ned ansiktet genom att öka procenten */
 .home-banner-img--cv {
     object-position: center 25%;
 }
 
-/* Projektbanner */
 .home-banner-img--project {
     object-position: center 33%;
 }
 
-/* Text block inside card */
 .home-card--text {
     max-width: 720px;
     margin: 0 auto;
@@ -129,7 +115,7 @@
     font-size: 15px;
     line-height: 1.7;
     font-weight: 520;
-    color: rgba(0,0,0,.74);
+    color: rgba(0, 0, 0, 0.74);
     text-align: left;
     text-wrap: pretty;
     overflow-wrap: break-word;
@@ -139,22 +125,17 @@
     margin-bottom: 0;
 }
 
-/* =========================
-   CV CARD (banner + carousel)
-   IMPORTANT: allow overflow visible so slides can float outside
-   ========================= */
 .home-cv-card {
     padding: 0;
-    overflow: visible; /* <— detta gör att karusellkorten kan gå UTANFÖR ramen */
+    overflow: visible;
     margin-top: 12px;
 }
 
 .home-cv-body {
     padding: 18px 18px 26px;
-    overflow: visible; /* extra safe */
+    overflow: visible;
 }
 
-/* CV CAROUSEL */
 .cv-carousel {
     margin-top: 10px;
     position: relative;
@@ -167,7 +148,6 @@
     overflow: visible;
 }
 
-/* Slides */
 .cv-slide {
     position: absolute;
     top: 50%;
@@ -182,31 +162,28 @@
     cursor: default;
     text-decoration: none !important;
     color: inherit;
-    transition: transform .28s ease, opacity .22s ease, filter .22s ease, box-shadow .28s ease;
+    transition: transform 0.28s ease, opacity 0.22s ease, filter 0.22s ease, box-shadow 0.28s ease;
 }
 
-    /* Never underline inside slides */
-    .cv-slide *,
-    .cv-slide:hover *,
-    .cv-slide:focus * {
-        text-decoration: none !important;
-    }
+.cv-slide *,
+.cv-slide:hover *,
+.cv-slide:focus * {
+    text-decoration: none !important;
+}
 
-/* Mini CV card */
 .cv-mini {
     height: 100%;
     border: var(--card-border-strong);
     border-radius: 18px;
-    background: rgba(255,255,255,.96);
-    box-shadow: 0 18px 36px rgba(0,0,0,.10);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.10);
     padding: 16px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    transition: border .28s ease, box-shadow .28s ease;
+    transition: border 0.28s ease, box-shadow 0.28s ease;
 }
 
-/* Active center */
 .cv-slide.is-active {
     opacity: 1;
     z-index: 4;
@@ -215,31 +192,29 @@
     transform: translate(-50%, -50%) scale(1);
 }
 
-    .cv-slide.is-active:hover {
-        transform: translate(-50%, -50%) scale(1.02);
-    }
+.cv-slide.is-active:hover {
+    transform: translate(-50%, -50%) scale(1.02);
+}
 
-        .cv-slide.is-active:hover .cv-mini {
-            border: 3px solid #000;
-            box-shadow: 0 0 0 4px rgba(0,0,0,.08), 0 20px 40px rgba(0,0,0,.16);
-        }
+.cv-slide.is-active:hover .cv-mini {
+    border: 3px solid #000;
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.08), 0 20px 40px rgba(0, 0, 0, 0.16);
+}
 
-/* Side slides */
 .cv-slide.is-left {
-    opacity: .75;
+    opacity: 0.75;
     z-index: 2;
     transform: translate(calc(-50% - var(--side-x)), -50%) scale(var(--side-scale)) rotate(var(--side-tilt));
-    filter: saturate(.95) contrast(.98);
+    filter: saturate(0.95) contrast(0.98);
 }
 
 .cv-slide.is-right {
-    opacity: .75;
+    opacity: 0.75;
     z-index: 2;
     transform: translate(calc(-50% + var(--side-x)), -50%) scale(var(--side-scale)) rotate(var(--side-tilt));
-    filter: saturate(.95) contrast(.98);
+    filter: saturate(0.95) contrast(0.98);
 }
 
-/* Mini content */
 .cv-mini-top {
     display: flex;
     gap: 12px;
@@ -250,12 +225,12 @@
     width: 44px;
     height: 44px;
     border-radius: 12px;
-    border: 1px solid rgba(0,0,0,.18);
+    border: 1px solid rgba(0, 0, 0, 0.18);
     display: grid;
     place-items: center;
     font-weight: 850;
-    color: rgba(0,0,0,.72);
-    background: rgba(0,0,0,.03);
+    color: rgba(0, 0, 0, 0.72);
+    background: rgba(0, 0, 0, 0.03);
     flex: 0 0 auto;
 }
 
@@ -270,7 +245,7 @@
     margin-top: 2px;
     font-size: 13px;
     font-weight: 650;
-    color: rgba(0,0,0,.60);
+    color: rgba(0, 0, 0, 0.60);
 }
 
 .cv-mini-meta {
@@ -279,7 +254,7 @@
     gap: 8px;
     font-size: 13px;
     font-weight: 650;
-    color: rgba(0,0,0,.70);
+    color: rgba(0, 0, 0, 0.70);
 }
 
 .cv-mini-chips {
@@ -293,11 +268,11 @@
     align-items: center;
     padding: 7px 10px;
     border-radius: 999px;
-    border: 1px solid rgba(0,0,0,.14);
-    background: rgba(255,255,255,.95);
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    background: rgba(255, 255, 255, 0.95);
     font-weight: 750;
     font-size: 12px;
-    color: rgba(0,0,0,.78);
+    color: rgba(0, 0, 0, 0.78);
 }
 
 .cv-mini-desc {
@@ -305,13 +280,11 @@
     font-size: 14px;
     line-height: 1.55;
     font-weight: 560;
-    color: rgba(0,0,0,.72);
+    color: rgba(0, 0, 0, 0.72);
 }
 
-/* Edge fade zones (behind buttons only) */
 .carousel-nav-zone {
     position: absolute;
-    /* ✅ ÄNDRAT: flytta hela nav-zonen lite uppåt */
     top: calc(50% + var(--nav-offset-y));
     transform: translateY(-50%);
     width: 140px;
@@ -320,65 +293,60 @@
     z-index: 19;
 }
 
-    .carousel-nav-zone.left {
-        left: 0;
-        background: linear-gradient(to right, rgba(255,255,255,.9) 0%, rgba(255,255,255,.5) 50%, rgba(255,255,255,0) 100%);
-    }
+.carousel-nav-zone.left {
+    left: 0;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%);
+}
 
-    .carousel-nav-zone.right {
-        right: 0;
-        background: linear-gradient(to left, rgba(255,255,255,.9) 0%, rgba(255,255,255,.5) 50%, rgba(255,255,255,0) 100%);
-    }
+.carousel-nav-zone.right {
+    right: 0;
+    background: linear-gradient(to left, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%);
+}
 
-/* Nav buttons (pill with strong black ring) */
 .cv-nav {
     position: absolute;
-    /* ✅ ÄNDRAT: flytta knapparna uppåt, matchar zonen */
     top: calc(50% + var(--nav-offset-y));
     transform: translateY(-5%);
     width: 48px;
     height: 48px;
     border-radius: 999px;
     border: 2px solid #000;
-    background: rgba(255,255,255,.98);
-    box-shadow: 0 4px 12px rgba(0,0,0,.15);
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     display: grid;
     place-items: center;
     font-size: 26px;
     line-height: 1;
-    color: rgba(0,0,0,.88);
+    color: rgba(0, 0, 0, 0.88);
     cursor: pointer;
     z-index: 20;
     user-select: none;
     pointer-events: auto;
-    transition: transform .2s ease, box-shadow .2s ease;
-    /* ✅ NYTT: ta bort "vit ring"/tap highlight/outline artefakter */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     outline: none;
     -webkit-tap-highlight-color: transparent;
     background-clip: padding-box;
 }
 
-    .cv-nav:hover {
-        transform: translateY(-50%) scale(1.08);
-        box-shadow: 0 6px 18px rgba(0,0,0,.22);
-    }
+.cv-nav:hover {
+    transform: translateY(-50%) scale(1.08);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+}
 
-    .cv-nav:focus,
-    .cv-nav:active {
-        outline: none;
-    }
+.cv-nav:focus,
+.cv-nav:active {
+    outline: none;
+}
 
-    /* ✅ NYTT: Apple-ish focus när man tabbar (inte på klick) */
-    .cv-nav:focus-visible {
-        box-shadow: 0 0 0 3px rgba(0,0,0,.18), 0 6px 18px rgba(0,0,0,.22);
-    }
+.cv-nav:focus-visible {
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.18), 0 6px 18px rgba(0, 0, 0, 0.22);
+}
 
-    /* ✅ NYTT: om någon pseudo-ring råkat finnas */
-    .cv-nav::before,
-    .cv-nav::after {
-        content: none !important;
-        display: none !important;
-    }
+.cv-nav::before,
+.cv-nav::after {
+    content: none !important;
+    display: none !important;
+}
 
 .cv-nav--prev {
     left: 20px;
@@ -388,7 +356,6 @@
     right: 20px;
 }
 
-/* Dots */
 .cv-dots {
     display: flex;
     justify-content: center;
@@ -401,27 +368,24 @@
     width: 10px;
     height: 10px;
     border-radius: 999px;
-    border: 1.5px solid rgba(0,0,0,.30);
-    background: rgba(0,0,0,.25);
+    border: 1.5px solid rgba(0, 0, 0, 0.30);
+    background: rgba(0, 0, 0, 0.25);
     cursor: pointer;
-    transition: all .2s ease;
+    transition: all 0.2s ease;
 }
 
-    .cv-dot:hover {
-        background: rgba(0,0,0,.40);
-        border-color: rgba(0,0,0,.50);
-    }
+.cv-dot:hover {
+    background: rgba(0, 0, 0, 0.40);
+    border-color: rgba(0, 0, 0, 0.50);
+}
 
-    .cv-dot.is-active {
-        width: 12px;
-        height: 12px;
-        background: #000;
-        border: 1.5px solid #000;
-    }
+.cv-dot.is-active {
+    width: 12px;
+    height: 12px;
+    background: #000;
+    border: 1.5px solid #000;
+}
 
-/* =========================
-   PROJECT CARD (banner + tall "paper" body)
-   ========================= */
 .home-project-card {
     padding: 0;
     overflow: hidden;
@@ -435,11 +399,11 @@
 .project-spotlight {
     max-width: 720px;
     margin: 0 auto;
-    border: 1px solid rgba(0,0,0,.14);
+    border: 1px solid rgba(0, 0, 0, 0.14);
     border-radius: 16px;
     padding: 26px;
-    background: rgba(255,255,255,.98);
-    box-shadow: 0 10px 24px rgba(0,0,0,.08);
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
 }
 
 .project-title {
@@ -453,7 +417,7 @@
     margin-top: 6px;
     font-size: 13px;
     font-weight: 650;
-    color: rgba(0,0,0,.60);
+    color: rgba(0, 0, 0, 0.60);
 }
 
 .project-chips {
@@ -468,7 +432,7 @@
     font-size: 14px;
     line-height: 1.75;
     font-weight: 560;
-    color: rgba(0,0,0,.74);
+    color: rgba(0, 0, 0, 0.74);
 }
 
 .project-actions {
@@ -484,21 +448,20 @@
     justify-content: center;
     padding: 11px 16px;
     border-radius: 12px;
-    border: 1px solid rgba(0,0,0,.22);
-    background: rgba(255,255,255,.95);
-    color: rgba(0,0,0,.86);
+    border: 1px solid rgba(0, 0, 0, 0.22);
+    background: rgba(255, 255, 255, 0.95);
+    color: rgba(0, 0, 0, 0.86);
     text-decoration: none;
     font-weight: 750;
     font-size: 14px;
-    box-shadow: 0 10px 22px rgba(0,0,0,.06);
-    transition: transform .2s ease;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease;
 }
 
-    .btn-ghost:hover {
-        transform: translateY(-1px);
-    }
+.btn-ghost:hover {
+    transform: translateY(-1px);
+}
 
-/* Stories */
 .home-stories {
     display: flex;
     flex-direction: column;
@@ -522,13 +485,13 @@
     grid-template-columns: 1fr 280px;
 }
 
-    .story-card--reverse .story-media {
-        order: 2;
-    }
+.story-card--reverse .story-media {
+    order: 2;
+}
 
-    .story-card--reverse .story-content {
-        order: 1;
-    }
+.story-card--reverse .story-content {
+    order: 1;
+}
 
 .story-media img {
     width: 100%;
@@ -546,22 +509,21 @@
     margin: 0 0 12px;
     font-size: 15px;
     line-height: 1.65;
-    color: rgba(0,0,0,.70);
+    color: rgba(0, 0, 0, 0.70);
 }
 
 .story-quote {
     margin: 0;
     padding: 14px 14px;
-    border-left: 4px solid rgba(0,0,0,.85);
-    background: rgba(0,0,0,.04);
+    border-left: 4px solid rgba(0, 0, 0, 0.85);
+    background: rgba(0, 0, 0, 0.04);
     border-radius: 12px;
-    color: rgba(0,0,0,.85);
+    color: rgba(0, 0, 0, 0.85);
     line-height: 1.65;
     font-style: italic;
     font-size: 15px;
 }
 
-/* Mobile */
 @media (max-width: 800px) {
     :root {
         --carousel-h: 360px;
@@ -569,7 +531,6 @@
         --side-x: 230px;
         --slide-w: 440px;
         --side-scale: 0.82;
-        /* ✅ NYTT: egen offset på mobil om du vill */
         --nav-offset-y: -18px;
     }
 
@@ -592,7 +553,6 @@
     .home-banner-img--cv {
         object-position: center 62%;
     }
-    /* justera vid behov */
 
     .carousel-nav-zone {
         width: 100px;

@@ -5,6 +5,9 @@ using WebApp.Domain.Identity;
 
 namespace WebApp.Infrastructure.Data;
 
+/// <summary>
+/// Applikationens EF Core-kontext. Innehåller både Identity-tabeller och domänens tabeller.
+/// </summary>
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -12,20 +15,18 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
     }
 
-    // Domain tables (CV)
+    // Domänmodellen (CV).
     public DbSet<Profile> Profiler => Set<Profile>();
     public DbSet<Skill> Kompetenser => Set<Skill>();
     public DbSet<Project> Projekt => Set<Project>();
     public DbSet<ProjectUser> ProjektAnvandare => Set<ProjectUser>();
     public DbSet<ProfileVisit> ProfilBesok => Set<ProfileVisit>();
 
-    // Mail-like messaging (recommended for your requirements)
     public DbSet<UserMessage> UserMessages => Set<UserMessage>();
 
-    // Legacy placeholder (kept temporarily)
+    // Äldre entitet som kan finnas kvar för bakåtkompatibilitet.
     public DbSet<Message> Meddelanden => Set<Message>();
 
-    // Conversation/thread model (optional future expansion)
     public DbSet<ApplicationUserProfile> ApplicationUserProfiles => Set<ApplicationUserProfile>();
     public DbSet<Conversation> Conversations => Set<Conversation>();
     public DbSet<ConversationParticipant> ConversationParticipants => Set<ConversationParticipant>();
@@ -35,10 +36,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(builder);
 
-        // Place for fluent configuration as the model grows (optional)
-        // builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        // Index och constraints sätts med Fluent API för att stödja vanliga sökningar och förhindra dubletter.
 
-        // Profiles
         builder.Entity<Profile>()
             .HasIndex(p => p.OwnerUserId);
 
@@ -48,19 +47,16 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<Profile>()
             .HasIndex(p => p.CreatedUtc);
 
-        // Projects
         builder.Entity<Project>()
             .HasIndex(p => p.CreatedUtc);
 
         builder.Entity<Project>()
             .HasIndex(p => p.CreatedByUserId);
 
-        // Project connections (user joins a project)
         builder.Entity<ProjectUser>()
             .HasIndex(x => new { x.ProjectId, x.UserId })
             .IsUnique();
 
-        // User -> Profile link (one-to-one by default; can be relaxed later)
         builder.Entity<ApplicationUserProfile>()
             .HasIndex(x => x.UserId)
             .IsUnique();
@@ -71,26 +67,22 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasForeignKey(x => x.ProfileId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Conversation participant uniqueness (avoid duplicates)
         builder.Entity<ConversationParticipant>()
             .HasIndex(x => new { x.ConversationId, x.UserId })
             .IsUnique();
 
-        // Direct messages (basic indexing)
         builder.Entity<DirectMessage>()
             .HasIndex(m => m.ConversationId);
 
         builder.Entity<DirectMessage>()
             .HasIndex(m => m.SentUtc);
 
-        // Profile visit tracking
         builder.Entity<ProfileVisit>()
             .HasIndex(v => v.ProfileId);
 
         builder.Entity<ProfileVisit>()
             .HasIndex(v => v.VisitedUtc);
 
-        // Mail-like messages (inbox + unread count)
         builder.Entity<UserMessage>()
             .HasIndex(m => new { m.RecipientUserId, m.IsRead, m.SentUtc });
 

@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Identity;
 namespace WebApp.Domain.Identity;
 
 /// <summary>
-/// Extended Identity user with profile fields required by the assignment.
-/// Stored in AspNetUsers.
-/// Placed in Domain to avoid circular dependencies (Infrastructure must not depend on WebApp).
+/// Utökad Identity-användare med extra profilfält som sparas i tabellen AspNetUsers.
 /// </summary>
 public class ApplicationUser : IdentityUser
 {
@@ -20,8 +18,9 @@ public class ApplicationUser : IdentityUser
     [RegularExpression("^[A-Za-zÅÄÖåäö-]+$", ErrorMessage = "Efternamn får bara innehålla bokstäver och bindestreck.")]
     public string LastName { get; set; } = "";
 
-    // For fast/predictable case-insensitive searching/filtering.
+    // För snabb och förutsägbar skiftlägesokänslig sökning/filtrering.
     public string FirstNameNormalized { get; set; } = "";
+
     public string LastNameNormalized { get; set; } = "";
 
     [Phone(ErrorMessage = "Telefonnummer har fel format.")]
@@ -38,8 +37,6 @@ public class ApplicationUser : IdentityUser
     [RegularExpression("^[0-9]{5}$", ErrorMessage = "Postnummer måste vara exakt 5 siffror (ex: 71412).")]
     public string PostalCode { get; set; } = "";
 
-    /// <summary>
-    /// Soft-deactivation (VG): deactivated users should not appear in listings/search.
-    /// </summary>
+    // Mjuk avaktivering: används för att kunna dölja användare i listor/sök utan att radera data.
     public bool IsDeactivated { get; set; }
 }

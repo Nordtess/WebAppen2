@@ -1,19 +1,16 @@
 :root {
-    /* Keep same max width as MyCV so banners/cards align */
     --account-max: 900px;
     --account-banner-h: 190px;
     --account-radius: 24px;
-    --account-border: 1px solid rgba(0,0,0,.16);
-    --account-shadow: 0 20px 40px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.04);
+    --account-border: 1px solid rgba(0, 0, 0, 0.16);
+    --account-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
     --account-pad: 18px;
 
-    /* Mint accent (match MyCV) */
-    --mint: #7FFFD4;
-    --mint-soft: rgba(127,255,212,.18);
-    --mint-soft-2: rgba(127,255,212,.10);
+    --mint: #7fffd4;
+    --mint-soft: rgba(127, 255, 212, 0.18);
+    --mint-soft-2: rgba(127, 255, 212, 0.10);
 }
 
-/* Page wrapper */
 .account-page {
     display: flex;
     flex-direction: column;
@@ -22,9 +19,6 @@
     gap: 12px;
 }
 
-/* =========================
-   Banner (base)
-   ========================= */
 .account-banner {
     width: 100%;
     max-width: var(--account-max);
@@ -32,8 +26,8 @@
     border-radius: var(--account-radius);
     overflow: hidden;
     border: var(--account-border);
-    background: rgba(255,255,255,.95);
-    box-shadow: 0 18px 38px rgba(0,0,0,.07), 0 2px 6px rgba(0,0,0,.04);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.07), 0 2px 6px rgba(0, 0, 0, 0.04);
     box-sizing: border-box;
 }
 
@@ -42,18 +36,17 @@
     height: 100%;
     display: block;
     object-fit: cover;
-
-    /* Default (Account info / edit) */
     object-position: center 15%;
 }
 
-/* Per-page banner positioning (keep current settings) */
-.account-banner--password .account-banner-img { object-position: center 55%; }
-.account-banner--deactivate .account-banner-img { object-position: center 45%; }
+.account-banner--password .account-banner-img {
+    object-position: center 55%;
+}
 
-/* =========================
-   Card
-   ========================= */
+.account-banner--deactivate .account-banner-img {
+    object-position: center 45%;
+}
+
 .account-card {
     width: 100%;
     max-width: var(--account-max);
@@ -61,11 +54,10 @@
     overflow: hidden;
     border: var(--account-border);
     box-shadow: var(--account-shadow);
-    background: rgba(255,255,255,.96);
+    background: rgba(255, 255, 255, 0.96);
     box-sizing: border-box;
 }
 
-/* Content inside card */
 .account-card-inner {
     padding: 16px var(--account-pad) 18px;
 }
@@ -85,10 +77,9 @@
 
 .account-benefit {
     font-weight: 750;
-    color: rgba(0,0,0,.70);
+    color: rgba(0, 0, 0, 0.70);
 }
 
-/* Info list (AccountProfile) */
 .account-info {
     margin-top: 12px;
     display: grid;
@@ -104,17 +95,16 @@
 
 .account-label {
     font-weight: 900;
-    color: rgba(0,0,0,.75);
+    color: rgba(0, 0, 0, 0.75);
 }
 
 .account-value {
     font-weight: 750;
-    color: rgba(0,0,0,.82);
+    color: rgba(0, 0, 0, 0.82);
     min-width: 0;
     overflow-wrap: anywhere;
 }
 
-/* Forms (Edit + ChangePassword) */
 .account-form {
     margin-top: 12px;
     display: grid;
@@ -123,45 +113,39 @@
 
 .account-form label {
     font-weight: 900;
-    color: rgba(0,0,0,.78);
+    color: rgba(0, 0, 0, 0.78);
 }
 
-/* Inputs styled closer to MyCV tiles + mint focus ring */
 .account-form input {
     width: 100%;
-    max-width: 420px; /* shorter fields on desktop */
+    max-width: 420px;
     box-sizing: border-box;
-
     height: 42px;
     padding: 10px 12px;
-
     border-radius: 14px;
-    border: 1px solid rgba(0,0,0,.12);
-    background: rgba(255,255,255,.95);
-
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 0.95);
     font-weight: 800;
-    color: rgba(0,0,0,.82);
-
-    box-shadow: inset 0 2px 3px rgba(0,0,0,.06), inset 0 -2px 3px rgba(255,255,255,.7);
-    transition: border-color .15s ease, box-shadow .15s ease, transform .08s ease;
+    color: rgba(0, 0, 0, 0.82);
+    box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.06), inset 0 -2px 3px rgba(255, 255, 255, 0.70);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
 }
 
 .account-form input::placeholder {
-    color: rgba(0,0,0,.45);
+    color: rgba(0, 0, 0, 0.45);
     font-weight: 750;
 }
 
 .account-form input:focus {
     outline: none;
-    border-color: rgba(127,255,212,.70);
+    border-color: rgba(127, 255, 212, 0.70);
     box-shadow:
-        0 0 0 3px rgba(127,255,212,.20),
-        0 10px 22px rgba(0,0,0,.08),
-        inset 0 2px 3px rgba(0,0,0,.06),
-        inset 0 -2px 3px rgba(255,255,255,.7);
+        0 0 0 3px rgba(127, 255, 212, 0.20),
+        0 10px 22px rgba(0, 0, 0, 0.08),
+        inset 0 2px 3px rgba(0, 0, 0, 0.06),
+        inset 0 -2px 3px rgba(255, 255, 255, 0.70);
 }
 
-/* Actions */
 .account-actions {
     margin-top: 12px;
     display: flex;
@@ -169,7 +153,6 @@
     flex-wrap: wrap;
 }
 
-/* Responsive */
 @media (max-width: 800px) {
     .account-banner {
         height: 160px;

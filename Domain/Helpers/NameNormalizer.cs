@@ -2,10 +2,13 @@ using System.Globalization;
 
 namespace WebApp.Domain.Helpers;
 
+/// <summary>
+/// Hjälpmetoder för att formatera och normalisera namnsträngar på ett konsekvent sätt.
+/// </summary>
 public static class NameNormalizer
 {
-    // Splits on space and hyphen and applies Title Case per segment.
-    // Keeps separators as-is (single space or '-').
+    private static readonly CultureInfo SwedishCulture = CultureInfo.GetCultureInfo("sv-SE");
+
     public static string ToDisplayName(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
@@ -13,43 +16,45 @@ public static class NameNormalizer
             return string.Empty;
         }
 
-        // Normalize whitespace
+        // Trimma och bygg sedan upp strängen tecken för tecken för att behålla separatorer (mellanslag och bindestreck).
         value = value.Trim();
 
-        // Build by iterating chars to preserve separators
-        var result = new List<string>();
-        var current = new List<char>();
+        var parts = new List<string>();
+        var currentWord = new List<char>();
 
-        void flushWord()
+        void FlushWord()
         {
-            if (current.Count == 0) return;
-            var word = new string(current.ToArray());
-            current.Clear();
+            if (currentWord.Count == 0)
+            {
+                return;
+            }
 
-            // TitleCase in Swedish culture
-            var culture = CultureInfo.GetCultureInfo("sv-SE");
-            word = word.ToLower(culture);
-            word = culture.TextInfo.ToTitleCase(word);
-            result.Add(word);
+            var word = new string(currentWord.ToArray());
+            currentWord.Clear();
+
+            // TitleCase med svensk kultur (påverkar t.ex. å/ä/ö).
+            word = word.ToLower(SwedishCulture);
+            word = SwedishCulture.TextInfo.ToTitleCase(word);
+
+            parts.Add(word);
         }
 
         foreach (var ch in value)
         {
             if (ch is '-' or ' ')
             {
-                flushWord();
-                result.Add(ch.ToString());
+                FlushWord();
+                parts.Add(ch.ToString());
+                continue;
             }
-            else
-            {
-                current.Add(ch);
-            }
+
+            currentWord.Add(ch);
         }
 
-        flushWord();
+        FlushWord();
 
-        // Collapse multiple spaces (optional)
-        var joined = string.Concat(result);
+        // Slå ihop resultatet och komprimera eventuella dubbla mellanslag.
+        var joined = string.Concat(parts);
         while (joined.Contains("  ", StringComparison.Ordinal))
         {
             joined = joined.Replace("  ", " ", StringComparison.Ordinal);
@@ -65,6 +70,7 @@ public static class NameNormalizer
             return string.Empty;
         }
 
+        // Normaliserad form används för jämförelser/sökning: trim + versaler med invariant kultur.
         return value.Trim().ToUpperInvariant();
     }
 }

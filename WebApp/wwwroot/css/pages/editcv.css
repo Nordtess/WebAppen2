@@ -1,21 +1,20 @@
 ﻿:root {
     --edit-max: 1100px;
     --edit-card-radius: 22px;
-    --edit-border: rgba(0,0,0,0.08);
-    --edit-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
-    --mint: #7FFFD4;
-    --mint-soft: rgba(127,255,212,0.18);
-    --mint-soft-strong: rgba(127,255,212,0.32);
+    --edit-border: rgba(0, 0, 0, 0.08);
+    --edit-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+
+    --mint: #7fffd4;
+    --mint-soft: rgba(127, 255, 212, 0.18);
+    --mint-soft-strong: rgba(127, 255, 212, 0.32);
+
     --danger: #ff3b30;
 
-    /* Matcha MyCV */
     --edit-banner-h: 190px;
 
-    /* Profile image sizing (MyCV-left panel feel) */
-    --edit-profile-max: 320px; /* Slightly narrower to match MyCV avatar feel */
+    --edit-profile-max: 320px;
 }
 
-/* Page shell */
 .editcv-page {
     padding: 22px 18px 90px;
     display: flex;
@@ -24,16 +23,15 @@
     gap: 12px;
 }
 
-/* Banner (matchar MyCV) */
 .editcv-banner {
     width: 100%;
     max-width: var(--edit-max);
     height: var(--edit-banner-h);
     border-radius: var(--edit-card-radius);
     overflow: hidden;
-    border: 1px solid rgba(0,0,0,0.16);
-    background: rgba(255,255,255,0.95);
-    box-shadow: 0 18px 38px rgba(0,0,0,0.07), 0 2px 6px rgba(0,0,0,0.04);
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.07), 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .editcv-banner-img {
@@ -44,7 +42,6 @@
     object-position: center 20%;
 }
 
-/* Container (matchar banner-bredd) */
 .editcv-container {
     width: 100%;
     max-width: var(--edit-max);
@@ -55,7 +52,6 @@
     max-width: 100%;
 }
 
-/* Topbar */
 .editcv-topbar {
     display: flex;
     justify-content: space-between;
@@ -84,9 +80,9 @@
     gap: 8px;
     padding: 8px 12px;
     border-radius: 999px;
-    border: 1px solid rgba(0,0,0,0.10);
-    background: rgba(255,255,255,0.95);
-    color: rgba(0,0,0,0.78);
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: rgba(255, 255, 255, 0.95);
+    color: rgba(0, 0, 0, 0.78);
     font-weight: 650;
     font-size: 13px;
 }
@@ -101,36 +97,34 @@
     text-decoration: none;
 }
 
-/* Autosave indicator (UI-only) */
 .editcv-status {
     display: flex;
     align-items: center;
     gap: 8px;
     padding: 8px 12px;
     border-radius: 999px;
-    border: 1px solid rgba(0,0,0,0.10);
-    background: rgba(255,255,255,0.95);
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: rgba(255, 255, 255, 0.95);
     font-weight: 750;
     font-size: 13px;
-    color: rgba(0,0,0,0.75);
+    color: rgba(0, 0, 0, 0.75);
 }
 
 .editcv-status-dot {
     width: 10px;
     height: 10px;
     border-radius: 999px;
-    background: rgba(0,0,0,0.28);
+    background: rgba(0, 0, 0, 0.28);
 }
 
 .editcv-status[data-state="dirty"] .editcv-status-dot {
-    background: rgba(255,149,0,0.95);
+    background: rgba(255, 149, 0, 0.95);
 }
 
 .editcv-status[data-state="saved"] .editcv-status-dot {
-    background: rgba(52,199,89,0.95);
+    background: rgba(52, 199, 89, 0.95);
 }
 
-/* Actions bar */
 .editcv-actions-bar {
     display: flex;
     justify-content: space-between;
@@ -138,12 +132,11 @@
     padding: 14px 18px;
     border: 1px solid var(--edit-border);
     border-radius: var(--edit-card-radius);
-    background: rgba(255,255,255,0.95);
+    background: rgba(255, 255, 255, 0.95);
     box-shadow: var(--edit-shadow);
     margin-bottom: 16px;
 }
 
-/* Slightly smaller secondary buttons in EditCV content */
 .editcv-maincard .btn-secondary-custom {
     padding: 0.55em 1.05em;
     font-size: 0.95rem;
@@ -157,13 +150,13 @@
 
 .editcv-mini-label {
     font-weight: 850;
-    color: rgba(0,0,0,0.78);
+    color: rgba(0, 0, 0, 0.78);
     font-size: 13px;
 }
 
 .editcv-mini-muted {
     font-weight: 650;
-    color: rgba(0,0,0,0.55);
+    color: rgba(0, 0, 0, 0.55);
     font-size: 12px;
 }
 
@@ -172,7 +165,6 @@
     gap: 10px;
 }
 
-/* Grid layout */
 .editcv-grid {
     display: grid;
     grid-template-columns: 0.92fr 1.25fr;
@@ -180,21 +172,19 @@
     align-items: start;
 }
 
-/* Main content container (Apple look) */
 .editcv-maincard {
     border: 1px solid var(--edit-border);
     border-radius: var(--edit-card-radius);
-    background: rgba(255,255,255,0.96);
+    background: rgba(255, 255, 255, 0.96);
     box-shadow: var(--edit-shadow);
     padding: 16px;
     margin-bottom: 16px;
 }
 
-/* Cards */
 .editcv-card {
     border: 1px solid var(--edit-border);
     border-radius: var(--edit-card-radius);
-    background: rgba(255,255,255,0.95);
+    background: rgba(255, 255, 255, 0.95);
     box-shadow: var(--edit-shadow);
     padding: 18px;
     margin-bottom: 16px;
@@ -213,16 +203,15 @@
     margin: 0;
     font-size: 16px;
     font-weight: 900;
-    color: rgba(0,0,0,0.82);
+    color: rgba(0, 0, 0, 0.82);
 }
 
 .editcv-card-sub {
     font-size: 12px;
     font-weight: 700;
-    color: rgba(0,0,0,0.50);
+    color: rgba(0, 0, 0, 0.50);
 }
 
-/* Inputs */
 .editcv-field {
     display: flex;
     flex-direction: column;
@@ -233,7 +222,7 @@
 .editcv-label {
     font-size: 13px;
     font-weight: 850;
-    color: rgba(0,0,0,0.75);
+    color: rgba(0, 0, 0, 0.75);
 }
 
 .editcv-input,
@@ -241,37 +230,29 @@
     width: 100%;
     box-sizing: border-box;
     border-radius: 14px;
-    border: 1px solid rgba(0,0,0,0.10);
-    background: rgba(255,255,255,0.96);
-    padding: 12px 12px;
-    /* More professional / less "thick" */
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: rgba(255, 255, 255, 0.96);
+    padding: 12px;
     font-weight: 560;
     font-size: 13px;
     line-height: 1.35;
     outline: none;
-}
-
-/* Make typed text match the (lighter) placeholder vibe */
-.editcv-input,
-.editcv-textarea {
-    color: rgba(0,0,0,0.72);
+    color: rgba(0, 0, 0, 0.72);
 }
 
 .editcv-input::placeholder,
 .editcv-textarea::placeholder {
-    /* Slightly more intense than before (still softer than typed text) */
-    color: rgba(0,0,0,0.52);
+    color: rgba(0, 0, 0, 0.52);
     font-weight: 560;
 }
 
-    .editcv-input:focus,
-    .editcv-textarea:focus {
-        /* Stronger mint focus ring (closer to sidebar active highlight) */
-        border-color: rgba(127,255,212,0.95);
-        box-shadow:
-            0 0 0 4px rgba(127,255,212,0.22),
-            0 0 0 7px var(--mint-soft-strong);
-    }
+.editcv-input:focus,
+.editcv-textarea:focus {
+    border-color: rgba(127, 255, 212, 0.95);
+    box-shadow:
+        0 0 0 4px rgba(127, 255, 212, 0.22),
+        0 0 0 7px var(--mint-soft-strong);
+}
 
 .editcv-textarea {
     resize: vertical;
@@ -281,36 +262,31 @@
 .editcv-help {
     font-size: 12px;
     font-weight: 650;
-    color: rgba(0,0,0,0.55);
+    color: rgba(0, 0, 0, 0.55);
     margin-top: 6px;
 }
 
-/* Two-column fields inside cards */
 .editcv-two-col {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 10px 12px;
 }
 
-/* Error styling (ASP.NET adds .input-validation-error) */
 .input-validation-error {
     border: 1px solid var(--danger) !important;
-    box-shadow: 0 0 0 4px rgba(255,59,48,0.14) !important;
+    box-shadow: 0 0 0 4px rgba(255, 59, 48, 0.14) !important;
 }
 
-/* Valid styling (unobtrusive adds .input-validation-valid on valid inputs) */
 .input-validation-valid {
-    border-color: rgba(0,0,0,0.10);
+    border-color: rgba(0, 0, 0, 0.10);
 }
 
-/* When a field has been validated and is valid, give a subtle mint cue */
 .editcv-input.valid,
 .editcv-textarea.valid {
-    border-color: rgba(127,255,212,0.55);
-    box-shadow: 0 0 0 3px rgba(127,255,212,0.10);
+    border-color: rgba(127, 255, 212, 0.55);
+    box-shadow: 0 0 0 3px rgba(127, 255, 212, 0.10);
 }
 
-/* Validation message styling (Tag Helpers render these spans) */
 .field-validation-error,
 .editcv-error.field-validation-error {
     color: var(--danger);
@@ -322,7 +298,6 @@
     min-height: 14px;
 }
 
-/* Under row (error + counter) */
 .editcv-under {
     display: flex;
     justify-content: space-between;
@@ -333,13 +308,12 @@
 .editcv-counter {
     font-size: 12px;
     font-weight: 750;
-    color: rgba(0,0,0,0.55);
+    color: rgba(0, 0, 0, 0.55);
 }
 
-/* Profile layout */
 .editcv-profile {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 14px;
     align-items: start;
 }
@@ -348,29 +322,17 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    /* Allow fields to be full card width (like Kontakt) */
     max-width: none;
 }
 
-/* Keep ONLY the avatar itself narrower like MyCV */
 .editcv-avatar {
     max-width: var(--edit-profile-max);
     margin: 0 auto;
-}
-
-/* In Profile card: keep image narrow but let the fields below use full card width */
-.editcv-avatar-wrap .editcv-profile-fields {
     width: 100%;
-    max-width: none;
-}
-
-.editcv-avatar {
-    width: 100%;
-    /* Slightly smaller than MyCV (240px) to account for EditCV padding/layout */
     height: 220px;
     border-radius: 16px;
-    border: 1px solid rgba(0,0,0,0.12);
-    background: rgba(0,0,0,0.02);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: rgba(0, 0, 0, 0.02);
     position: relative;
     overflow: hidden;
     display: flex;
@@ -379,6 +341,11 @@
     cursor: pointer;
     padding: 0;
     box-sizing: border-box;
+}
+
+.editcv-avatar-wrap .editcv-profile-fields {
+    width: 100%;
+    max-width: none;
 }
 
 .editcv-avatar-img {
@@ -391,7 +358,7 @@
 .editcv-avatar-fallback {
     font-weight: 900;
     font-size: 22px;
-    color: rgba(0,0,0,0.55);
+    color: rgba(0, 0, 0, 0.55);
 }
 
 .editcv-avatar-overlay {
@@ -401,7 +368,7 @@
     align-items: flex-end;
     justify-content: center;
     padding-bottom: 12px;
-    background: linear-gradient(to top, rgba(0,0,0,0.35), rgba(0,0,0,0));
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0));
     opacity: 0;
     transition: opacity 160ms ease;
 }
@@ -413,11 +380,11 @@
 .editcv-avatar-overlay-text {
     font-size: 12px;
     font-weight: 850;
-    color: rgba(255,255,255,0.95);
+    color: rgba(255, 255, 255, 0.95);
     padding: 6px 10px;
     border-radius: 999px;
-    background: rgba(0,0,0,0.35);
-    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .editcv-file {
@@ -430,27 +397,6 @@
     gap: 6px;
 }
 
-/* --- EditCV: match MyCV feel (name + rubrik under bilden) --- */
-.editcv-profile {
-    grid-template-columns: 1fr;
-}
-
-/* Contact: avoid cramped two-col layout (stack fields like MyCV left panel) */
-.editcv-two-col {
-    grid-template-columns: 1fr;
-}
-
-@media (max-width: 900px) {
-    .editcv-profile {
-        grid-template-columns: 1fr;
-    }
-
-    .editcv-avatar {
-        height: 220px;
-    }
-}
-
-/* Draft list cards */
 .editcv-draft-list {
     display: flex;
     flex-direction: column;
@@ -458,9 +404,9 @@
 }
 
 .editcv-draft-card {
-    border: 1px solid rgba(0,0,0,0.10);
+    border: 1px solid rgba(0, 0, 0, 0.10);
     border-radius: 16px;
-    background: rgba(255,255,255,0.96);
+    background: rgba(255, 255, 255, 0.96);
     padding: 12px;
     display: flex;
     justify-content: space-between;
@@ -470,7 +416,7 @@
 
 .editcv-draft-title {
     font-weight: 900;
-    color: rgba(0,0,0,0.80);
+    color: rgba(0, 0, 0, 0.80);
     margin: 0;
     font-size: 14px;
 }
@@ -479,12 +425,12 @@
     margin-top: 4px;
     font-size: 12px;
     font-weight: 700;
-    color: rgba(0,0,0,0.55);
+    color: rgba(0, 0, 0, 0.55);
 }
 
 .editcv-draft-remove {
-    border: 1px solid rgba(0,0,0,0.10);
-    background: rgba(255,255,255,0.95);
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: rgba(255, 255, 255, 0.95);
     border-radius: 999px;
     width: 34px;
     height: 34px;
@@ -493,40 +439,34 @@
     justify-content: center;
     cursor: pointer;
     font-weight: 900;
-    color: rgba(0,0,0,0.55);
+    color: rgba(0, 0, 0, 0.55);
     padding: 0;
     line-height: 1;
     transition: transform 140ms ease;
-}
-
-.editcv-draft-remove {
-    /* Ensure the glyph is visually centered */
     font-size: 18px;
 }
 
 .editcv-draft-remove::before {
-    /* Normalize baseline differences across fonts */
     content: none;
 }
 
-    .editcv-draft-remove:hover {
-        transform: translateY(-1px);
-    }
+.editcv-draft-remove:hover {
+    transform: translateY(-1px);
+}
 
-/* Collapsible add form */
 .editcv-collapse {
     margin-top: 12px;
     display: none;
 }
 
-    .editcv-collapse.is-open {
-        display: block;
-    }
+.editcv-collapse.is-open {
+    display: block;
+}
 
 .editcv-mini-form {
-    border: 1px dashed rgba(0,0,0,0.14);
+    border: 1px dashed rgba(0, 0, 0, 0.14);
     border-radius: 18px;
-    background: rgba(127,255,212,0.10);
+    background: rgba(127, 255, 212, 0.10);
     padding: 12px;
 }
 
@@ -544,7 +484,6 @@
     color: var(--danger);
 }
 
-/* Projects toolbar */
 .editcv-projects-toolbar {
     display: flex;
     justify-content: space-between;
@@ -557,7 +496,6 @@
     flex: 1 1 auto;
 }
 
-/* Project grid */
 .editcv-project-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -565,24 +503,24 @@
 }
 
 .editcv-project-card {
-    border: 1px solid rgba(0,0,0,0.10);
+    border: 1px solid rgba(0, 0, 0, 0.10);
     border-radius: 18px;
-    background: rgba(255,255,255,0.96);
+    background: rgba(255, 255, 255, 0.96);
     padding: 14px;
     position: relative;
     transition: transform 160ms ease, box-shadow 160ms ease;
 }
 
-    .editcv-project-card:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 18px 34px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
-    }
+.editcv-project-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 18px 34px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+}
 
 .editcv-project-title {
     margin: 0;
     font-size: 14px;
     font-weight: 950;
-    color: rgba(0,0,0,0.82);
+    color: rgba(0, 0, 0, 0.82);
     text-align: center;
 }
 
@@ -590,7 +528,7 @@
     margin-top: 8px;
     font-size: 13px;
     font-weight: 650;
-    color: rgba(0,0,0,0.62);
+    color: rgba(0, 0, 0, 0.62);
     line-height: 1.45;
     text-align: justify;
     hyphens: auto;
@@ -599,11 +537,10 @@
 .editcv-project-divider {
     width: 76%;
     height: 1px;
-    background: rgba(0,0,0,0.10);
+    background: rgba(0, 0, 0, 0.10);
     margin: 12px auto 10px;
 }
 
-/* Tech icons row */
 .editcv-tech-row {
     display: flex;
     justify-content: center;
@@ -615,8 +552,8 @@
     width: 34px;
     height: 34px;
     border-radius: 12px;
-    border: 1px solid rgba(0,0,0,0.10);
-    background: rgba(255,255,255,0.96);
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: rgba(255, 255, 255, 0.96);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -628,7 +565,6 @@
     display: block;
 }
 
-/* Toggle overlay (project visible on CV) */
 .editcv-project-toggle {
     position: absolute;
     top: 10px;
@@ -640,8 +576,8 @@
     width: 54px;
     height: 28px;
     border-radius: 999px;
-    border: 1px solid rgba(0,0,0,0.10);
-    background: rgba(0,0,0,0.10);
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: rgba(0, 0, 0, 0.10);
     display: flex;
     align-items: center;
     padding: 3px;
@@ -649,18 +585,18 @@
     user-select: none;
 }
 
-    .editcv-toggle[data-on="true"] {
-        background: rgba(127,255,212,0.55);
-        border-color: rgba(0,0,0,0.08);
-    }
+.editcv-toggle[data-on="true"] {
+    background: rgba(127, 255, 212, 0.55);
+    border-color: rgba(0, 0, 0, 0.08);
+}
 
 .editcv-toggle-knob {
     width: 22px;
     height: 22px;
     border-radius: 999px;
-    background: rgba(255,255,255,0.95);
-    border: 1px solid rgba(0,0,0,0.10);
-    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
     transform: translateX(0);
     transition: transform 160ms ease;
 }
@@ -673,23 +609,21 @@
     opacity: 0.65;
 }
 
-    .editcv-project-card.is-off::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: 18px;
-        background: rgba(255,255,255,0.55);
-        pointer-events: none;
-    }
+.editcv-project-card.is-off::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.55);
+    pointer-events: none;
+}
 
-/* Bottom sticky bar */
 .editcv-bottom {
     position: sticky;
     bottom: 10px;
     margin-top: 16px;
 }
 
-/* Ensure link-buttons in sticky bar don't inherit global <a> color */
 .editcv-bottom-inner .btn-secondary-custom,
 .editcv-bottom-inner .btn-secondary-custom:hover,
 .editcv-bottom-inner .btn-secondary-custom:visited {
@@ -698,10 +632,10 @@
 }
 
 .editcv-bottom-inner {
-    border: 2px solid rgba(0,0,0,0.28);
+    border: 2px solid rgba(0, 0, 0, 0.28);
     border-radius: var(--edit-card-radius);
-    background: rgba(255,255,255,0.96);
-    box-shadow: 0 22px 44px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 22px 44px rgba(0, 0, 0, 0.10), 0 2px 6px rgba(0, 0, 0, 0.06);
     padding: 12px 14px;
     display: flex;
     justify-content: space-between;
@@ -709,11 +643,10 @@
     gap: 10px;
 }
 
-/* Education add button spacing + sizing */
 .editcv-draft-actions {
     margin-top: 10px;
     padding-top: 4px;
-    margin-bottom: 10px; /* add breathing room before helper text */
+    margin-bottom: 10px;
 }
 
 .editcv-draft-actions .btn-secondary-custom {
@@ -727,15 +660,7 @@
         grid-template-columns: 1fr;
     }
 
-    .editcv-two-col {
-        grid-template-columns: 1fr;
-    }
-
     .editcv-project-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .editcv-profile {
         grid-template-columns: 1fr;
     }
 
