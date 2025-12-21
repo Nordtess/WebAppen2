@@ -1,0 +1,38 @@
+html,
+body,
+.app-shell,
+.app-main,
+.main-inner {
+    cursor: url('/images/cursor.svg') 2 2, auto;
+}
+
+a,
+button,
+input[type="button"],
+input[type="submit"],
+[role="button"],
+[onclick],
+[data-clickable="true"],
+.is-clickable,
+.interactive {
+    cursor: url('/images/cursor-hand.svg') 10 6, pointer;
+}
+
+@media (hover: none) {
+    html,
+    body,
+    .app-shell,
+    .app-main,
+    .main-inner,
+    a,
+    button,
+    input[type="button"],
+    input[type="submit"],
+    [role="button"],
+    [onclick],
+    [data-clickable="true"],
+    .is-clickable,
+    .interactive {
+        cursor: auto;
+    }
+}

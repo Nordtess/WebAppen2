@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none">
+  <defs>
+    <linearGradient id="mintGradient" x1="6" y1="4" x2="20" y2="22" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#EFFFFA" />
+      <stop offset="28%" stop-color="#7FFFD4" />
+      <stop offset="62%" stop-color="#22F3C6" />
+      <stop offset="100%" stop-color="#00D7B0" />
+    </linearGradient>
+
+    <linearGradient id="glassFill" x1="7" y1="5" x2="18" y2="21" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.92" />
+      <stop offset="45%" stop-color="#EFFFFA" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#7FFFD4" stop-opacity="0.10" />
+    </linearGradient>
+
+    <filter id="laserGlow" x="-45%" y="-45%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="1.6" stdDeviation="1.2" flood-color="#000" flood-opacity="0.28" />
+      <feDropShadow dx="0" dy="0" stdDeviation="1.9" flood-color="#7FFFD4" flood-opacity="0.62" />
+      <feDropShadow dx="0" dy="0" stdDeviation="0.9" flood-color="#00E5B8" flood-opacity="0.55" />
+    </filter>
+
+    <path id="handShape" d="M10 11V8.99c0-.88.59-1.64 1.44-1.86h.05A1.99 1.99 0 0 1 14 9.05V12v-2c0-.88.6-1.65 1.46-1.87h.05A1.98 1.98 0 0 1 18 10.06V13v-1.94a2 2 0 0 1 1.51-1.94h0A2 2 0 0 1 22 11.06V14c0 .6-.08 1.27-.21 1.97a7.96 7.96 0 0 1-7.55 6.48 54.98 54.98 0 0 1-4.48 0 7.96 7.96 0 0 1-7.55-6.48C2.08 15.27 2 14.59 2 14v-1.49c0-1.11.9-2.01 2.01-2.01h0a2 2 0 0 1 2.01 2.03l-.01.97v-10c0-1.1.9-2 2-2h0a2 2 0 0 1 2 2V11Z" />
+  </defs>
+
+  <use href="#handShape"
+       fill="none"
+       stroke="#000"
+       stroke-width="1"
+       stroke-linejoin="round" />
+
+  <use href="#handShape"
+       fill="url(#mintGradient)"
+       stroke="#000000"
+       stroke-width="1"
+       stroke-linejoin="round"
+       filter="url(#laserGlow)" />
+
+  <use href="#handShape"
+       fill="url(#glassFill)"
+       opacity="1" />
+
+  <use href="#handShape"
+       fill="none"
+       stroke="#000000"
+       stroke-width="0.7"
+       stroke-linejoin="round"
+       opacity="1" />
+</svg>
