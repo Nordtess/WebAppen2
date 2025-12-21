@@ -1,11 +1,9 @@
-﻿/* Sida */
-.register-page {
+﻿.register-page {
     display: flex;
     justify-content: center;
     padding: 70px 20px;
 }
 
-/* Account pages: banner + card should match MyCV width */
 :root {
     --account-max: 900px;
     --account-banner-h: 190px;
@@ -26,9 +24,9 @@
     height: var(--account-banner-h);
     border-radius: var(--account-radius);
     overflow: hidden;
-    border: 1px solid rgba(0,0,0,.16);
-    background: rgba(255,255,255,.95);
-    box-shadow: 0 18px 38px rgba(0,0,0,.07), 0 2px 6px rgba(0,0,0,.04);
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.07), 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .account-banner-img {
@@ -39,7 +37,6 @@
     object-position: center 20%;
 }
 
-/* Make this card align exactly with the banner width (disable the old 1100px max for these pages) */
 .account-card {
     width: 100%;
     max-width: var(--account-max);
@@ -52,11 +49,9 @@
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
     gap: 56px;
-    /* Apple-look */
     background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.08); /* light border */
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 24px;
-    /* Subtil depth */
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
     padding: 52px;
     overflow: hidden;
@@ -68,20 +63,17 @@
     box-shadow: 0 26px 50px rgba(0, 0, 0, 0.10), 0 6px 12px rgba(0, 0, 0, 0.06);
 }
 
-/* When used on account pages, remove the 2-column layout and right image area */
 .account-card.register-card {
     grid-template-columns: 1fr;
     gap: 28px;
 }
 
-/* Titel */
 .register-title {
     font-size: 44px;
     font-weight: 850;
     margin: 0 0 18px;
 }
 
-/* Benefits */
 .register-benefits {
     display: flex;
     flex-direction: column;
@@ -94,7 +86,7 @@
     align-items: center;
     gap: 14px;
     font-size: 18px;
-    color: rgba(0,0,0,0.75);
+    color: rgba(0, 0, 0, 0.75);
 }
 
 .benefit-emoji {
@@ -102,13 +94,11 @@
     line-height: 1;
 }
 
-/* Lite fetare text för benefit-raderna (men inte för mycket) */
 .benefit-text {
-    font-weight: 600; /* 👈 lite fetare, inte tungt */
+    font-weight: 600;
     line-height: 1.35;
 }
 
-/* Form */
 .register-form {
     display: flex;
     flex-direction: column;
@@ -121,13 +111,12 @@
 }
 
 .register-form input {
-    padding: 14px 14px;
+    padding: 14px;
     font-size: 16px;
     border-radius: 12px;
-    border: 1px solid rgba(0,0,0,0.25);
+    border: 1px solid rgba(0, 0, 0, 0.25);
 }
 
-/* Knapp + länk på samma rad */
 .register-actions {
     margin-top: 22px;
     display: flex;
@@ -135,7 +124,6 @@
     align-items: center;
 }
 
-/* Länken till höger */
 .login-link {
     color: #111;
     font-weight: 650;
@@ -146,7 +134,6 @@
     text-decoration: underline;
 }
 
-/* Höger sida */
 .register-right {
     display: flex;
     align-items: center;
@@ -169,8 +156,7 @@
     display: block;
 }
 
-/* Mobil */
-@media (max-width: 900px) {
+@media (max-width: 800px) {
     .register-card {
         grid-template-columns: 1fr;
         padding: 36px;
@@ -190,21 +176,11 @@
         align-items: flex-start;
         gap: 14px;
     }
-}
 
-@media (max-width: 800px) {
     .account-banner {
         height: 160px;
     }
 
-    /* On account pages, reduce visual field width so they don't feel overly long.
-       We do this by constraining the left content column while keeping inputs at 100% of that column. */
-    .account-card .register-left {
-        max-width: 720px;
-    }
-}
-
-@media (max-width: 800px) {
     .account-card .register-left {
         max-width: 100%;
     }

@@ -1,8 +1,3 @@
-/* Shared custom buttons
-   Standardized to match the slimmer MyCV button feel.
-   Primary/secondary keep the dark Uiverse-like vibe, but without forced aspect ratios.
-*/
-
 .btn-primary-custom,
 .btn-secondary-custom,
 a.btn-primary-custom,
@@ -14,17 +9,15 @@ a.btn-secondary-custom {
     justify-content: center;
     gap: 0.55em;
 
-    /* Slimmer default sizing (match MyCV) */
     padding: 0.75em 1.05em;
     font-size: 0.98rem;
     font-weight: 850;
     line-height: 1;
 
-    /* No forced geometry (prevents huge/fat buttons) */
     min-width: auto;
     aspect-ratio: auto;
 
-    color: white;
+    color: #fff;
     background: #212121;
     background-size: cover;
     background-blend-mode: overlay;
@@ -41,7 +34,6 @@ a.btn-secondary-custom {
     white-space: nowrap;
 }
 
-/* Icon inside buttons */
 .btn-primary-custom svg,
 .btn-secondary-custom svg,
 a.btn-primary-custom svg,
@@ -58,31 +50,21 @@ a.btn-primary-custom:hover,
 a.btn-secondary-custom:hover {
     transform: scale(1.06);
     box-shadow: 0 0 1em 0.45em rgba(0, 0, 0, 0.10);
-    background: radial-gradient(
-        circle at bottom,
-        rgba(50, 100, 180, 0.50) 10%,
-        #212121 70%
-    );
+    background: radial-gradient(circle at bottom, rgba(50, 100, 180, 0.50) 10%, #212121 70%);
     outline: 0;
 }
 
-/* Secondary: slightly lighter */
 .btn-secondary-custom,
 a.btn-secondary-custom {
     background: #2a2a2a;
-    outline-color: rgba(255,255,255,0.15);
+    outline-color: rgba(255, 255, 255, 0.15);
 }
 
 .btn-secondary-custom:hover,
 a.btn-secondary-custom:hover {
-    background: radial-gradient(
-        circle at bottom,
-        rgba(255, 255, 255, 0.18) 10%,
-        #2a2a2a 70%
-    );
+    background: radial-gradient(circle at bottom, rgba(255, 255, 255, 0.18) 10%, #2a2a2a 70%);
 }
 
-/* Disabled */
 .btn-primary-custom:disabled,
 .btn-secondary-custom:disabled {
     opacity: 0.55;
@@ -90,7 +72,6 @@ a.btn-secondary-custom:hover {
     transform: none;
 }
 
-/* Danger button (used for Deactivate confirm) */
 .btn-danger-custom,
 a.btn-danger-custom {
     display: inline-flex;
@@ -99,7 +80,7 @@ a.btn-danger-custom {
 
     padding: 0.75rem 1.1rem;
     border-radius: 12px;
-    border: 1px solid rgba(0,0,0,0.18);
+    border: 1px solid rgba(0, 0, 0, 0.18);
 
     font-weight: 850;
     font-size: 0.98rem;
@@ -109,7 +90,7 @@ a.btn-danger-custom {
 
     color: #fff;
     background: #dc3545;
-    box-shadow: 0 10px 22px rgba(0,0,0,0.16);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.16);
 
     cursor: pointer;
     transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
@@ -119,7 +100,5 @@ a.btn-danger-custom {
 a.btn-danger-custom:hover {
     transform: translateY(-1px);
     background: #c82333;
-    box-shadow:
-        0 14px 30px rgba(0,0,0,0.22),
-        0 0 0 4px rgba(255,255,255,0.08);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22), 0 0 0 4px rgba(255, 255, 255, 0.08);
 }

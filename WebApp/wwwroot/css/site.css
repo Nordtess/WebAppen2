@@ -2,13 +2,12 @@ html {
     font-size: 16px;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 800px) {
     html {
         font-size: 14px;
     }
 }
 
-/* Link defaults */
 a {
     color: #0077cc;
     text-decoration: none;
@@ -18,7 +17,6 @@ a:hover {
     text-decoration: underline;
 }
 
-/* Common utility classes */
 .text-center {
     text-align: center;
 }
@@ -27,7 +25,6 @@ a:hover {
     color: #6c757d;
 }
 
-/* Keep page-specific classes if they exist */
 .page {
     min-height: 100%;
 }

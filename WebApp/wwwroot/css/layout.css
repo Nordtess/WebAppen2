@@ -1,6 +1,4 @@
-﻿/* ===== CSS GRID APP SHELL - SINGLE BREAKPOINT DESIGN ===== */
-
-:root {
+﻿:root {
     --header-height: 70px;
     --sidebar-width: 240px;
     --shell-gap: 10px;
@@ -11,15 +9,13 @@
     --page-bg: #e8e8ed;
     --text-color: #111;
     --hover-bg: rgba(0, 0, 0, 0.05);
-    --active-bg: rgba(0, 0, 0, 0.1);
-
-    /* Mint accent for nav active */
-    --mint: #7FFFD4;
-    --mint-soft: rgba(127,255,212,.18);
+    --active-bg: rgba(0, 0, 0, 0.10);
+    --mint: #7fffd4;
+    --mint-soft: rgba(127, 255, 212, 0.18);
 }
 
-/* Prevent body scroll - only main content scrolls */
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -35,7 +31,6 @@ body {
     color: var(--text-color);
 }
 
-/* ===== GLOBAL TYPOGRAPHY (smaller sizes) ===== */
 h1 {
     font-size: 1.75rem;
     font-weight: 700;
@@ -63,7 +58,6 @@ p {
     margin-bottom: 0.75rem;
 }
 
-/* APP SHELL - CSS Grid Container (no top padding, header flush to top) */
 .app-shell {
     display: grid;
     grid-template-columns: var(--sidebar-width) 1fr;
@@ -77,7 +71,6 @@ p {
     box-sizing: border-box;
 }
 
-/* ===== HEADER ===== */
 .app-header {
     grid-area: header;
     background: var(--bg-color);
@@ -102,7 +95,6 @@ p {
     align-items: center;
 }
 
-/* Hamburger - hidden on desktop */
 .hamburger-btn {
     display: none;
     width: 36px;
@@ -144,7 +136,6 @@ p {
     transform: translateY(-7px) rotate(-45deg);
 }
 
-/* Header User Area - always shown for testing */
 .header-user-area {
     display: flex;
     align-items: center;
@@ -178,7 +169,6 @@ p {
     white-space: nowrap;
 }
 
-/* ===== SIDEBAR (full height, equal to main) ===== */
 .app-sidebar {
     grid-area: sidebar;
     background: var(--bg-color);
@@ -214,30 +204,24 @@ p {
 .sidebar-link:hover {
     background: transparent;
     opacity: 1;
-    /* Avoid scale to prevent text blur */
     transform: translateX(4px);
     text-decoration: none;
 }
 
-/* Active link: static mint highlight (no animated effects) */
 .sidebar-link.active {
-    background: linear-gradient(180deg, rgba(127,255,212,.30) 0%, rgba(127,255,212,.14) 60%, rgba(255,255,255,0) 100%);
-    border: 1px solid rgba(127,255,212,.85);
-    box-shadow:
-        0 0 0 3px rgba(127,255,212,.12),
-        0 10px 22px rgba(0,0,0,.06);
+    background: linear-gradient(180deg, rgba(127, 255, 212, 0.30) 0%, rgba(127, 255, 212, 0.14) 60%, rgba(255, 255, 255, 0) 100%);
+    border: 1px solid rgba(127, 255, 212, 0.85);
+    box-shadow: 0 0 0 3px rgba(127, 255, 212, 0.12), 0 10px 22px rgba(0, 0, 0, 0.06);
     opacity: 1;
     position: relative;
     overflow: hidden;
 }
 
-/* Remove active mint animations/overlays */
 .sidebar-link.active::before,
 .sidebar-link.active::after {
     content: none;
 }
 
-/* Ensure no underline ever appears in sidebar links */
 .sidebar-link,
 .sidebar-link:hover,
 .sidebar-link:focus,
@@ -246,12 +230,10 @@ p {
     text-decoration: none;
 }
 
-/* Sidebar Overlay (hidden on desktop) */
 .sidebar-overlay {
     display: none;
 }
 
-/* ===== MAIN CONTENT (scrollable, equal height to sidebar) ===== */
 .app-main {
     grid-area: main;
     background: var(--bg-color);
@@ -261,12 +243,10 @@ p {
     overflow-y: auto;
     overflow-x: hidden;
     height: 100%;
-    /* Gemini-like scrollbar styling */
     scrollbar-width: thin;
     scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
 }
 
-/* Webkit scrollbar styling for Chrome/Safari/Edge */
 .app-main::-webkit-scrollbar {
     width: 8px;
 }
@@ -284,7 +264,6 @@ p {
     background: rgba(0, 0, 0, 0.3);
 }
 
-/* Inner wrapper for flexbox layout with footer at bottom */
 .main-inner {
     min-height: 100%;
     display: flex;
@@ -292,7 +271,6 @@ p {
     padding: 28px;
 }
 
-/* ===== FOOTER (inside main, at bottom via margin-top: auto) ===== */
 .app-footer {
     margin-top: auto;
     padding-top: 40px;
@@ -318,7 +296,6 @@ p {
     text-decoration: underline;
 }
 
-/* ===== ERROR PAGE STYLES ===== */
 .error-title {
     color: #dc3545;
     font-size: 1.75rem;
@@ -331,7 +308,6 @@ p {
     margin-bottom: 1rem;
 }
 
-/* ===== SINGLE BREAKPOINT - MOBILE ===== */
 @media (max-width: 800px) {
     :root {
         --shell-padding-sides: 8px;
@@ -339,7 +315,6 @@ p {
         --header-height: 60px;
     }
 
-    /* Mobile grid: single column */
     .app-shell {
         grid-template-columns: 1fr;
         grid-template-rows: var(--header-height) 1fr;
@@ -349,12 +324,10 @@ p {
         padding: 0 var(--shell-padding-sides) var(--shell-padding-sides) var(--shell-padding-sides);
     }
 
-    /* Show hamburger on mobile */
     .hamburger-btn {
         display: flex;
     }
 
-    /* Hide user email on mobile */
     .user-email {
         display: none;
     }
@@ -368,7 +341,6 @@ p {
         height: 22px;
     }
 
-    /* Sidebar becomes slide-down panel BELOW header */
     .app-sidebar {
         position: fixed;
         top: calc(var(--header-height) + var(--shell-gap));
@@ -386,12 +358,11 @@ p {
     }
 
     .app-sidebar.open {
-        max-height: calc(100vh - var(--header-height) - var(--shell-padding-sides) - var(--shell-gap) * 2 - 20px);
+        max-height: calc(100vh - var(--header-height) - var(--shell-padding-sides) - (var(--shell-gap) * 2) - 20px);
         padding: 12px 10px;
         overflow-y: auto;
     }
 
-    /* Sidebar overlay - starts BELOW header */
     .sidebar-overlay {
         display: none;
         position: fixed;
@@ -425,7 +396,6 @@ p {
         padding-bottom: 16px;
     }
 
-    /* Smaller typography on mobile */
     h1 {
         font-size: 1.5rem;
     }

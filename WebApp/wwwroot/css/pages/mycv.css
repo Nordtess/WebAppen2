@@ -1,38 +1,33 @@
 ﻿:root {
-    /* Matcha Home: samma maxbredd (900px) */
     --cv-max: 900px;
-    /* Banner */
     --cv-banner-h: 190px;
-    /* Layout */
     --cv-radius: 24px;
-    --cv-border: 1px solid rgba(0,0,0,.10);
-    --cv-shadow: 0 20px 40px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.04);
+    --cv-border: 1px solid rgba(0, 0, 0, 0.10);
+    --cv-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
     --cv-pad: 18px;
-    /* Mint accent */
-    --mint: #7FFFD4;
-    --mint-soft: rgba(127,255,212,.18);
-    --mint-soft-2: rgba(127,255,212,.10);
+
+    --mint: #7fffd4;
+    --mint-soft: rgba(127, 255, 212, 0.18);
+    --mint-soft-2: rgba(127, 255, 212, 0.10);
 }
 
-/* Page */
 .cv-page {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 22px 18px 28px; /* samma känsla som home */
+    padding: 22px 18px 28px;
     gap: 12px;
 }
 
-/* Banner */
 .cv-banner {
     width: 100%;
     max-width: var(--cv-max);
     height: var(--cv-banner-h);
     border-radius: var(--cv-radius);
     overflow: hidden;
-    border: 1px solid rgba(0,0,0,.16);
-    background: rgba(255,255,255,.95);
-    box-shadow: 0 18px 38px rgba(0,0,0,.07), 0 2px 6px rgba(0,0,0,.04);
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.07), 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .cv-banner-img {
@@ -43,20 +38,18 @@
     object-position: center 20%;
 }
 
-/* CV card */
 .cv-card {
     width: 100%;
     max-width: var(--cv-max);
-    background: rgba(255,255,255,.96);
-    border: 1px solid rgba(0,0,0,.16);
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(0, 0, 0, 0.16);
     border-radius: var(--cv-radius);
     box-shadow: var(--cv-shadow);
-    box-sizing: border-box; /* <-- Gemini: exakt linje med banner */
-    padding: 0; /* <-- Gemini: edge-to-edge, paddingen flyttas in */
+    box-sizing: border-box;
+    padding: 0;
     overflow: hidden;
 }
 
-/* Topbar */
 .cv-topbar {
     display: flex;
     align-items: center;
@@ -68,62 +61,54 @@
 .cv-visits {
     font-size: 13px;
     font-weight: 800;
-    color: rgba(0,0,0,.70);
+    color: rgba(0, 0, 0, 0.70);
 }
 
 .cv-visits-num {
     font-weight: 900;
-    color: rgba(0,0,0,.82);
+    color: rgba(0, 0, 0, 0.82);
 }
 
-/* Divider: utan margin så mint-panelen kan nå upp */
 .cv-divider {
     height: 1px;
-    background: rgba(0,0,0,.08);
-    margin: 0; /* <-- Gemini */
+    background: rgba(0, 0, 0, 0.08);
+    margin: 0;
 }
 
-/* Grid: align-items stretch ger lika hög vänster/höger */
 .cv-grid {
     display: grid;
     grid-template-columns: 320px 1fr;
-    align-items: stretch; /* <-- Gemini */
-    gap: 0; /* edge-to-edge */
+    align-items: stretch;
+    gap: 0;
 }
 
-/* LEFT mint-panel */
 .cv-left {
     padding: var(--cv-pad);
-    border-right: 1px solid rgba(0,0,0,.06);
-
-    /* Cool mint multi-layer gradient that lasts longer */
+    border-right: 1px solid rgba(0, 0, 0, 0.06);
     background:
-        radial-gradient(900px 520px at 20% 0%, rgba(127,255,212,.28) 0%, rgba(127,255,212,0) 60%),
-        radial-gradient(700px 420px at 80% 35%, rgba(127,255,212,.16) 0%, rgba(127,255,212,0) 62%),
-        linear-gradient(180deg, rgba(127,255,212,.22) 0%, rgba(127,255,212,.12) 55%, rgba(255,255,255,0) 100%);
+        radial-gradient(900px 520px at 20% 0%, rgba(127, 255, 212, 0.28) 0%, rgba(127, 255, 212, 0) 60%),
+        radial-gradient(700px 420px at 80% 35%, rgba(127, 255, 212, 0.16) 0%, rgba(127, 255, 212, 0) 62%),
+        linear-gradient(180deg, rgba(127, 255, 212, 0.22) 0%, rgba(127, 255, 212, 0.12) 55%, rgba(255, 255, 255, 0) 100%);
 }
 
-/* RIGHT */
 .cv-right {
     padding: var(--cv-pad);
-    background: rgba(255,255,255,.96);
+    background: rgba(255, 255, 255, 0.96);
 }
 
-/* =========================
-   Toggle (mint, kortare, ingen bleed)
-   ========================= */
 .cv-toggle {
     --h: 32px;
-    --w: 88px; /* mindre bredd */
-    --pad: 1px; /* mindre glipa mot kanten */
-    --knob: 30px; /* täcker text bättre */
+    --w: 88px;
+    --pad: 1px;
+    --knob: 30px;
+
     position: relative;
     width: var(--w);
     height: var(--h);
     border-radius: 999px;
-    border: 1px solid rgba(0,0,0,.14);
-    background: rgba(0,0,0,.08);
-    box-shadow: inset 0 1px 2px rgba(0,0,0,.10);
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    background: rgba(0, 0, 0, 0.08);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.10);
     cursor: pointer;
     padding: 0;
     overflow: hidden;
@@ -142,12 +127,18 @@
     line-height: 1;
     pointer-events: none;
     z-index: 1;
-    color: rgba(0,0,0,.72);
-    transition: opacity .12s ease;
+    color: rgba(0, 0, 0, 0.72);
+    transition: opacity 0.12s ease;
+    opacity: 1;
 }
 
-.cv-toggle__label--off { left: 10px; }
-.cv-toggle__label--on { right: 10px; }
+.cv-toggle__label--off {
+    left: 10px;
+}
+
+.cv-toggle__label--on {
+    right: 10px;
+}
 
 .cv-toggle__knob {
     position: absolute;
@@ -156,36 +147,32 @@
     width: var(--knob);
     height: calc(var(--h) - (var(--pad) * 2));
     border-radius: 999px;
-    background: rgba(255,255,255,.98);
-    box-shadow: 0 2px 8px rgba(0,0,0,.18);
-    transition: transform .18s ease;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    transition: transform 0.18s ease;
     z-index: 2;
 }
 
-/* =========================
-   Toggle fixes (single knob, no double-circle)
-   ========================= */
-
-/* Disable the masking layer that caused a second "knob" in ON state */
 .cv-toggle::before {
     content: none;
 }
 
-/* Ensure labels are above the track but below the knob */
-.cv-toggle__label {
-    z-index: 1;
-    opacity: 1;
+.cv-toggle.is-on .cv-toggle__knob {
+    transform: translateX(calc(var(--w) - (var(--knob) + (var(--pad) * 2))));
 }
 
-/* Knob covers labels cleanly */
-.cv-toggle__knob {
-    z-index: 2;
-    background: rgba(255,255,255,.98);
+.cv-toggle:not(.is-on) {
+    background: rgba(0, 0, 0, 0.08);
+    border-color: rgba(0, 0, 0, 0.14);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.10);
 }
 
-/* =========================
-   Toggle row (restore label look)
-   ========================= */
+.cv-toggle.is-on {
+    background: var(--mint);
+    border-color: rgba(0, 0, 0, 0.12);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.10), 0 0 0 3px rgba(127, 255, 212, 0.16);
+}
+
 .cv-privacy {
     display: flex;
     align-items: center;
@@ -196,22 +183,19 @@
 .cv-privacy-label {
     font-size: 13px;
     font-weight: 800;
-    color: rgba(0,0,0,.70);
+    color: rgba(0, 0, 0, 0.70);
     margin: 0;
     line-height: 1;
     display: inline-flex;
     align-items: center;
 }
 
-/* =========================
-   Left profile card
-   ========================= */
 .cv-profile-card {
-    background: rgba(255,255,255,.92);
-    border: 1px solid rgba(0,0,0,.14);
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(0, 0, 0, 0.14);
     border-radius: 18px;
     padding: 14px;
-    box-shadow: 0 10px 24px rgba(0,0,0,.06);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
     margin-bottom: 14px;
 }
 
@@ -219,8 +203,8 @@
     width: 100%;
     height: 240px;
     border-radius: 16px;
-    border: 1px solid rgba(0,0,0,.12);
-    background: rgba(0,0,0,.02);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: rgba(0, 0, 0, 0.02);
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -230,7 +214,7 @@
 .cv-avatar-placeholder {
     font-weight: 900;
     font-size: 22px;
-    color: rgba(0,0,0,.55);
+    color: rgba(0, 0, 0, 0.55);
 }
 
 .cv-avatar-img {
@@ -242,7 +226,7 @@
 
 .cv-hero-text {
     margin-top: 10px;
-    text-align: center; /* fixar att namn hamnar centrerat */
+    text-align: center;
 }
 
 .cv-name {
@@ -251,20 +235,19 @@
     letter-spacing: -0.02em;
     line-height: 1.12;
     margin: 0;
-    word-break: break-word; /* lång namn-safe */
+    word-break: break-word;
 }
 
 .cv-role {
     margin-top: 6px;
     font-size: 13px;
     font-weight: 750;
-    color: rgba(0,0,0,.62);
+    color: rgba(0, 0, 0, 0.62);
 }
 
-/* Boxes */
 .cv-box {
-    background: rgba(255,255,255,.92);
-    border: 1px solid rgba(0,0,0,.08);
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 18px;
     padding: 16px;
     margin-bottom: 14px;
@@ -279,17 +262,16 @@
 .cv-paragraph {
     margin: 0;
     font-size: 14px;
-    color: rgba(0,0,0,.78);
+    color: rgba(0, 0, 0, 0.78);
     font-weight: 600;
     line-height: 1.55;
 }
 
 .cv-paragraph-muted {
     margin-top: 6px;
-    color: rgba(0,0,0,.62);
+    color: rgba(0, 0, 0, 0.62);
 }
 
-/* Contact list */
 .cv-contact-list {
     display: flex;
     flex-direction: column;
@@ -302,8 +284,8 @@
     align-items: center;
     padding: 12px;
     border-radius: 16px;
-    border: 1px solid rgba(0,0,0,.08);
-    background: rgba(255,255,255,.95);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.95);
 }
 
 .cv-contact-ico {
@@ -312,26 +294,25 @@
     border-radius: 12px;
     display: grid;
     place-items: center;
-    border: 1px solid rgba(0,0,0,.10);
-    background: rgba(0,0,0,.03);
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: rgba(0, 0, 0, 0.03);
     font-size: 14px;
 }
 
 .cv-contact-k {
     font-size: 12px;
     font-weight: 800;
-    color: rgba(0,0,0,.62);
+    color: rgba(0, 0, 0, 0.62);
     line-height: 1.1;
 }
 
 .cv-contact-v {
     font-size: 13px;
     font-weight: 900;
-    color: rgba(0,0,0,.82);
+    color: rgba(0, 0, 0, 0.82);
     line-height: 1.2;
 }
 
-/* Skills: fasta “slots” så spacing blir enhetligt */
 .cv-skill-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -344,40 +325,38 @@
     align-items: center;
     height: 34px;
     border-radius: 999px;
-    border: 1px solid rgba(0,0,0,.12);
-    background: rgba(255,255,255,.95);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 0.95);
     font-weight: 900;
     font-size: 12px;
-    color: rgba(0,0,0,.76);
-    box-shadow: inset 0 2px 3px rgba(0,0,0,.06), inset 0 -2px 3px rgba(255,255,255,.7);
+    color: rgba(0, 0, 0, 0.76);
+    box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.06), inset 0 -2px 3px rgba(255, 255, 255, 0.70);
 }
 
-/* Items (education/experience blocks) */
 .cv-item {
     padding: 12px;
     border-radius: 14px;
-    border: 1px solid rgba(0,0,0,.08);
-    background: rgba(255,255,255,.95);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.95);
     margin-top: 10px;
 }
 
 .cv-item-title {
     font-weight: 900;
-    color: rgba(0,0,0,.82);
+    color: rgba(0, 0, 0, 0.82);
 }
 
 .cv-item-sub {
     margin-top: 4px;
     font-weight: 700;
     font-size: 13px;
-    color: rgba(0,0,0,.62);
+    color: rgba(0, 0, 0, 0.62);
 }
 
 .cv-item-muted {
-    opacity: .95;
+    opacity: 0.95;
 }
 
-/* Projects */
 .cv-projects {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -386,17 +365,15 @@
 }
 
 .cv-project {
-    border: 1px solid rgba(0,0,0,.08);
-    background: rgba(255,255,255,.95);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.95);
     border-radius: 16px;
     padding: 14px;
-    box-shadow: 0 10px 22px rgba(0,0,0,.05);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.05);
     position: relative;
     overflow: hidden;
-
     display: flex;
     flex-direction: column;
-
     will-change: transform, box-shadow;
     transition:
         transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -408,38 +385,37 @@
     height: 1px;
     width: 68%;
     margin: 12px auto 10px;
-    background: rgba(0,0,0,.10);
+    background: rgba(0, 0, 0, 0.10);
     flex: 0 0 auto;
 }
 
-/* subtler "shine" overlay (less intense for readability) */
 .cv-project::before {
     content: "";
     position: absolute;
     inset: -50% -70%;
-    background: radial-gradient(circle at 30% 20%, rgba(127,255,212,.16), rgba(255,255,255,0) 60%);
+    background: radial-gradient(circle at 30% 20%, rgba(127, 255, 212, 0.16), rgba(255, 255, 255, 0) 60%);
     opacity: 0;
     transform: translateY(10px);
     transition: opacity 0.35s ease, transform 0.35s ease;
     pointer-events: none;
 }
 
-    .cv-project:hover {
-        transform: translateY(-6px) scale(1.012);
-        border-color: rgba(0,0,0,.22); /* darker border on hover */
-        box-shadow: 0 18px 44px rgba(0,0,0,.12);
-    }
+.cv-project:hover {
+    transform: translateY(-6px) scale(1.012);
+    border-color: rgba(0, 0, 0, 0.22);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.12);
+}
 
-    .cv-project:hover::before {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.cv-project:hover::before {
+    opacity: 1;
+    transform: translateY(0);
+}
 
 .cv-project-title {
     font-weight: 950;
-    color: rgba(0,0,0,.88);
+    color: rgba(0, 0, 0, 0.88);
     text-align: center;
-    letter-spacing: -0.02em; /* slightly tighter */
+    letter-spacing: -0.02em;
     line-height: 1.15;
     font-size: clamp(14px, 1.6vw, 16px);
 }
@@ -447,45 +423,40 @@
 .cv-project-desc {
     margin: 10px 0 0;
     font-size: clamp(13px, 1.55vw, 14px);
-    color: rgba(0,0,0,.70);
+    color: rgba(0, 0, 0, 0.70);
     font-weight: 650;
     line-height: 1.6;
-
     text-align: left;
     word-spacing: normal;
-
-    /* Professional wrapping */
     hyphens: manual;
     overflow-wrap: anywhere;
 }
 
-/* Tech icons row */
 .cv-tech-row {
     display: flex;
     justify-content: center;
     gap: 10px;
     padding-bottom: 2px;
-    margin-top: auto; /* pins row to bottom regardless of description height */
+    margin-top: auto;
 }
 
 .cv-tech-tile {
-    width: 32px; /* slightly smaller tile */
+    width: 32px;
     height: 32px;
     border-radius: 12px;
-    border: 1px solid rgba(0,0,0,.10);
-    background: rgba(255,255,255,.92);
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: rgba(255, 255, 255, 0.92);
     display: grid;
     place-items: center;
-    box-shadow: 0 6px 14px rgba(0,0,0,.06);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
 }
 
 .cv-tech-icon {
-    width: 24px; /* bigger logo */
+    width: 24px;
     height: 24px;
     display: block;
 }
 
-/* Edit button container */
 .cv-edit-button-container {
     width: 100%;
     max-width: var(--cv-max);
@@ -494,18 +465,17 @@
     margin-top: 8px;
 }
 
-    .cv-edit-button-container .btn-primary-custom {
-        text-decoration: none;
-        color: #fff;
-    }
+.cv-edit-button-container .btn-primary-custom {
+    text-decoration: none;
+    color: #fff;
+}
 
-        .cv-edit-button-container .btn-primary-custom:hover,
-        .cv-edit-button-container .btn-primary-custom:visited {
-            text-decoration: none;
-            color: #fff;
-        }
+.cv-edit-button-container .btn-primary-custom:hover,
+.cv-edit-button-container .btn-primary-custom:visited {
+    text-decoration: none;
+    color: #fff;
+}
 
-/* Project card as link (no visual change) */
 .cv-project-link {
     display: block;
     text-decoration: none;
@@ -518,7 +488,6 @@
     color: inherit;
 }
 
-/* Responsive (matcha Home: 800px breakpoint) */
 @media (max-width: 800px) {
     .cv-banner {
         height: 160px;
@@ -530,39 +499,10 @@
 
     .cv-left {
         border-right: 0;
-        border-bottom: 1px solid rgba(0,0,0,.06);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     }
 
     .cv-projects {
         grid-template-columns: 1fr;
     }
-}
-
-/* =========================
-   Toggle: keep it simple + working
-   ========================= */
-
-/* Ensure knob movement works */
-.cv-toggle__knob {
-    transition: transform .18s ease;
-}
-
-.cv-toggle.is-on .cv-toggle__knob {
-    transform: translateX(calc(var(--w) - (var(--knob) + (var(--pad) * 2))));
-}
-
-/* Keep labels always visible (accept minor bleed) */
-.cv-toggle__label { opacity: 1; }
-
-/* Toggle state colors */
-.cv-toggle:not(.is-on) {
-    background: rgba(0,0,0,.08);
-    border-color: rgba(0,0,0,.14);
-    box-shadow: inset 0 1px 2px rgba(0,0,0,.10);
-}
-
-.cv-toggle.is-on {
-    background: var(--mint);
-    border-color: rgba(0,0,0,.12);
-    box-shadow: inset 0 1px 2px rgba(0,0,0,.10), 0 0 0 3px rgba(127,255,212,.16);
 }

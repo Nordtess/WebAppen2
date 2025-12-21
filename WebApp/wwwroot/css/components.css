@@ -1,39 +1,32 @@
-﻿/* Shared input style (Apple-like + mint glow) */
-input.form-control,
+﻿input.form-control,
 textarea.form-control,
 select.form-control,
 .register-form input,
-.login-form input
-{
+.login-form input {
     width: 100%;
     border-radius: 12px;
-    border: 1px solid rgba(0,0,0,0.18);
-    background: rgba(255,255,255,0.95);
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    background: rgba(255, 255, 255, 0.95);
     padding: 0.85rem 1rem;
     font-size: 1rem;
     outline: none;
     transition: box-shadow 0.20s ease, border-color 0.20s ease, transform 0.20s ease;
 }
 
-/* Mint glow on focus (match EditCV vibe) */
 input.form-control:focus,
 textarea.form-control:focus,
 select.form-control:focus,
 .register-form input:focus,
-.login-form input:focus
-{
+.login-form input:focus {
     border-color: rgba(40, 220, 160, 0.65);
-    box-shadow: 0 0 0 4px rgba(40, 220, 160, 0.18), 0 10px 25px rgba(0,0,0,0.10);
+    box-shadow: 0 0 0 4px rgba(40, 220, 160, 0.18), 0 10px 25px rgba(0, 0, 0, 0.10);
 }
 
-/* Validation UI wrappers */
-.field-wrap
-{
+.field-wrap {
     position: relative;
 }
 
-.field-status-icon
-{
+.field-status-icon {
     position: absolute;
     right: 12px;
     top: 50%;
@@ -46,14 +39,12 @@ select.form-control:focus,
 
 .field-wrap.is-valid input,
 .field-wrap.is-valid textarea,
-.field-wrap.is-valid select
-{
+.field-wrap.is-valid select {
     border-color: rgba(40, 220, 160, 0.55);
 }
 
 .field-wrap.is-invalid input,
 .field-wrap.is-invalid textarea,
-.field-wrap.is-invalid select
-{
+.field-wrap.is-invalid select {
     border-color: rgba(235, 60, 84, 0.55);
 }
