@@ -8,14 +8,23 @@ body,
 
 a,
 button,
-input[type="button"],
-input[type="submit"],
+input,
+select,
+textarea,
+label,
+summary,
 [role="button"],
 [onclick],
 [data-clickable="true"],
 .is-clickable,
-.interactive {
-    cursor: url('/images/cursor-hand.svg') 10 6, pointer;
+.btn-primary-custom,
+.btn-secondary-custom,
+.btn-ghost,
+.sidebar-link,
+.cv-nav,
+.cv-dot,
+.cv-slide {
+    cursor: url('/images/cursor.svg') 2 2, auto !important;
 }
 
 @media (hover: none) {
@@ -26,13 +35,22 @@ input[type="submit"],
     .main-inner,
     a,
     button,
-    input[type="button"],
-    input[type="submit"],
+    input,
+    select,
+    textarea,
+    label,
+    summary,
     [role="button"],
     [onclick],
     [data-clickable="true"],
     .is-clickable,
-    .interactive {
-        cursor: auto;
+    .btn-primary-custom,
+    .btn-secondary-custom,
+    .btn-ghost,
+    .sidebar-link,
+    .cv-nav,
+    .cv-dot,
+    .cv-slide {
+        cursor: auto !important;
     }
 }
