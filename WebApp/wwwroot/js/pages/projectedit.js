@@ -27,7 +27,6 @@
         "cplusplus",
         "csharp",
         "dotnet",
-        "go",
         "java",
         "javascript",
         "mongodb",

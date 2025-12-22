@@ -367,6 +367,8 @@
     height: 100%;
     object-fit: cover;
     display: block;
+    /* Adjust this value to move the image up/down inside the frame */
+    object-position: center var(--avatar-y, 50%);
 }
 
 .editcv-avatar-fallback {
