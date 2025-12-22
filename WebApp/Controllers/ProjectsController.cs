@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -27,29 +27,47 @@ public sealed class ProjectsController : Controller
     [HttpGet]
     public async Task<IActionResult> Index([FromQuery] string? q, [FromQuery] string? sort)
     {
-        var query = _db.Projekt.AsNoTracking().AsQueryable();
+        // Join to creator so we can filter on name/email and (optionally) show it.
+        var query = from p in _db.Projekt.AsNoTracking()
+                    join u in _db.Users.AsNoTracking() on p.CreatedByUserId equals u.Id into users
+                    from u in users.DefaultIfEmpty()
+                    select new { p, u };
 
         if (!string.IsNullOrWhiteSpace(q))
         {
             var s = q.Trim();
-            query = query.Where(p => p.Titel.Contains(s) || (p.KortBeskrivning != null && p.KortBeskrivning.Contains(s)));
+
+            // EF.Functions.Like makes it case-insensitive on SQL Server collations typically,
+            // and avoids client-side evaluation.
+            var like = $"{s}%";
+            var likeAnywhere = $"%{s}%";
+
+            query = query.Where(x =>
+                EF.Functions.Like(x.p.Titel, likeAnywhere) ||
+                (x.p.KortBeskrivning != null && EF.Functions.Like(x.p.KortBeskrivning, likeAnywhere)) ||
+                (x.u != null && x.u.FirstName != null && EF.Functions.Like(x.u.FirstName, like)) ||
+                (x.u != null && x.u.Email != null && EF.Functions.Like(x.u.Email, like)));
         }
 
         var sortKey = (sort ?? "new").ToLowerInvariant();
         query = sortKey switch
         {
-            "old" => query.OrderBy(p => p.CreatedUtc),
-            _ => query.OrderByDescending(p => p.CreatedUtc)
+            "old" => query.OrderBy(x => x.p.CreatedUtc),
+            "az" => query.OrderBy(x => x.p.Titel),
+            "za" => query.OrderByDescending(x => x.p.Titel),
+            _ => query.OrderByDescending(x => x.p.CreatedUtc)
         };
 
         var items = await query
-            .Select(p => new ProjectsIndexVm.ProjectCardVm
+            .Select(x => new ProjectsIndexVm.ProjectCardVm
             {
-                Id = p.Id,
-                Title = p.Titel,
-                ShortDescription = p.KortBeskrivning,
-                CreatedUtc = p.CreatedUtc,
-                TechKeysCsv = p.TechStackKeysCsv
+                Id = x.p.Id,
+                Title = x.p.Titel,
+                ShortDescription = x.p.KortBeskrivning,
+                CreatedUtc = x.p.CreatedUtc,
+                TechKeysCsv = x.p.TechStackKeysCsv,
+                CreatedByName = x.u == null ? null : ((x.u.FirstName + " " + x.u.LastName).Trim()),
+                CreatedByEmail = x.u == null ? null : x.u.Email
             })
             .ToListAsync();
 
@@ -57,6 +75,7 @@ public sealed class ProjectsController : Controller
         {
             Query = q ?? string.Empty,
             Sort = sortKey,
+            ShowLoginTip = !(User.Identity?.IsAuthenticated ?? false),
             Projects = items
         };
 

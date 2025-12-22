@@ -2,6 +2,63 @@
     const form = document.getElementById("projectForm");
     if (!form) return;
 
+    // Project image picker (predefined images)
+    const projectImage = document.getElementById("ProjectImage");
+    const avatarBtn = document.getElementById("projectAvatarBtn");
+    const avatarPreview = document.getElementById("projectAvatarPreview");
+    const avatarPicker = document.getElementById("projectAvatarPicker");
+    const avatarClose = document.getElementById("projectAvatarClose");
+    const avatarGrid = document.getElementById("projectAvatarGrid");
+
+    function setProjectImage(src) {
+        if (projectImage) projectImage.value = src;
+        if (avatarPreview) avatarPreview.src = src;
+        avatarGrid?.querySelectorAll(".projectedit-avatar-tile").forEach((b) => b.classList.remove("is-on"));
+        avatarGrid?.querySelector(`.projectedit-avatar-tile[data-src='${src}']`)?.classList.add("is-on");
+    }
+
+    function openPicker() {
+        if (!avatarPicker) return;
+        avatarPicker.classList.add("is-open");
+        avatarPicker.style.display = "block";
+        avatarPicker.setAttribute("aria-hidden", "false");
+    }
+
+    function closePicker() {
+        if (!avatarPicker) return;
+        avatarPicker.classList.remove("is-open");
+        avatarPicker.style.display = "none";
+        avatarPicker.setAttribute("aria-hidden", "true");
+    }
+
+    avatarBtn?.addEventListener("click", () => {
+        if (!avatarPicker) return;
+        if (avatarPicker.classList.contains("is-open")) closePicker();
+        else openPicker();
+    });
+
+    avatarClose?.addEventListener("click", closePicker);
+
+    avatarGrid?.addEventListener("click", (e) => {
+        const btn = e.target instanceof Element ? e.target.closest("button[data-src]") : null;
+        if (!btn) return;
+        const src = btn.getAttribute("data-src");
+        if (!src) return;
+        setProjectImage(src);
+        closePicker();
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!avatarPicker || !avatarBtn) return;
+        if (!avatarPicker.classList.contains("is-open")) return;
+        const t = e.target;
+        if (t instanceof Node && (avatarPicker.contains(t) || avatarBtn.contains(t))) return;
+        closePicker();
+    });
+
+    // Initialize from hidden value
+    if (projectImage?.value) setProjectImage(projectImage.value);
+
     // Counter
     const desc = form.querySelector("textarea[name='Description']");
     const descCount = document.getElementById("descCount");
@@ -52,11 +109,13 @@
         if (!techMsg) return;
         if (!text) {
             techMsg.textContent = "";
+            techMsg.classList.remove("is-error");
             techMsg.style.display = "none";
             return;
         }
 
         techMsg.textContent = text;
+        techMsg.classList.add("is-error");
         techMsg.style.display = "block";
     }
 
@@ -131,7 +190,7 @@
                     showTechMsg("");
                 } else {
                     if (selected.size >= MAX_TECH) {
-                        showTechMsg(`Du kan max ha ${MAX_TECH} teknologier`);
+                        showTechMsg("Du kan max använda 4 teknologier!");
                         return;
                     }
                     selected.add(key);

@@ -30,13 +30,20 @@
                 </div>
             </div>
 
+            @if (Model.ShowLoginTip)
+            {
+                <div class="projects-tip">Tips: Du får fler resultat om du är inloggad!</div>
+            }
+
             <div class="projects-controls">
                 <form method="get" class="projects-search">
-                    <input class="projects-input" type="text" name="q" value="@Model.Query" placeholder="Sök projekt..." />
+                    <input class="projects-input" type="text" name="q" value="@Model.Query" placeholder="Sök projekt, förnamn eller e-post..." />
 
                     <select class="projects-input" name="sort" aria-label="Sortering">
                         <option value="new" selected="@(Model.Sort == "new")">Senast skapade</option>
                         <option value="old" selected="@(Model.Sort == "old")">Äldst först</option>
+                        <option value="az" selected="@(Model.Sort == "az")">A-Ö</option>
+                        <option value="za" selected="@(Model.Sort == "za")">Ö-A</option>
                     </select>
 
                     <button type="submit" class="btn-secondary-custom">Sök</button>

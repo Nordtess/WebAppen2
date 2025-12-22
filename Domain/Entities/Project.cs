@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 namespace WebApp.Domain.Entities;
 
 /// <summary>
-/// Projekt som kan kopplas till en användare (t.ex. för att visa i ett CV).
+/// Projekt som kan kopplas till en anvÃ¤ndare (t.ex. fÃ¶r att visa i ett CV).
 /// </summary>
 public class Project
 {
@@ -27,7 +27,7 @@ public class Project
     [StringLength(500)]
     public string? TechStackKeysCsv { get; set; }
 
-    // Identity-användarens UserId för den som skapade projektet.
+    // Identity-anvÃ¤ndarens UserId fÃ¶r den som skapade projektet.
     public string? CreatedByUserId { get; set; }
 
     public DateTimeOffset CreatedUtc { get; set; } = DateTimeOffset.UtcNow;

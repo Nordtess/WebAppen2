@@ -7,6 +7,7 @@
 
 @{
     ViewData["Title"] = "Skapa projekt";
+    var defaultImg = Url.Content("~/images/projects/rocketship.png");
 }
 
 <div class="projectedit-page">
@@ -20,6 +21,12 @@
                 <div>
                     <h1 class="projectedit-title">Skapa projekt</h1>
                     <div class="projectedit-sub">Fyll i information om ditt projekt</div>
+
+                    <div class="projectedit-pill-group">
+                        <span class="projectedit-pill">
+                            <strong>Tips:</strong> Ge ditt projekt en tydlig titel och en kort beskrivning för att göra det mer iögonfallande.
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -27,8 +34,36 @@
                 @Html.AntiForgeryToken()
 
                 <input type="hidden" asp-for="TechStackJson" id="TechStackJson" />
+                <input type="hidden" name="ProjectImage" id="ProjectImage" value="/images/projects/rocketship.png" />
 
                 <div class="projectedit-maincard">
+                    <div class="projectedit-hero">
+                        <div class="projectedit-avatar-wrap">
+                            <button type="button" class="projectedit-avatar" id="projectAvatarBtn" aria-label="Välj projektbild">
+                                <img id="projectAvatarPreview" class="projectedit-avatar-img" alt="Projektbild" src="@defaultImg" />
+                                <div class="projectedit-avatar-overlay">
+                                    <span class="projectedit-avatar-overlay-text">Välj bild</span>
+                                </div>
+                            </button>
+
+                            <div class="projectedit-avatar-picker" id="projectAvatarPicker" aria-hidden="true">
+                                <div class="projectedit-avatar-picker-head">
+                                    <div class="projectedit-avatar-picker-title">Välj projektbild</div>
+                                    <button type="button" class="projectedit-avatar-picker-close" id="projectAvatarClose" aria-label="Stäng">×</button>
+                                </div>
+
+                                <div class="projectedit-avatar-grid" id="projectAvatarGrid">
+                                    <button type="button" class="projectedit-avatar-tile is-on" data-src="/images/projects/rocketship.png" aria-label="Rocketship">
+                                        <img src="@defaultImg" alt="Rocketship" />
+                                    </button>
+                                    @* Add up to 4 more tiles here when images are added *@
+                                </div>
+
+                                <div class="projectedit-help">Du kan välja mellan förvalda bilder.</div>
+                            </div>
+                        </div>
+                    </div>
+
                     <section class="projectedit-card">
                         <div class="projectedit-card-head">
                             <h2 class="projectedit-card-title">Projektinfo</h2>
@@ -44,7 +79,7 @@
                         <div class="projectedit-field">
                             <label class="projectedit-label" asp-for="ShortDescription">Kort beskrivning (valfri)</label>
                             <input class="projectedit-input" asp-for="ShortDescription" maxlength="140" placeholder="Kort text som syns i listor..." />
-                            <div class="projectedit-help">Tips: 1�2 meningar.</div>
+                            <div class="projectedit-help">Tips: 1-2 meningar.</div>
                             <span class="projectedit-error" asp-validation-for="ShortDescription"></span>
                         </div>
 
@@ -64,18 +99,17 @@
                             <span class="projectedit-card-sub">Valfritt (max 4)</span>
                         </div>
 
-
                         <div class="projectedit-help">Valda teknologier:</div>
                         <div class="projectedit-sep" aria-hidden="true"></div>
                         <div class="projectedit-tech-selected" id="techSelected"></div>
 
                         <div class="projectedit-tech-search">
-                            <input class="projectedit-input" id="techSearch" type="text" placeholder="S�k teknologi..." />
+                            <input class="projectedit-input" id="techSearch" type="text" placeholder="Sök teknologi..." />
                         </div>
 
                         <div class="projectedit-tech-grid" id="techGrid"></div>
 
-                        <div class="projectedit-help">Klicka p� en ikon f�r att l�gga till/ta bort.</div>
+                        <div class="projectedit-help projectedit-help-bottom">Klicka på en ikon för att lägga till/ta bort.</div>
                     </section>
                 </div>
 
