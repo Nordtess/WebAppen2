@@ -90,7 +90,7 @@
                     <span class="link-text">Sök CV</span>
                 </a>
 
-                <a class="sidebar-link @Active("Projects")" asp-controller="Projects" asp-action="Index">
+                <a class="sidebar-link @(Context?.Request?.Path.Value?.Equals("/Projects", StringComparison.OrdinalIgnoreCase) == true ? "active" : "")" asp-controller="Projects" asp-action="Index">
                     <span class="link-icon">📁</span>
                     <span class="link-text">Alla projekt</span>
                 </a>

@@ -22,13 +22,21 @@
 
     const MAX_TECH = 8;
 
-    // Available tech keys (match svg filenames). Extend later.
+    // Available tech keys (match svg filenames). Must exist in wwwroot/images/svg/techstack.
     const available = [
+        "cplusplus",
         "csharp",
-        "mysql",
-        "mongodb",
+        "dotnet",
+        "go",
+        "java",
         "javascript",
-        "git"
+        "mongodb",
+        "mysql",
+        "python",
+        "ruby",
+        "rust",
+        "swift",
+        "typescript"
     ];
 
     /** @type {Set<string>} */
