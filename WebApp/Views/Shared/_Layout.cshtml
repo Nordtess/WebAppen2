@@ -145,14 +145,16 @@
             <div class="space-background" aria-hidden="true">
                 <svg width="0" height="0" style="position: absolute;">
                     <defs>
-                        <g id="complexStarShape">
-                            <path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z" fill="currentColor" />
-                            <path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z" fill="currentColor" transform="rotate(45 10 10)" />
-                        </g>
+                        <path id="northStarShape" d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z" fill="#FFFFFF" />
 
-                        <linearGradient id="shootingTail" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="#F8F8FF" stop-opacity="1" />
-                            <stop offset="100%" stop-color="#F8F8FF" stop-opacity="0" />
+                        <filter id="whiteLaserGlow" x="-100%" y="-100%" width="300%" height="300%">
+                            <feDropShadow dx="0" dy="0" stdDeviation="1.2" flood-color="#FFFFFF" flood-opacity="1" />
+                            <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#FFFFFF" flood-opacity="0.7" />
+                        </filter>
+
+                        <linearGradient id="shootingStarGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0" />
+                            <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1" />
                         </linearGradient>
                     </defs>
                 </svg>

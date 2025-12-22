@@ -190,7 +190,7 @@
                     showTechMsg("");
                 } else {
                     if (selected.size >= MAX_TECH) {
-                        showTechMsg("Du kan max använda 4 teknologier!");
+                        showTechMsg("Du kan max ha 4 teknologier!");
                         return;
                     }
                     selected.add(key);
