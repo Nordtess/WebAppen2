@@ -97,6 +97,10 @@
     height: 190px;
     opacity: 0.95;
     display: block;
+
+    /* Prevent the SVG glow/filter region from appearing as a square edge */
+    border-radius: 50%;
+    overflow: hidden;
 }
 
 
