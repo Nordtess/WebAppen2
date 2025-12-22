@@ -3,21 +3,23 @@
     const layer = document.getElementById('shootingStarsLayer');
     if (!main || !layer) return;
 
+    // Prevent multiple instances if the script is loaded twice.
+    if (window.__spaceMovingStarTimer) {
+        clearTimeout(window.__spaceMovingStarTimer);
+        window.__spaceMovingStarTimer = null;
+    }
+
     const SHOOT_INTERVAL_MS = 10_000;
-    const TRAVEL_MS = 2_000;
+    const TRAVEL_MS = 3_500;
 
     function shootOnce() {
-        // `layer` is absolutely positioned to cover the entire scrollable `.app-main`.
-        // So position stars in the layer's coordinate system (scroll content space).
         const width = main.clientWidth;
         const height = main.clientHeight;
         const scrollTop = main.scrollTop;
 
-        // Start from top-right of the *visible* viewport within `app-main`.
         const startX = Math.max(0, width - 10);
         const startY = scrollTop + 10;
 
-        // End past the left edge, and down a bit across the current viewport.
         const endX = -120;
         const endY = scrollTop + Math.min(height * 0.6, height - 10);
 
@@ -31,21 +33,39 @@
         star.style.width = `${size}px`;
         star.style.height = `${size}px`;
 
-        // Use translate so we can animate smoothly without reflow.
-        star.style.transform = `translate(${startX}px, ${startY}px)`;
-
         layer.appendChild(star);
 
-        requestAnimationFrame(() => {
-            star.style.transition = `transform ${TRAVEL_MS}ms linear`;
-            star.style.transform = `translate(${endX}px, ${endY}px)`;
+        // Animate via WAAPI for smoother compositor-driven transforms.
+        const anim = star.animate(
+            [
+                { transform: `translate3d(${startX}px, ${startY}px, 0)` },
+                { transform: `translate3d(${endX}px, ${endY}px, 0)` }
+            ],
+            {
+                duration: TRAVEL_MS,
+                easing: 'linear',
+                fill: 'forwards'
+            }
+        );
+
+        anim.addEventListener('finish', () => {
+            star.remove();
         });
 
+        // Fallback cleanup in case finish doesn't fire.
         window.setTimeout(() => {
             star.remove();
-        }, TRAVEL_MS + 100);
+        }, TRAVEL_MS + 250);
     }
 
+    function scheduleNext(delayMs) {
+        window.__spaceMovingStarTimer = window.setTimeout(() => {
+            shootOnce();
+            scheduleNext(SHOOT_INTERVAL_MS);
+        }, delayMs);
+    }
+
+    // First one immediately, then every 10s.
     shootOnce();
-    window.setInterval(shootOnce, SHOOT_INTERVAL_MS);
+    scheduleNext(SHOOT_INTERVAL_MS);
 })();

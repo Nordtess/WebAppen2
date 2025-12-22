@@ -101,4 +101,8 @@
 
     /* Keep it crisp and smooth */
     will-change: transform;
+
+    /* Encourage GPU compositing for smoother movement */
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
 }
