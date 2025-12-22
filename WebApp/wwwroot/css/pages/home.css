@@ -75,6 +75,15 @@
     color: rgba(0, 0, 0, 0.86);
 }
 
+.home-card-body {
+    padding: 22px 22px 26px;
+}
+
+/* When a banner is present, give the text extra distance from the banner */
+.home-banner + .home-card-body {
+    padding-top: 26px;
+}
+
 .home-card--text {
     max-width: 720px;
     margin: 0 auto;
@@ -481,6 +490,12 @@
     display: block;
     object-fit: cover;
 }
+
+/* Banner image positioning (change these to move images inside their banners) */
+.home-banner-img--welcome { object-position: center 40%; }
+.home-banner-img--message { object-position: center 35%; }
+.home-banner-img--cv { object-position: center 25%; }
+.home-banner-img--project { object-position: center 33%; }
 
 /* Undo the previous override that could force images to the wrong height */
 .home-banner-img {

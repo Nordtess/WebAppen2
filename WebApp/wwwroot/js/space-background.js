@@ -11,7 +11,6 @@
         return h;
     }
 
-    // Deterministic pseudo-random generator (fast, repeatable)
     function mulberry32(seed) {
         return function () {
             let t = (seed += 0x6D2B79F5);
@@ -21,8 +20,6 @@
         };
     }
 
-    // Stable seed so stars appear in the same positions each load.
-    // (Change this number if you ever want a new "sky" layout.)
     const prng = mulberry32(1337);
     const rand = (min, max) => min + prng() * (max - min);
 
@@ -36,7 +33,6 @@
 
         star.style.left = `${leftPct}%`;
         star.style.top = `${topPx}px`;
-        // twinkle timing is also deterministic now
         star.style.animationDuration = `${rand(3.5, 7.5)}s`;
         star.style.animationDelay = `${rand(0, 6)}s`;
 
@@ -52,7 +48,6 @@
 
         const hPx = syncHeight();
 
-        // Bulk (4-point stars)
         const STAR_COUNT = 120;
         const sizes = [18, 20, 22, 24, 26, 28, 30, 35];
 
@@ -67,7 +62,6 @@
             });
         }
 
-        // Special/bigger stars (complex path)
         const SPECIAL_COUNT = 10;
         for (let i = 0; i < SPECIAL_COUNT; i++) {
             createStar({
@@ -80,42 +74,40 @@
         }
     }
 
-    function createShootingStar(viewTop, viewH) {
+    function createShootingStarFromTopRight(viewTop, viewH) {
         const sStar = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         sStar.classList.add('shooting-star', 'is-laser');
 
-        // We'll use a slightly bigger canvas so we can include a "head" star and tail.
-        // Place origin so the head sits at the right side.
-        sStar.setAttribute('width', '260');
-        sStar.setAttribute('height', '40');
-        sStar.setAttribute('viewBox', '0 0 260 40');
+        sStar.setAttribute('width', '280');
+        sStar.setAttribute('height', '44');
+        sStar.setAttribute('viewBox', '0 0 280 44');
 
-        // Start near upper-right of current viewport
-        const padTop = 40;
-        const startTop = viewTop + rand(padTop, Math.max(padTop, viewH * 0.35));
+        // Start near the upper-right corner of the current viewport
+        // Keep it consistently in the "yellow-line" region (top 25% of the viewport)
+        const startTop = viewTop + rand(10, Math.max(10, viewH * 0.14));
         sStar.style.top = `${startTop}px`;
-        sStar.style.right = `${-10 - rand(0, 10)}%`;
 
-        // 2-3 seconds across the view for visibility
-        const dur = rand(2.0, 3.0);
+        // Position just off the right edge so it enters from the corner
+        sStar.style.right = `${-6 - rand(0, 4)}%`;
+
+        // Slow travel (2–3s) - previously too fast
+        const dur = rand(5.2, 6.8);
         sStar.style.animation = `shootingStarAnim ${dur}s linear 1`;
 
-        // Tail
         const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
         rect.setAttribute('x', '0');
-        rect.setAttribute('y', '18');
-        rect.setAttribute('width', '230');
+        rect.setAttribute('y', '20');
+        rect.setAttribute('width', '250');
         rect.setAttribute('height', '4');
         rect.setAttribute('fill', 'url(#shootingStarGradient)');
         rect.setAttribute('filter', 'url(#whiteLaserGlow)');
         sStar.appendChild(rect);
 
-        // Head star (4-point) in front of the tail
         const head = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        head.setAttribute('x', '228');
-        head.setAttribute('y', '8');
-        head.setAttribute('width', '24');
-        head.setAttribute('height', '24');
+        head.setAttribute('x', '248');
+        head.setAttribute('y', '10');
+        head.setAttribute('width', '26');
+        head.setAttribute('height', '26');
         head.setAttribute('viewBox', '0 0 20 20');
         head.setAttribute('filter', 'url(#whiteLaserGlow)');
 
@@ -136,12 +128,11 @@
         const viewTop = main.scrollTop;
         const viewH = main.clientHeight;
 
-        // 3-5 stars, with small delay between them
-        const groupCount = Math.floor(3 + Math.random() * 3);
+        const groupCount = Math.floor(rand(3, 6));
         for (let i = 0; i < groupCount; i++) {
             window.setTimeout(() => {
-                createShootingStar(viewTop, viewH);
-            }, i * 200);
+                createShootingStarFromTopRight(viewTop, viewH);
+            }, i * 220);
         }
     }
 
