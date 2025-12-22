@@ -112,3 +112,25 @@
     }
 
 }
+
+/* Meteor overlay layer (above space background, below content) */
+#meteorLayer {
+    position: absolute;
+    inset: 0;
+    z-index: 6; /* keep consistent with moon; layer itself is behind content */
+    pointer-events: none;
+    overflow: visible;
+}
+
+.space-meteor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+
+    background: url('/images/svg/space/meteor.svg') center / contain no-repeat;
+
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+}
