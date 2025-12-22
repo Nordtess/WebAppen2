@@ -40,8 +40,8 @@
         meteor.setAttribute('aria-hidden', 'true');
 
         // Keep the meteor reasonably sized; SVG has width/height set but we'll control via CSS pixels.
-        meteor.style.width = '280px';
-        meteor.style.height = '140px';
+        meteor.style.width = '420px';
+        meteor.style.height = '225px';
 
         layer.appendChild(meteor);
 
