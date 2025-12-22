@@ -10,13 +10,21 @@
     }
 
     const SHOOT_INTERVAL_MS = 10_000;
-    const TRAVEL_MS = 3_500;
+    const TRAVEL_MS = 4_500;
 
     const GROUP_COUNT = 5;
     const GROUP_STAGGER_MS = 140;
 
     function rand(min, max) {
         return min + Math.random() * (max - min);
+    }
+
+    function shuffleInPlace(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
     }
 
     function shootOne({ startX, startY, endX, endY, size }) {
@@ -62,18 +70,31 @@
         const baseStartX = Math.max(0, width - 10);
         const baseStartY = scrollTop + 10;
 
-        const baseEndX = -140;
+        const baseEndX = -160;
         const baseEndY = scrollTop + Math.min(height * 0.6, height - 10);
 
-        // Offset each star slightly so they travel as a "group".
-        // We keep offsets small so the group reads as one cluster.
+        // Spread the group of stars more across the top-right (like a cluster).
+        // We'll build lanes first, then randomize launch order so it doesn't feel 1-2-3-4-5.
+        const lanes = [];
         for (let i = 0; i < GROUP_COUNT; i++) {
-            const delay = i * GROUP_STAGGER_MS + rand(0, 60);
+            // Wider spread than before.
+            const laneOffsetX = i * 42 + rand(-8, 12);
+            const laneOffsetY = i * 14 + rand(-6, 14);
 
-            const laneOffsetX = i * 14 + rand(-4, 6);
-            const laneOffsetY = i * 10 + rand(-4, 10);
+            // Slight size variance; don't strictly decrease by index.
+            const size = Math.round(rand(26, 52));
 
-            const size = Math.round(rand(28, 48) * (1 - i * 0.05));
+            lanes.push({ laneOffsetX, laneOffsetY, size });
+        }
+
+        // Randomize emission order (e.g., 4-1-5-2-3).
+        shuffleInPlace(lanes);
+
+        for (let i = 0; i < lanes.length; i++) {
+            const { laneOffsetX, laneOffsetY, size } = lanes[i];
+
+            // Keep a consistent stagger, with small jitter.
+            const delay = i * GROUP_STAGGER_MS + rand(0, 80);
 
             window.setTimeout(() => {
                 shootOne({
