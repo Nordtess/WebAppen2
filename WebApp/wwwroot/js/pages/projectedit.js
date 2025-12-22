@@ -131,7 +131,7 @@
                     showTechMsg("");
                 } else {
                     if (selected.size >= MAX_TECH) {
-                        showTechMsg(`Du kan max välja ${MAX_TECH} teknologier.`);
+                        showTechMsg(`Du kan max valja ${MAX_TECH} teknologier`);
                         return;
                     }
                     selected.add(key);
