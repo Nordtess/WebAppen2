@@ -138,12 +138,16 @@
     left: 0;
     pointer-events: none;
 
-    background: url('/images/svg/space/meteor.svg') center / contain no-repeat;
+    background-image: url('/images/svg/space/meteor.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
 
     will-change: transform;
     transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
 }
+
 
 /* UFO overlay layer (above background, below content) */
 #ufoLayer {
@@ -160,9 +164,13 @@
     left: 0;
     pointer-events: none;
 
-    background: url('/images/svg/space/ufo.svg') center / contain no-repeat;
+    background-image: url('/images/svg/space/ufo.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
 
     will-change: transform;
     transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
 }
+

@@ -178,10 +178,12 @@
                 <div id="starsContainer" class="stars-container"></div>
             </div>
 
-            <div class="space-moon" aria-hidden="true">
-                <img src="~/images/svg/space/moon.svg" alt="" />
-            </div>
-
+            @if (Active("Home") == "active")
+            {
+                <div class="space-moon" aria-hidden="true">
+                    <img src="~/images/svg/space/moon.svg" alt="" />
+                </div>
+            }
 
             <div class="main-inner">
                 @RenderBody()
@@ -202,8 +204,12 @@
     <script src="~/js/cursor-click.js" asp-append-version="true"></script>
     <script src="~/js/mouse-circle.js" asp-append-version="true"></script>
     <script src="~/js/space-background.js" asp-append-version="true"></script>
-    <script src="~/js/space-meteor.js" asp-append-version="true"></script>
-    <script src="~/js/space-ufo.js" asp-append-version="true"></script>
+    @if (string.Equals(ViewContext.RouteData.Values["controller"]?.ToString(), "Home", StringComparison.OrdinalIgnoreCase)
+       && string.Equals(ViewContext.RouteData.Values["action"]?.ToString(), "Index", StringComparison.OrdinalIgnoreCase))
+    {
+        <script src="~/js/space-meteor.js" asp-append-version="true"></script>
+        <script src="~/js/space-ufo.js" asp-append-version="true"></script>
+    }
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>

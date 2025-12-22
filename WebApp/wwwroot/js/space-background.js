@@ -54,13 +54,13 @@
         // Height-based density model (stars per 1000px of scrollable height).
         // This reduces "cramped" stars on short pages.
         // Caps protect performance on very tall pages.
-        const densityPer1000 = isMobile ? 38 : 60;
-        const minStars = isMobile ? 40 : 80;
-        const maxStars = isMobile ? 90 : 150;
+        const densityPer1000 = isMobile ? 38 : 48;
+        const minStars = isMobile ? 35 : 50;
+        const maxStars = isMobile ? 80 : 130;
 
         const specialDensityPer1000 = isMobile ? 2.5 : 5;
-        const minSpecial = isMobile ? 3 : 7;
-        const maxSpecial = isMobile ? 6 : 12;
+        const minSpecial = isMobile ? 2 : 4;
+        const maxSpecial = isMobile ? 5 : 10;
 
         const STAR_COUNT = clamp(Math.round(densityPer1000 * (hPx / 1000)), minStars, maxStars);
         const SPECIAL_COUNT = clamp(Math.round(specialDensityPer1000 * (hPx / 1000)), minSpecial, maxSpecial);
