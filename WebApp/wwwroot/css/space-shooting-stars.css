@@ -15,7 +15,8 @@
     }
 
     100% {
-        transform: translate(-140vw, 140vh) rotate(155deg) scaleX(1);
+        /* farther travel so it doesn't disappear after ~1/4 screen */
+        transform: translate(-200vw, 200vh) rotate(155deg) scaleX(1);
         opacity: 0;
     }
 }
