@@ -1,37 +1,37 @@
-﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 50" width="240" height="100">
-  <defs>
-    <linearGradient id="iceGradientV2" x1="100%" y1="0%" x2="0%" y2="0%">
-      <stop offset="0%" stop-color="#F8F8FF"/>
-      <stop offset="100%" stop-color="#ADE8F4"/>
-    </linearGradient>
-    <filter id="strongFireGlow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-    </filter>
-  </defs>
-  <g transform="translate(15, 25)">
-    <g filter="url(#strongFireGlow)">
-      <path fill="#FF4500" opacity="0.7" d="M5,0 Q30,-15 60,-18 T100,0 Q70,18 30,15 T5,0 Z">
-        <animate attributeName="opacity" values="0.7;0.5;0.7" dur="1s" repeatCount="indefinite"/>
-        <animate attributeName="d" values="M5,0 Q30,-15 60,-18 T100,0 Q70,18 30,15 T5,0 Z; M5,0 Q30,-12 60,-20 T105,0 Q70,20 30,12 T5,0 Z; M5,0 Q30,-15 60,-18 T100,0 Q70,18 30,15 T5,0 Z" dur="0.3s" repeatCount="indefinite"/>
-      </path>
-      <path fill="#FF8C00" opacity="0.8" d="M8,0 Q25,-10 50,-12 T85,0 Q50,12 25,10 T8,0 Z">
-        <animate attributeName="d" values="M8,0 Q25,-10 50,-12 T85,0 Q50,12 25,10 T8,0 Z; M8,0 Q25,-8 50,-14 T88,0 Q50,14 25,8 T8,0 Z; M8,0 Q25,-10 50,-12 T85,0 Q50,12 25,10 T8,0 Z" dur="0.25s" repeatCount="indefinite"/>
-      </path>
-      <path fill="#FFD700" d="M10,0 Q20,-6 35,-8 T60,0 Q35,8 20,6 T10,0 Z">
-        <animate attributeName="fill" values="#FFD700;#FFFF00;#FFD700" dur="0.2s" repeatCount="indefinite"/>
-      </path>
-      <circle cx="90" cy="-5" r="1.5" fill="#FFD700" opacity="0.8">
-        <animate attributeName="cx" values="90;110" dur="0.8s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0.8;0" dur="0.8s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="95" cy="8" r="1" fill="#FF4500" opacity="0.6">
-        <animate attributeName="cx" values="95;115" dur="0.6s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0.6;0" dur="0.6s" repeatCount="indefinite"/>
-      </circle>
-    </g>
-    <circle cx="0" cy="0" r="11" fill="url(#iceGradientV2)" stroke="#F8F8FF" stroke-width="1.5"/>
-    <circle cx="-4" cy="-3" r="2.5" fill="#FFFFFF" opacity="0.7"/>
-    <circle cx="-3" cy="5" r="1.8" fill="#FFFFFF" opacity="0.5"/>
-  </g>
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -40 140 110" width="280" height="220">
+	<defs>
+		<linearGradient id="iceGradientV2" x1="100%" y1="0%" x2="0%" y2="0%">
+			<stop offset="0%" stop-color="#F8F8FF"/>
+			<stop offset="100%" stop-color="#ADE8F4"/>
+		</linearGradient>
+		<filter id="strongFireGlow" x="-50%" y="-50%" width="200%" height="200%">
+			<feGaussianBlur stdDeviation="3" result="blur"/>
+			<feComposite in="SourceGraphic" in2="blur" operator="over"/>
+		</filter>
+	</defs>
+	<g transform="translate(15, 25)">
+		<g filter="url(#strongFireGlow)" transform="rotate(-35, 0, 0)">
+			<path fill="#FF4500" opacity="0.7" d="M5,0 Q30,-15 60,-18 T100,0 Q70,18 30,15 T5,0 Z">
+				<animate attributeName="opacity" values="0.7;0.5;0.7" dur="1s" repeatCount="indefinite"/>
+				<animate attributeName="d" values="M5,0 Q30,-15 60,-18 T100,0 Q70,18 30,15 T5,0 Z; M5,0 Q30,-12 60,-20 T105,0 Q70,20 30,12 T5,0 Z; M5,0 Q30,-15 60,-18 T100,0 Q70,18 30,15 T5,0 Z" dur="0.3s" repeatCount="indefinite"/>
+			</path>
+			<path fill="#FF8C00" opacity="0.8" d="M8,0 Q25,-10 50,-12 T85,0 Q50,12 25,10 T8,0 Z">
+				<animate attributeName="d" values="M8,0 Q25,-10 50,-12 T85,0 Q50,12 25,10 T8,0 Z; M8,0 Q25,-8 50,-14 T88,0 Q50,14 25,8 T8,0 Z; M8,0 Q25,-10 50,-12 T85,0 Q50,12 25,10 T8,0 Z" dur="0.25s" repeatCount="indefinite"/>
+			</path>
+			<path fill="#FFD700" d="M10,0 Q20,-6 35,-8 T60,0 Q35,8 20,6 T10,0 Z">
+				<animate attributeName="fill" values="#FFD700;#FFFF00;#FFD700" dur="0.2s" repeatCount="indefinite"/>
+			</path>
+			<circle cx="90" cy="-5" r="1.5" fill="#FFD700" opacity="0.8">
+				<animate attributeName="cx" values="90;110" dur="0.8s" repeatCount="indefinite"/>
+				<animate attributeName="opacity" values="0.8;0" dur="0.8s" repeatCount="indefinite"/>
+			</circle>
+			<circle cx="95" cy="8" r="1" fill="#FF4500" opacity="0.6">
+				<animate attributeName="cx" values="95;115" dur="0.6s" repeatCount="indefinite"/>
+				<animate attributeName="opacity" values="0.6;0" dur="0.6s" repeatCount="indefinite"/>
+			</circle>
+		</g>
+		<circle cx="0" cy="0" r="11" fill="url(#iceGradientV2)" stroke="#F8F8FF" stroke-width="1.5"/>
+		<circle cx="-4" cy="-3" r="2.5" fill="#FFFFFF" opacity="0.7"/>
+		<circle cx="-3" cy="5" r="1.8" fill="#FFFFFF" opacity="0.5"/>
+	</g>
 </svg>
