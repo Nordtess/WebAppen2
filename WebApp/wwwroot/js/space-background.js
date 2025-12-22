@@ -80,29 +80,49 @@
         }
     }
 
-    function createShootingStar(baseTop, baseRight, offsetIndex) {
+    function createShootingStar(viewTop, viewH) {
         const sStar = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         sStar.classList.add('shooting-star', 'is-laser');
-        sStar.setAttribute('width', '220');
-        sStar.setAttribute('height', '4');
-        sStar.setAttribute('viewBox', '0 0 220 4');
 
-        sStar.style.top = `${baseTop + rand(-40, 40)}px`;
-        sStar.style.right = `${baseRight + rand(-3, 8)}%`;
+        // We'll use a slightly bigger canvas so we can include a "head" star and tail.
+        // Place origin so the head sits at the right side.
+        sStar.setAttribute('width', '260');
+        sStar.setAttribute('height', '40');
+        sStar.setAttribute('viewBox', '0 0 260 40');
 
-        // Slow travel across the page
-        const dur = rand(6, 10);
-        const delay = rand(0, 0.8) + offsetIndex * rand(0.15, 0.35);
+        // Start near upper-right of current viewport
+        const padTop = 40;
+        const startTop = viewTop + rand(padTop, Math.max(padTop, viewH * 0.35));
+        sStar.style.top = `${startTop}px`;
+        sStar.style.right = `${-10 - rand(0, 10)}%`;
 
+        // 2-3 seconds across the view for visibility
+        const dur = rand(2.0, 3.0);
         sStar.style.animation = `shootingStarAnim ${dur}s linear 1`;
-        sStar.style.animationDelay = `${delay}s`;
 
+        // Tail
         const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        rect.setAttribute('width', '220');
+        rect.setAttribute('x', '0');
+        rect.setAttribute('y', '18');
+        rect.setAttribute('width', '230');
         rect.setAttribute('height', '4');
         rect.setAttribute('fill', 'url(#shootingStarGradient)');
         rect.setAttribute('filter', 'url(#whiteLaserGlow)');
         sStar.appendChild(rect);
+
+        // Head star (4-point) in front of the tail
+        const head = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        head.setAttribute('x', '228');
+        head.setAttribute('y', '8');
+        head.setAttribute('width', '24');
+        head.setAttribute('height', '24');
+        head.setAttribute('viewBox', '0 0 20 20');
+        head.setAttribute('filter', 'url(#whiteLaserGlow)');
+
+        const headUse = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+        headUse.setAttribute('href', '#northStarShape');
+        head.appendChild(headUse);
+        sStar.appendChild(head);
 
         sStar.addEventListener('animationend', () => {
             sStar.remove();
@@ -111,21 +131,17 @@
         container.appendChild(sStar);
     }
 
-    // Create a group within the current viewport so users will actually see it.
     function createShootingStarGroupInViewport() {
         syncHeight();
-
         const viewTop = main.scrollTop;
         const viewH = main.clientHeight;
-        const groupCount = Math.floor(rand(3, 6));
 
-        // Start somewhere visible with a little padding
-        const pad = 60;
-        const baseTop = rand(viewTop + pad, Math.max(viewTop + pad, viewTop + viewH - pad));
-        const baseRight = -10 - rand(0, 20);
-
+        // 3-5 stars, with small delay between them
+        const groupCount = Math.floor(3 + Math.random() * 3);
         for (let i = 0; i < groupCount; i++) {
-            createShootingStar(baseTop, baseRight, i);
+            window.setTimeout(() => {
+                createShootingStar(viewTop, viewH);
+            }, i * 200);
         }
     }
 
