@@ -358,6 +358,14 @@ public sealed class ProjectsController : Controller
         {
             _db.ProjektAnvandare.Add(new ProjectUser { ProjectId = id, UserId = user.Id, ConnectedUtc = DateTimeOffset.UtcNow });
             await _db.SaveChangesAsync();
+
+            TempData["ToastTitle"] = "Du gick med i ett projekt";
+            TempData["ToastMessage"] = "Kom ihåg att komplettera ditt konto/CV med personliga uppgifter så att andra kan se vem du är.";
+        }
+        else
+        {
+            TempData["ToastTitle"] = "Du är redan medlem";
+            TempData["ToastMessage"] = "Du är redan kopplad till det här projektet.";
         }
 
         return RedirectToAction(nameof(Details), new { id });

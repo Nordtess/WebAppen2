@@ -1,9 +1,12 @@
-﻿@{
+﻿@model WebApp.Controllers.HomeIndexVm
+
+@{
     ViewData["Title"] = "Home";
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/home.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/projects.css" asp-append-version="true" />
 }
 
 <div class="home-page">
@@ -206,26 +209,82 @@
         </div>
 
         <div class="home-card-body home-project-body">
-            <article class="project-spotlight" aria-label="Senast upplagda projektet">
-                <div class="project-title">NotLinkedIn — WebApp</div>
-                <div class="project-sub">Upplagt: 2025-12-18 • av Jamie Larsson</div>
+            <!-- Center only the actual project card inside this white home-card -->
+            <div style="display:flex; flex-direction:column; align-items:center; width:100%;">
+                @if (Model.LatestProject is null)
+                {
+                    <div class="projects-empty">Inga projekt finns ännu.</div>
+                }
+                else
+                {
+                    var p = Model.LatestProject;
+                    <div style="width:min(100%, 360px);">
+                        <a class="projects-card" href="@Url.Action("Details", "Projects", new { id = p.Id })" aria-label="Visa projekt: @p.Title" style="display:block;">
+                            <div class="projects-doc">
+                                <div class="projects-doc-top">
+                                    <div class="projects-doc-grid">
+                                        <div class="projects-doc-avatar" aria-hidden="true">
+                                            <img src="@(string.IsNullOrWhiteSpace(p.ImagePath) ? "/images/projects/rocketship.png" : p.ImagePath)" alt="" />
+                                        </div>
 
-                <div class="project-chips">
-                    <span class="cv-chip">ASP.NET</span>
-                    <span class="cv-chip">MVC</span>
-                    <span class="cv-chip">SQL</span>
+                                        <div class="projects-doc-center">
+                                            <div class="projects-doc-title">@p.Title</div>
+                                            <div class="projects-doc-createdby">
+                                                Skapare: @(string.IsNullOrWhiteSpace(p.CreatedByName) ? (p.CreatedByEmail ?? "Okänd") : p.CreatedByName)
+                                            </div>
+                                            <div class="projects-doc-meta">Skapad: @p.CreatedUtc.ToString("yyyy-MM-dd")</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="projects-doc-body">
+                                    @if (!string.IsNullOrWhiteSpace(p.ShortDescription))
+                                    {
+                                        <div class="projects-doc-desc-card">
+                                            <div class="projects-doc-desc" style="text-align:center;">@p.ShortDescription</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="projects-doc-desc-card">
+                                            <div class="projects-doc-desc projects-doc-desc--muted" style="text-align:center;">Ingen kort beskrivning.</div>
+                                        </div>
+                                    }
+
+                                    @* Home-only: read-only longer description preview *@
+                                    @if (!string.IsNullOrWhiteSpace(p.Description))
+                                    {
+                                        <div class="projects-doc-desc-card" style="margin-top: 10px;">
+                                            <div class="projects-doc-desc" style="text-align:left;">
+                                                @(p.Description!.Length > 220 ? (p.Description.Substring(0, 220) + "…") : p.Description)
+                                            </div>
+                                        </div>
+                                    }
+
+                                    @if (!string.IsNullOrWhiteSpace(p.TechKeysCsv))
+                                    {
+                                        <div class="projects-doc-bottom">
+                                            <div class="projects-doc-sep" aria-hidden="true"></div>
+                                            <div class="projects-doc-tech" aria-label="Tech stack">
+                                                @foreach (var key in p.TechKeysCsv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+                                                {
+                                                    <span class="projects-doc-tech-tile">
+                                                        <img class="projects-doc-tech-icon" src="~/images/svg/techstack/@(key).svg" alt="@key" />
+                                                    </span>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+
+                <div style="display:flex; justify-content:center; margin-top: 12px;">
+                    <a class="btn-secondary-custom" href="@Url.Action("Index", "Projects")">Se alla projekt</a>
                 </div>
-
-                <p class="project-desc">
-                    Ett webbprojekt där användare kan skapa CV-profiler, koppla projekt och kommunicera via privata meddelanden.
-                    Fokus ligger på ren “Apple-ish” design, tydlig struktur och en upplevelse som känns snabb och professionell.
-                </p>
-
-                <div class="project-actions">
-                    <a class="btn-ghost" href="#">Öppna projekt</a>
-                    <a class="btn-ghost" href="#">Se alla projekt</a>
-                </div>
-            </article>
+            </div>
         </div>
     </section>
 

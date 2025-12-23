@@ -20,6 +20,9 @@
 
     var isAuthenticated = User?.Identity?.IsAuthenticated == true;
     var userEmail = isAuthenticated ? (User?.Identity?.Name ?? "") : "";
+
+    var toastTitle = TempData["ToastTitle"] as string;
+    var toastMessage = TempData["ToastMessage"] as string;
 }
 
 <!DOCTYPE html>
@@ -36,6 +39,7 @@
     <link rel="stylesheet" href="~/css/cursor.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/mouse-circle.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/space-background.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/toast.css" asp-append-version="true" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -197,6 +201,24 @@
         </main>
     </div>
 
+    @* Toast notifications *@
+    @if (!string.IsNullOrWhiteSpace(toastMessage))
+    {
+        <div class="toast-wrap" aria-live="polite">
+            <div class="toast" data-toast>
+                <div class="toast-ico" aria-hidden="true">i</div>
+                <div>
+                    @if (!string.IsNullOrWhiteSpace(toastTitle))
+                    {
+                        <p class="toast-title">@toastTitle</p>
+                    }
+                    <div class="toast-msg">@toastMessage</div>
+                </div>
+                <button class="toast-close" type="button" aria-label="Stäng" data-toast-close>×</button>
+            </div>
+        </div>
+    }
+
     <div class="circle" aria-hidden="true"></div>
 
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -204,6 +226,7 @@
     <script src="~/js/cursor-click.js" asp-append-version="true"></script>
     <script src="~/js/mouse-circle.js" asp-append-version="true"></script>
     <script src="~/js/space-background.js" asp-append-version="true"></script>
+    <script src="~/js/toast.js" asp-append-version="true"></script>
     @if (string.Equals(ViewContext.RouteData.Values["controller"]?.ToString(), "Home", StringComparison.OrdinalIgnoreCase)
        && string.Equals(ViewContext.RouteData.Values["action"]?.ToString(), "Index", StringComparison.OrdinalIgnoreCase))
     {
