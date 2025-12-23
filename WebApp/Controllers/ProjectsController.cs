@@ -25,13 +25,29 @@ public sealed class ProjectsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index([FromQuery] string? q, [FromQuery] string? sort)
+    public async Task<IActionResult> Index([FromQuery] string? q, [FromQuery] string? sort, [FromQuery] string? scope, [FromQuery] bool? mine)
     {
+        var viewer = await _userManager.GetUserAsync(User);
+        var viewerId = viewer?.Id;
+
+        var scopeKey = string.IsNullOrWhiteSpace(scope) ? "all" : scope.Trim().ToLowerInvariant();
+        if (scopeKey is not ("all" or "title" or "created" or "member"))
+        {
+            scopeKey = "all";
+        }
+
+        var onlyMine = (mine ?? false) && viewerId != null;
+
         // Join to creator so we can filter on name/email and (optionally) show it.
-        var query = from p in _db.Projekt.AsNoTracking()
-                    join u in _db.Users.AsNoTracking() on p.CreatedByUserId equals u.Id into users
-                    from u in users.DefaultIfEmpty()
-                    select new { p, u };
+        var baseQuery = from p in _db.Projekt.AsNoTracking()
+                        join u in _db.Users.AsNoTracking() on p.CreatedByUserId equals u.Id into users
+                        from u in users.DefaultIfEmpty()
+                        select new { p, u };
+
+        if (onlyMine)
+        {
+            baseQuery = baseQuery.Where(x => x.p.CreatedByUserId == viewerId);
+        }
 
         if (!string.IsNullOrWhiteSpace(q))
         {
@@ -42,38 +58,78 @@ public sealed class ProjectsController : Controller
             var like = $"{s}%";
             var likeAnywhere = $"%{s}%";
 
-            query = query.Where(x =>
-                EF.Functions.Like(x.p.Titel, likeAnywhere) ||
-                (x.p.KortBeskrivning != null && EF.Functions.Like(x.p.KortBeskrivning, likeAnywhere)) ||
-                (x.u != null && x.u.FirstName != null && EF.Functions.Like(x.u.FirstName, like)) ||
-                (x.u != null && x.u.Email != null && EF.Functions.Like(x.u.Email, like)));
+            if (scopeKey == "title")
+            {
+                baseQuery = baseQuery.Where(x =>
+                    EF.Functions.Like(x.p.Titel, likeAnywhere) ||
+                    (x.p.KortBeskrivning != null && EF.Functions.Like(x.p.KortBeskrivning, likeAnywhere)));
+            }
+            else if (scopeKey == "created")
+            {
+                baseQuery = baseQuery.Where(x =>
+                    (x.u != null && x.u.FirstName != null && EF.Functions.Like(x.u.FirstName, like)) ||
+                    (x.u != null && x.u.LastName != null && EF.Functions.Like(x.u.LastName, like)) ||
+                    (x.u != null && x.u.Email != null && EF.Functions.Like(x.u.Email, like)));
+            }
+            else if (scopeKey == "member")
+            {
+                // Projects where any member matches the query.
+                // We do a subquery so we don't have to project membership names into the main row.
+                baseQuery = baseQuery.Where(x =>
+                    _db.ProjektAnvandare.AsNoTracking()
+                        .Where(pu => pu.ProjectId == x.p.Id)
+                        .Join(_db.Users.AsNoTracking(), pu => pu.UserId, u2 => u2.Id, (pu, u2) => u2)
+                        .Any(u2 =>
+                            (u2.FirstName != null && EF.Functions.Like(u2.FirstName, like)) ||
+                            (u2.LastName != null && EF.Functions.Like(u2.LastName, like)) ||
+                            (u2.Email != null && EF.Functions.Like(u2.Email, like))));
+            }
+            else
+            {
+                // all
+                baseQuery = baseQuery.Where(x =>
+                    EF.Functions.Like(x.p.Titel, likeAnywhere) ||
+                    (x.p.KortBeskrivning != null && EF.Functions.Like(x.p.KortBeskrivning, likeAnywhere)) ||
+                    (x.u != null && x.u.FirstName != null && EF.Functions.Like(x.u.FirstName, like)) ||
+                    (x.u != null && x.u.LastName != null && EF.Functions.Like(x.u.LastName, like)) ||
+                    (x.u != null && x.u.Email != null && EF.Functions.Like(x.u.Email, like)) ||
+                    _db.ProjektAnvandare.AsNoTracking()
+                        .Where(pu => pu.ProjectId == x.p.Id)
+                        .Join(_db.Users.AsNoTracking(), pu => pu.UserId, u2 => u2.Id, (pu, u2) => u2)
+                        .Any(u2 =>
+                            (u2.FirstName != null && EF.Functions.Like(u2.FirstName, like)) ||
+                            (u2.LastName != null && EF.Functions.Like(u2.LastName, like)) ||
+                            (u2.Email != null && EF.Functions.Like(u2.Email, like))));
+            }
         }
 
         var sortKey = (sort ?? "new").ToLowerInvariant();
-        query = sortKey switch
+        baseQuery = sortKey switch
         {
-            "old" => query.OrderBy(x => x.p.CreatedUtc),
-            "az" => query.OrderBy(x => x.p.Titel),
-            "za" => query.OrderByDescending(x => x.p.Titel),
-            _ => query.OrderByDescending(x => x.p.CreatedUtc)
+            "old" => baseQuery.OrderBy(x => x.p.CreatedUtc),
+            "az" => baseQuery.OrderBy(x => x.p.Titel),
+            "za" => baseQuery.OrderByDescending(x => x.p.Titel),
+            _ => baseQuery.OrderByDescending(x => x.p.CreatedUtc)
         };
 
-        var items = await query
-            .Select(x => new ProjectsIndexVm.ProjectCardVm
-            {
-                Id = x.p.Id,
-                Title = x.p.Titel,
-                ShortDescription = x.p.KortBeskrivning,
-                CreatedUtc = x.p.CreatedUtc,
-                TechKeysCsv = x.p.TechStackKeysCsv,
-                CreatedByName = x.u == null ? null : ((x.u.FirstName + " " + x.u.LastName).Trim()),
-                CreatedByEmail = x.u == null ? null : x.u.Email
-            })
-            .ToListAsync();
+        var items = await baseQuery
+             .Select(x => new ProjectsIndexVm.ProjectCardVm
+             {
+                 Id = x.p.Id,
+                 Title = x.p.Titel,
+                 ShortDescription = x.p.KortBeskrivning,
+                 CreatedUtc = x.p.CreatedUtc,
+                 TechKeysCsv = x.p.TechStackKeysCsv,
+                 CreatedByName = x.u == null ? null : ((x.u.FirstName + " " + x.u.LastName).Trim()),
+                 CreatedByEmail = x.u == null ? null : x.u.Email
+             })
+             .ToListAsync();
 
         var vm = new ProjectsIndexVm
         {
             Query = q ?? string.Empty,
+            Scope = scopeKey,
+            OnlyMine = onlyMine,
             Sort = sortKey,
             ShowLoginTip = !(User.Identity?.IsAuthenticated ?? false),
             Projects = items

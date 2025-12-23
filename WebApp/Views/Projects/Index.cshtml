@@ -11,7 +11,8 @@
 
 <div class="projects-page">
     <div class="projects-banner" aria-label="Projects-banner">
-        <img src="~/images/bannersandicons/projects.png" alt="Banner" class="projects-banner-img" />
+        <!-- Banner image path to change: update the src below -->
+        <img src="~/images/bannersandicons/allaprojekt.png" alt="Banner" class="projects-banner-img" />
     </div>
 
     <div class="projects-container">
@@ -37,57 +38,88 @@
 
             <div class="projects-controls">
                 <form method="get" class="projects-search">
-                    <input class="projects-input" type="text" name="q" value="@Model.Query" placeholder="Sök projekt, förnamn eller e-post..." />
+                    <div class="projects-search-main">
+                        <input class="projects-input" type="text" name="q" value="@Model.Query" placeholder="Sök…" />
 
-                    <select class="projects-input" name="sort" aria-label="Sortering">
-                        <option value="new" selected="@(Model.Sort == "new")">Senast skapade</option>
-                        <option value="old" selected="@(Model.Sort == "old")">Äldst först</option>
-                        <option value="az" selected="@(Model.Sort == "az")">A-Ö</option>
-                        <option value="za" selected="@(Model.Sort == "za")">Ö-A</option>
-                    </select>
+                        <div class="projects-segmented" role="group" aria-label="Sök i">
+                            <label class="seg-item">
+                                <input type="radio" name="scope" value="all" checked="@(Model.Scope == "all")" />
+                                <span>Alla</span>
+                            </label>
+                            <label class="seg-item">
+                                <input type="radio" name="scope" value="title" checked="@(Model.Scope == "title")" />
+                                <span>Titel</span>
+                            </label>
+                            <label class="seg-item">
+                                <input type="radio" name="scope" value="created" checked="@(Model.Scope == "created")" />
+                                <span>Skapad av</span>
+                            </label>
+                            <label class="seg-item">
+                                <input type="radio" name="scope" value="member" checked="@(Model.Scope == "member")" />
+                                <span>Medlem i</span>
+                            </label>
+                        </div>
+                    </div>
 
-                    <button type="submit" class="btn-secondary-custom">Sök</button>
+                    <div class="projects-search-right">
+                        <label class="projects-toggle" title="Visar bara projekt du skapat">
+                            <input type="checkbox" name="mine" value="true" checked="@Model.OnlyMine" @(User.Identity?.IsAuthenticated == true ? "" : "disabled") />
+                            <span class="toggle-ui" aria-hidden="true"></span>
+                            <span>Visa bara mina</span>
+                        </label>
+
+                        <select class="projects-input" name="sort" aria-label="Sortering">
+                            <option value="new" selected="@(Model.Sort == "new")">Senast skapade</option>
+                            <option value="old" selected="@(Model.Sort == "old")">Äldst först</option>
+                            <option value="az" selected="@(Model.Sort == "az")">A-Ö</option>
+                            <option value="za" selected="@(Model.Sort == "za")">Ö-A</option>
+                        </select>
+
+                        <button type="submit" class="btn-secondary-custom">Sök</button>
+                    </div>
                 </form>
             </div>
 
-            <div class="projects-grid">
-                @if (Model.Projects.Count == 0)
-                {
-                    <div class="projects-empty">Inga projekt hittades.</div>
-                }
-                else
-                {
-                    foreach (var p in Model.Projects)
+            <div class="projects-list-card">
+                <div class="projects-grid">
+                    @if (Model.Projects.Count == 0)
                     {
-                        <a class="projects-card" href="@Url.Action("Details", "Projects", new { id = p.Id })">
-                            <div class="projects-card-title">@p.Title</div>
-
-                            @if (!string.IsNullOrWhiteSpace(p.ShortDescription))
-                            {
-                                <div class="projects-card-desc">@p.ShortDescription</div>
-                            }
-                            else
-                            {
-                                <div class="projects-card-desc projects-card-desc--muted">Ingen kort beskrivning.</div>
-                            }
-
-                            <div class="projects-card-meta">Skapad: @p.CreatedUtc.ToString("yyyy-MM-dd")</div>
-
-                            @if (!string.IsNullOrWhiteSpace(p.TechKeysCsv))
-                            {
-                                <div class="projects-card-sep" aria-hidden="true"></div>
-                                <div class="projects-tech-row" aria-label="Tech stack">
-                                    @foreach (var key in p.TechKeysCsv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
-                                    {
-                                        <span class="projects-tech-tile">
-                                            <img class="projects-tech-icon" src="~/images/svg/techstack/@(key).svg" alt="@key" />
-                                        </span>
-                                    }
-                                </div>
-                            }
-                        </a>
+                        <div class="projects-empty">Inga projekt hittades.</div>
                     }
-                }
+                    else
+                    {
+                        foreach (var p in Model.Projects)
+                        {
+                            <a class="projects-card" href="@Url.Action("Details", "Projects", new { id = p.Id })">
+                                <div class="projects-card-title">@p.Title</div>
+
+                                @if (!string.IsNullOrWhiteSpace(p.ShortDescription))
+                                {
+                                    <div class="projects-card-desc">@p.ShortDescription</div>
+                                }
+                                else
+                                {
+                                    <div class="projects-card-desc projects-card-desc--muted">Ingen kort beskrivning.</div>
+                                }
+
+                                <div class="projects-card-meta">Skapad: @p.CreatedUtc.ToString("yyyy-MM-dd")</div>
+
+                                @if (!string.IsNullOrWhiteSpace(p.TechKeysCsv))
+                                {
+                                    <div class="projects-card-sep" aria-hidden="true"></div>
+                                    <div class="projects-tech-row" aria-label="Tech stack">
+                                        @foreach (var key in p.TechKeysCsv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+                                        {
+                                            <span class="projects-tech-tile">
+                                                <img class="projects-tech-icon" src="~/images/svg/techstack/@(key).svg" alt="@key" />
+                                            </span>
+                                        }
+                                    </div>
+                                }
+                            </a>
+                        }
+                    }
+                </div>
             </div>
         </div>
     </div>

@@ -3,6 +3,10 @@ namespace WebApp.ViewModels;
 public sealed class ProjectsIndexVm
 {
     public string Query { get; init; } = string.Empty;
+    // Search scope from segmented control: all | title | created | member
+    public string Scope { get; init; } = "all";
+    // Toggle: show only projects created by current user
+    public bool OnlyMine { get; init; }
     public string Sort { get; init; } = "new";
 
     // Optional hint shown when user is anonymous.
