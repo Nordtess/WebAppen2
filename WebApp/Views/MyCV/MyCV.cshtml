@@ -3,6 +3,7 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/mycv.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/components.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/projects.css" asp-append-version="true" />
 }
 
 @{
@@ -155,97 +156,68 @@
 
                 <section class="cv-box">
                     <h3 class="cv-box-title">Projekt</h3>
-                    <p class="cv-paragraph cv-paragraph-muted">
-                        Exempelprojekt (placeholder). Senare hämtas projekt + tech stack från SQL.
-                    </p>
 
-                    <div class="cv-projects">
-                        <a class="cv-project-link" href="/InspectProject/1" aria-label="Visa projekt: NotLinkedIn — WebApp">
-                            <article class="cv-project">
-                                <div class="cv-project-title">NotLinkedIn — WebApp</div>
-                                <p class="cv-project-desc">
-                                    Webbplattform där användare skapar CV-profiler, kopplar projekt och kan kommunicera via privata meddelanden.
-                                    Fokus på ren Apple-ish UI, tydlig struktur och snabb upplevelse.
-                                </p>
+                    <!-- Reuse the exact same card styling as "Alla projekt" -->
+                    <div class="projects-list-card" style="margin-top: 12px;">
+                        <div class="projects-grid">
+                            @if (Model.Projects is null || Model.Projects.Count == 0)
+                            {
+                                <div class="projects-empty">Inga projekt valda ännu.</div>
+                            }
+                            else
+                            {
+                                foreach (var p in Model.Projects)
+                                {
+                                    <a class="projects-card" href="@Url.Action("Details", "Projects", new { id = p.Id })" aria-label="Visa projekt: @p.Title">
+                                        <div class="projects-doc">
+                                            <div class="projects-doc-top">
+                                                <div class="projects-doc-grid">
+                                                    <div class="projects-doc-avatar" aria-hidden="true">
+                                                        <img src="@(string.IsNullOrWhiteSpace(p.ImagePath) ? "/images/projects/rocketship.png" : p.ImagePath)" alt="" />
+                                                    </div>
 
-                                <div class="cv-project-sep" aria-hidden="true"></div>
+                                                    <div class="projects-doc-center">
+                                                        <div class="projects-doc-title">@p.Title</div>
+                                                        <div class="projects-doc-createdby">Skapare: @p.CreatedBy</div>
+                                                        <div class="projects-doc-meta">Skapad: @p.CreatedUtc.ToString("yyyy-MM-dd")</div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                <div class="cv-tech-row" aria-label="Tech stack">
-                                    <span class="cv-tech-tile">
-                                        <img class="cv-tech-icon" src="~/images/svg/techstack/csharp.svg" alt="C#" />
-                                    </span>
-                                    <span class="cv-tech-tile">
-                                        <img class="cv-tech-icon" src="~/images/svg/techstack/mongodb.svg" alt="MongoDB" />
-                                    </span>
-                                    <span class="cv-tech-tile">
-                                        <img class="cv-tech-icon" src="~/images/svg/techstack/mysql.svg" alt="MySQL" />
-                                    </span>
-                                </div>
-                            </article>
-                        </a>
+                                            <div class="projects-doc-body">
+                                                @if (!string.IsNullOrWhiteSpace(p.ShortDescription))
+                                                {
+                                                    <div class="projects-doc-desc-card">
+                                                        <div class="projects-doc-desc">@p.ShortDescription</div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="projects-doc-desc-card">
+                                                        <div class="projects-doc-desc projects-doc-desc--muted">Ingen kort beskrivning.</div>
+                                                    </div>
+                                                }
 
-                        <a class="cv-project-link" href="/InspectProject/2" aria-label="Visa projekt: AES GUI — Kryptering">
-                            <article class="cv-project">
-                                <div class="cv-project-title">AES GUI — Kryptering</div>
-                                <p class="cv-project-desc">
-                                    GUI-app som krypterar/dekrypterar text med tydlig input/feedback, validering och robust felhantering.
-                                    Byggd så att funktionalitet kan skalas upp senare.
-                                </p>
-
-                                <div class="cv-project-sep" aria-hidden="true"></div>
-
-                                <div class="cv-tech-row" aria-label="Tech stack">
-                                    <span class="cv-tech-tile">
-                                        <img class="cv-tech-icon" src="~/images/svg/techstack/csharp.svg" alt="C#" />
-                                    </span>
-                                    <span class="cv-tech-tile">
-                                        <img class="cv-tech-icon" src="~/images/svg/techstack/cplusplus.svg" alt="C++" />
-                                    </span>
-                                </div>
-                            </article>
-                        </a>
-
-                        <a class="cv-project-link" href="/InspectProject/3" aria-label="Visa projekt: Linux & Nätverk — IPv6 / Wireshark">
-                            <article class="cv-project">
-                                <div class="cv-project-title">Linux & Nätverk — IPv6 / Wireshark</div>
-                                <p class="cv-project-desc">
-                                    Rapport + labb där trafik analyseras i hemmanätverk. Fokus på adressering, protokoll
-                                    och verifiering av paketflöden i realistisk miljö.
-                                </p>
-
-                                <div class="cv-project-sep" aria-hidden="true"></div>
-
-                                <div class="cv-tech-row" aria-label="Tech stack">
-                                    <span class="cv-tech-tile">
-                                        <img class="cv-tech-icon" src="~/images/svg/techstack/python.svg" alt="Python" />
-                                    </span>
-                                    <span class="cv-tech-tile">
-                                        <img class="cv-tech-icon" src="~/images/svg/techstack/java.svg" alt="Java" />
-                                    </span>
-                                </div>
-                            </article>
-                        </a>
-
-                        <a class="cv-project-link" href="/InspectProject/4" aria-label="Visa projekt: Mini Dashboard — Frontend/Logik">
-                            <article class="cv-project">
-                                <div class="cv-project-title">Mini Dashboard — Frontend/Logik</div>
-                                <p class="cv-project-desc">
-                                    Liten demo för att visa struktur: komponenter, state och tydlig dataflödeslogik.
-                                    Byggd för att vara lätt att vidareutveckla när fler widgets behövs.
-                                </p>
-
-                                <div class="cv-project-sep" aria-hidden="true"></div>
-
-                                <div class="cv-tech-row" aria-label="Tech stack">
-                                    <span class="cv-tech-tile">
-                                        <img class="cv-tech-icon" src="~/images/svg/techstack/javascript.svg" alt="JavaScript" />
-                                    </span>
-                                    <span class="cv-tech-tile">
-                                        <img class="cv-tech-icon" src="~/images/svg/techstack/python.svg" alt="Python" />
-                                    </span>
-                                </div>
-                            </article>
-                        </a>
+                                                @if (p.TechKeys is { Length: > 0 })
+                                                {
+                                                    <div class="projects-doc-bottom">
+                                                        <div class="projects-doc-sep" aria-hidden="true"></div>
+                                                        <div class="projects-doc-tech" aria-label="Tech stack">
+                                                            @foreach (var key in p.TechKeys)
+                                                            {
+                                                                <span class="projects-doc-tech-tile">
+                                                                    <img class="projects-doc-tech-icon" src="~/images/svg/techstack/@(key).svg" alt="@key" />
+                                                                </span>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                     </a>
+                                }
+                            }
+                        </div>
                     </div>
                 </section>
             </div>

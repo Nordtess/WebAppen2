@@ -97,6 +97,10 @@ public class EditCVController : Controller
             return View("EditCV", model);
         }
 
+        // If user is creating their CV for the first time from MyCV,
+        // MyCvController sets this flag so we can redirect them back after successful save.
+        var redirectToMyCvAfterSave = TempData["FirstCvEdit"]?.ToString() == "1";
+
         var (profile, _) = await GetOrCreateProfileForUserAsync(user.Id);
 
         await using var tx = await _db.Database.BeginTransactionAsync();
@@ -125,6 +129,13 @@ public class EditCVController : Controller
         await tx.CommitAsync();
 
         TempData["Saved"] = "1";
+
+        if (redirectToMyCvAfterSave)
+        {
+            // Redirect them to MyCV after the first successful save so they see the result.
+            return RedirectToAction("Index", "MyCV");
+        }
+
         return RedirectToAction(nameof(Index));
     }
 

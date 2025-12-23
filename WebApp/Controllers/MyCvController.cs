@@ -35,6 +35,8 @@ public class MyCvController : Controller
 
         if (link is null)
         {
+            // First time: after successful save, redirect back here so user sees the result.
+            TempData["FirstCvEdit"] = "1";
             return RedirectToAction("Index", "EditCV");
         }
 
@@ -45,6 +47,42 @@ public class MyCvController : Controller
         var visits = await _db.ProfilBesok
             .AsNoTracking()
             .CountAsync(v => v.ProfileId == link.ProfileId);
+
+        // Resolve selected projects (stored as JSON array of ids in Profile.SelectedProjectsJson).
+        var selectedProjectIds = ParseSelectedProjectIds(profile?.SelectedProjectsJson);
+
+        var projects = new List<MyCvProjectCardVm>();
+        if (selectedProjectIds.Length > 0)
+        {
+            // Keep order as in selectedProjectIds by sorting in-memory after fetch.
+            var rows = await (from p in _db.Projekt.AsNoTracking()
+                              join u in _db.Users.AsNoTracking() on p.CreatedByUserId equals u.Id into users
+                              from u in users.DefaultIfEmpty()
+                              where selectedProjectIds.Contains(p.Id)
+                              select new { p, u })
+                .ToListAsync();
+
+            var map = rows.ToDictionary(x => x.p.Id, x => x);
+            foreach (var id in selectedProjectIds)
+            {
+                if (!map.TryGetValue(id, out var x)) continue;
+
+                projects.Add(new MyCvProjectCardVm
+                {
+                    Id = x.p.Id,
+                    Title = x.p.Titel,
+                    ShortDescription = x.p.KortBeskrivning,
+                    CreatedUtc = x.p.CreatedUtc,
+                    ImagePath = x.p.ImagePath,
+                    TechKeys = ParseCsv(x.p.TechStackKeysCsv),
+                    CreatedBy = x.u == null
+                        ? (x.p.CreatedByUserId ?? "")
+                        : (string.IsNullOrWhiteSpace((x.u.FirstName + " " + x.u.LastName).Trim())
+                            ? (x.u.Email ?? "")
+                            : (x.u.FirstName + " " + x.u.LastName).Trim())
+                });
+            }
+        }
 
         var model = new MyCvProfileViewModel
         {
@@ -59,7 +97,9 @@ public class MyCvController : Controller
             Headline = profile?.Headline,
             AboutMe = profile?.AboutMe,
             ProfileImagePath = profile?.ProfileImagePath ?? user.ProfileImagePath,
-            Skills = ParseSkills(profile?.SkillsCsv)
+            Skills = ParseSkills(profile?.SkillsCsv),
+
+            Projects = projects
         };
 
         return View("MyCV", model);
@@ -88,6 +128,31 @@ public class MyCvController : Controller
         return Ok(new { isPrivate = user.IsProfilePrivate });
     }
 
+    private static int[] ParseSelectedProjectIds(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json)) return Array.Empty<int>();
+
+        try
+        {
+            return System.Text.Json.JsonSerializer.Deserialize<int[]>(json, new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web))
+                ?? Array.Empty<int>();
+        }
+        catch
+        {
+            return Array.Empty<int>();
+        }
+    }
+
+    private static string[] ParseCsv(string? csv)
+    {
+        if (string.IsNullOrWhiteSpace(csv)) return Array.Empty<string>();
+
+        return csv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Where(s => !string.IsNullOrWhiteSpace(s))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+    }
+
     private static string[] ParseSkills(string? csv)
     {
         if (string.IsNullOrWhiteSpace(csv)) return Array.Empty<string>();
@@ -96,6 +161,17 @@ public class MyCvController : Controller
             .Where(s => !string.IsNullOrWhiteSpace(s))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToArray();
+    }
+
+    public sealed class MyCvProjectCardVm
+    {
+        public int Id { get; init; }
+        public string Title { get; init; } = string.Empty;
+        public string? ShortDescription { get; init; }
+        public DateTimeOffset CreatedUtc { get; init; }
+        public string? ImagePath { get; init; }
+        public string CreatedBy { get; init; } = string.Empty;
+        public string[] TechKeys { get; init; } = Array.Empty<string>();
     }
 
     public sealed class MyCvProfileViewModel
@@ -113,6 +189,9 @@ public class MyCvController : Controller
         public string? AboutMe { get; init; }
         public string? ProfileImagePath { get; init; }
         public string[] Skills { get; init; } = Array.Empty<string>();
+
+        // Selected projects to show on CV (read-only cards)
+        public List<MyCvProjectCardVm> Projects { get; init; } = new();
 
         public string FullName => string.Join(' ', new[] { FirstName, LastName }.Where(s => !string.IsNullOrWhiteSpace(s)));
 

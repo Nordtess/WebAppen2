@@ -10,8 +10,9 @@ public sealed class ProjectEditViewModel
     [StringLength(80, MinimumLength = 3, ErrorMessage = "Titel måste vara mellan {2} och {1} tecken.")]
     public string Title { get; set; } = "";
 
+    [Required(ErrorMessage = "Kort beskrivning är obligatoriskt.")]
     [StringLength(140, ErrorMessage = "Kort beskrivning får max vara 140 tecken.")]
-    public string? ShortDescription { get; set; }
+    public string ShortDescription { get; set; } = "";
 
     [Required(ErrorMessage = "Beskrivning är obligatoriskt.")]
     [StringLength(500, MinimumLength = 1, ErrorMessage = "Beskrivning får max vara {1} tecken.")]
