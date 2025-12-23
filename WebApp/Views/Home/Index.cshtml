@@ -7,6 +7,7 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/home.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/pages/projects.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/home-project-showcase.css" asp-append-version="true" />
 }
 
 <div class="home-page">
@@ -210,7 +211,7 @@
 
         <div class="home-card-body home-project-body">
             <!-- Center only the actual project card inside this white home-card -->
-            <div style="display:flex; flex-direction:column; align-items:center; width:100%;">
+            <div class="home-project-showcase">
                 @if (Model.LatestProject is null)
                 {
                     <div class="projects-empty">Inga projekt finns ännu.</div>
@@ -218,7 +219,7 @@
                 else
                 {
                     var p = Model.LatestProject;
-                    <div style="width:min(100%, 360px);">
+                    <div class="home-project-showcase__cardwrap">
                         <a class="projects-card" href="@Url.Action("Details", "Projects", new { id = p.Id })" aria-label="Visa projekt: @p.Title" style="display:block;">
                             <div class="projects-doc">
                                 <div class="projects-doc-top">
@@ -280,10 +281,10 @@
                         </a>
                     </div>
                 }
+            </div>
 
-                <div style="display:flex; justify-content:center; margin-top: 12px;">
-                    <a class="btn-secondary-custom" href="@Url.Action("Index", "Projects")">Se alla projekt</a>
-                </div>
+            <div style="display:flex; justify-content:center; margin-top: 12px;">
+                <a class="btn-secondary-custom" href="@Url.Action("Index", "Projects")">Se alla projekt</a>
             </div>
         </div>
     </section>
