@@ -226,25 +226,19 @@
                             <section class="editcv-card">
                                 <div class="editcv-card-head">
                                     <h2 class="editcv-card-title">Visa projekt på CV</h2>
-                                    <span class="editcv-card-sub">Välj upp till 4</span>
+                                    <span class="editcv-card-sub">Max 4</span>
                                 </div>
 
-                                <div class="editcv-projects-toolbar">
-                                    <div class="editcv-search">
-                                        <input type="text" class="editcv-input" id="projectSearch" placeholder="Sök projekt..." />
-                                    </div>
+                                <div class="editcv-help">Välj upp till 4 projekt som ska synas på ditt CV.</div>
 
-                                    <a class="btn-secondary-custom" href="#" id="manageProjectsBtn">Skapa / hantera</a>
+                                <div style="display:flex; gap:10px; align-items:center; justify-content:flex-start; flex-wrap:wrap;">
+                                    <button type="button" class="btn-secondary-custom" data-editcv-modal-open="editcv-projects-modal">Ändra projekt</button>
+                                    <a class="btn-secondary-custom" href="@Url.Action("Index", "Projects", new { mine = true })" style="text-decoration:none;">Mina projekt</a>
                                 </div>
 
-                                <div class="editcv-help">Valda projekt visas överst och kan senare sorteras (topp 4).</div>
-                                <div class="editcv-project-featured" id="featuredProjects"></div>
+                                <div data-editcv-projects-json='@System.Text.Json.JsonSerializer.Serialize(Model.AllMyProjects.Select(p => new { id = p.Id, title = p.Title, createdUtc = p.CreatedUtc.ToString("yyyy-MM-dd") }), new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web))'></div>
 
-                                <div class="editcv-project-grid" id="projectGrid"></div>
-
-                                <div class="editcv-help">
-                                    (Placeholder) “Skapa / hantera” länkas senare till projektsidan.
-                                </div>
+                                @await Html.PartialAsync("_ProjectPickerModal", Model)
                             </section>
                         </main>
                     </div>

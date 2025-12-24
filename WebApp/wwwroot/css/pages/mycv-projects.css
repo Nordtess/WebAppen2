@@ -1,0 +1,435 @@
+/* Projects section styling for `MyCV`.
+   Goal: use the exact same card look/feel as `Alla projekt` but keep it self-contained
+   (no dependency on `projects.css`).
+*/
+
+:root {
+    --mycv-proj-radius: 22px;
+    --mycv-proj-border: rgba(0, 0, 0, 0.10);
+    --mycv-proj-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* Wrapper card (like `.projects-list-card`) */
+.mycv-projects-card {
+    width: 100%;
+    padding: 0;
+    margin-top: 12px;
+
+    /* no pill wrapper */
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+/* Grid: max 4 projects, 2x2 on desktop */
+.mycv-projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+@media (max-width: 800px) {
+    .mycv-projects-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.mycv-projects-empty {
+    grid-column: 1 / -1;
+    width: 100%;
+    box-sizing: border-box;
+
+    font-size: 13px;
+    font-weight: 850;
+    color: rgba(0, 0, 0, 0.70);
+
+    /* plain text, no inner pill */
+    padding: 8px 2px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+.mycv-project-card,
+.mycv-project-card:hover,
+.mycv-project-card:visited {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Play-card look (copied from `projects.css` but scoped) */
+.mycv-project-card {
+    border: 1px solid rgba(0, 0, 0, 0.78);
+    background:
+        linear-gradient(135deg,
+            rgba(255, 255, 255, 0.995) 0%,
+            rgba(255, 255, 255, 0.995) 42%,
+            rgba(58, 34, 95, 0.55) 68%,
+            rgba(21, 10, 36, 0.78) 100%);
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 420px;
+    will-change: transform, box-shadow;
+    transition:
+        transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+        box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+        border-color 0.35s ease;
+}
+
+.mycv-project-card::before {
+    content: "";
+    position: absolute;
+    inset: -50% -70%;
+    background: radial-gradient(circle at 30% 20%, rgba(127, 255, 212, 0.16), rgba(255, 255, 255, 0) 60%);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    pointer-events: none;
+}
+
+.mycv-project-card:hover {
+    transform: translateY(-6px) scale(1.012);
+    border-color: rgba(0, 0, 0, 0.22);
+    box-shadow:
+        0 22px 54px rgba(0, 0, 0, 0.16),
+        0 0 0 4px rgba(127, 255, 212, 0.16),
+        0 0 28px rgba(127, 255, 212, 0.20);
+}
+
+.mycv-project-card:hover::before {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Mini "document" layout */
+.mycv-project-doc {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+}
+
+.mycv-project-doc-top {
+    padding: 4px 4px 12px;
+}
+
+.mycv-project-doc-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    align-items: center;
+}
+
+.mycv-project-doc-avatar {
+    width: 128px;
+    height: 128px;
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 14px 26px rgba(0, 0, 0, 0.07);
+}
+
+.mycv-project-doc-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.mycv-project-doc-center {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    align-self: start;
+    padding-top: 2px;
+}
+
+.mycv-project-doc-title {
+    font-size: 16px;
+    font-weight: 950;
+    color: rgba(0, 0, 0, 0.86);
+    letter-spacing: -0.2px;
+    line-height: 1.15;
+    word-break: break-word;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.mycv-project-doc-createdby {
+    margin-top: 6px;
+    font-size: 12px;
+    font-weight: 850;
+    color: rgba(0, 0, 0, 0.62);
+    white-space: nowrap;
+}
+
+.mycv-project-doc-meta {
+    margin-top: 6px;
+    font-size: 12px;
+    font-weight: 900;
+    color: rgba(0, 0, 0, 0.60);
+    white-space: nowrap;
+}
+
+.mycv-project-doc-body {
+    padding: 0 4px;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+}
+
+.mycv-project-doc-desc-card {
+    margin-top: 10px;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.75);
+    background: rgba(255, 255, 255, 0.92);
+    padding: 10px 12px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.mycv-project-doc-desc {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 650;
+    color: rgba(0, 0, 0, 0.72);
+    line-height: 1.45;
+    text-align: left;
+}
+
+.mycv-project-doc-desc--muted {
+    color: rgba(0, 0, 0, 0.62);
+}
+
+.mycv-project-doc-bottom {
+    margin-top: auto;
+    padding-top: 14px;
+}
+
+.mycv-project-doc-sep {
+    width: 70%;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.10);
+    margin: 0 auto 10px;
+}
+
+.mycv-project-doc-tech {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.mycv-project-doc-tech-tile {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: rgba(255, 255, 255, 0.96);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mycv-project-doc-tech-icon {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+/* Header row inside section */
+.mycv-projects-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.mycv-projects-header .btn-primary-custom {
+    text-decoration: none;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.mycv-projects-header .btn-primary-custom:hover,
+.mycv-projects-header .btn-primary-custom:visited {
+    text-decoration: none;
+    color: #fff;
+}
+
+/* Header actions */
+.mycv-projects-header__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* --- Modal (project picker) --- */
+.mycv-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: none;
+}
+
+.mycv-modal[aria-hidden="false"] {
+    display: block;
+}
+
+.mycv-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(3px);
+}
+
+.mycv-modal__dialog {
+    position: relative;
+    width: min(720px, calc(100% - 28px));
+    max-height: min(80vh, 720px);
+    margin: 70px auto;
+    border-radius: 18px;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.mycv-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.mycv-modal__title {
+    font-weight: 950;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.82);
+}
+
+.mycv-modal__close {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    font-size: 22px;
+    line-height: 1;
+    font-weight: 900;
+    color: rgba(0, 0, 0, 0.70);
+}
+
+.mycv-modal__body {
+    padding: 14px 16px 16px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.mycv-modal__hint {
+    font-size: 13px;
+    font-weight: 750;
+    color: rgba(0, 0, 0, 0.70);
+}
+
+.mycv-modal__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.98);
+}
+
+.mycv-modal__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mycv-modal__counter {
+    font-size: 12px;
+    font-weight: 900;
+    color: rgba(0, 0, 0, 0.62);
+}
+
+/* Prevent page scroll when modal open */
+body.mycv-modal-open {
+    overflow: hidden;
+}
+
+/* --- Picker list --- */
+.mycv-picker__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mycv-picker__row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: rgba(255, 255, 255, 0.96);
+    cursor: pointer;
+    user-select: none;
+}
+
+.mycv-picker__row.is-disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.mycv-picker__chk {
+    width: 18px;
+    height: 18px;
+    accent-color: #7fffd4;
+    flex: 0 0 auto;
+}
+
+.mycv-picker__content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 3px;
+}
+
+.mycv-picker__title {
+    font-weight: 950;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.82);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mycv-picker__meta {
+    font-weight: 800;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.62);
+}
+
+.mycv-picker__empty {
+    font-size: 13px;
+    font-weight: 800;
+    color: rgba(0, 0, 0, 0.70);
+    padding: 6px 2px;
+}

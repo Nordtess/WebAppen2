@@ -68,7 +68,7 @@ public class MyCvController : Controller
                 .ToListAsync();
 
             var map = rows.ToDictionary(x => x.p.Id, x => x);
-            foreach (var id in selectedProjectIds)
+            foreach (var id in selectedProjectIds.Take(4))
             {
                 if (!map.TryGetValue(id, out var x)) continue;
 

@@ -419,233 +419,180 @@
     loadEduFromHidden();
     renderEdu();
 
-    // Projects selection
-    const projectGrid = document.getElementById("projectGrid");
-    const projectSearch = document.getElementById("projectSearch");
+    // --- Projects picker modal (EditCV) ---
     const selectedProjectsJson = document.getElementById("SelectedProjectsJson");
-    const manageProjectsBtn = document.getElementById("manageProjectsBtn");
-    const featuredProjects = document.getElementById("featuredProjects");
+    const modal = document.getElementById("editcv-projects-modal");
+    const picker = document.getElementById("editcv-projects-picker");
+    const counter = document.getElementById("editcv-projects-counter");
 
     const MAX_SELECTED_PROJECTS = 4;
 
-    // Tillfälliga projekt (ersätts när det kopplas till backend).
-    const projects = [
-        {
-            id: "p1",
-            title: "NotLinkedIn — WebApp",
-            desc: "Webbplattform där användare skapar CV-profiler, kopplar projekt och kan kommunicera via privata meddelanden. Ren Apple-ish UI och tydlig struktur.",
-            tech: ["csharp", "mysql", "mongodb"]
-        },
-        {
-            id: "p2",
-            title: "AES GUI — Kryptering",
-            desc: "GUI-app som krypterar/dekrypterar text med tydlig input/feedback, validering och robust felhantering. Byggd för att kunna skalas upp.",
-            tech: ["csharp", "cplusplus"]
-        },
-        {
-            id: "p3",
-            title: "Linux & Nätverk — IPv6/Wireshark",
-            desc: "Rapport + labb där trafik analyseras i hemmanätverk. Fokus på adressering, protokoll och verifiering av paketflöden.",
-            tech: ["python", "java"]
-        },
-        {
-            id: "p4",
-            title: "Mini Dashboard — Frontend/Logik",
-            desc: "Liten demo för att visa struktur: komponenter, state och tydlig dataflödeslogik. Byggd för att vara lätt att vidareutveckla.",
-            tech: ["javascript", "python"]
-        }
-    ];
+    /** @type {{id:number,title:string,createdUtc:string}[]} */
+    let projects = [];
 
-    /** @type {Set<string>} */
+    /** @type {Set<number>} */
     let selected = new Set();
 
-    function loadSelectedFromHidden() {
-        if (!selectedProjectsJson) return;
-
+    function parseSelectedIds() {
+        if (!selectedProjectsJson) return [];
         try {
             const parsed = JSON.parse(selectedProjectsJson.value || "[]");
-            if (Array.isArray(parsed)) {
-                selected = new Set(parsed.map((x) => String(x)));
-            }
+            if (Array.isArray(parsed)) return parsed.map((x) => Number(x)).filter((n) => Number.isFinite(n));
         } catch {
-            selected = new Set();
         }
-
-        syncSelectedProjects();
+        return [];
     }
 
-    function syncSelectedProjects() {
+    function syncSelectedJson() {
         if (!selectedProjectsJson) return;
         selectedProjectsJson.value = JSON.stringify(Array.from(selected));
     }
 
-    function techIconPath(key) {
-        return `/images/svg/techstack/${key}.svg`;
+    function setModalOpen(open) {
+        if (!modal) return;
+        modal.setAttribute("aria-hidden", open ? "false" : "true");
+        document.body.classList.toggle("editcv-modal-open", open);
+
+        if (open) {
+            const closeBtn = modal.querySelector("[data-editcv-modal-close]");
+            closeBtn?.focus();
+        }
     }
 
-    function renderProjects(filter = "") {
-        if (!projectGrid) return;
-        projectGrid.innerHTML = "";
+    function updatePickerUi() {
+        if (!picker) return;
 
-        renderFeaturedProjects();
+        const checkboxes = Array.from(picker.querySelectorAll('input[type="checkbox"]'));
+        const checked = checkboxes.filter((c) => c.checked);
+        const checkedCount = checked.length;
 
-        const f = filter.trim().toLowerCase();
-        const filtered = !f ? projects : projects.filter((p) => (p.title + " " + p.desc).toLowerCase().includes(f));
+        if (counter) counter.textContent = `${checkedCount}/4 valda`;
 
-        filtered.forEach((project) => {
-            const card = document.createElement("div");
-            card.className = "editcv-project-card";
+        const limitReached = checkedCount >= MAX_SELECTED_PROJECTS;
+        for (const cb of checkboxes) {
+            if (cb.checked) {
+                cb.disabled = false;
+                cb.closest(".editcv-picker__row")?.classList.remove("is-disabled");
+                continue;
+            }
 
-            const isOn = selected.has(project.id);
-            card.classList.toggle("is-off", !isOn);
+            cb.disabled = limitReached;
+            cb.closest(".editcv-picker__row")?.classList.toggle("is-disabled", limitReached);
+        }
 
-            const toggleWrap = document.createElement("div");
-            toggleWrap.className = "editcv-project-toggle";
-
-            const toggle = document.createElement("div");
-            toggle.className = "editcv-toggle";
-            toggle.dataset.on = String(isOn);
-
-            const knob = document.createElement("div");
-            knob.className = "editcv-toggle-knob";
-
-            toggle.appendChild(knob);
-
-            toggle.addEventListener("click", () => {
-                const currentlyOn = selected.has(project.id);
-                if (currentlyOn) {
-                    selected.delete(project.id);
-                } else {
-                    if (selected.size >= MAX_SELECTED_PROJECTS) {
-                        alert(`Du kan max välja ${MAX_SELECTED_PROJECTS} projekt att visa på ditt CV.`);
-                        return;
-                    }
-
-                    selected.add(project.id);
-                }
-
-                syncSelectedProjects();
-                renderProjects(projectSearch?.value || "");
-                markDirty();
-            });
-
-            toggleWrap.appendChild(toggle);
-
-            const title = document.createElement("h3");
-            title.className = "editcv-project-title";
-            title.textContent = project.title;
-
-            const desc = document.createElement("p");
-            desc.className = "editcv-project-desc";
-            desc.textContent = project.desc;
-
-            const divider = document.createElement("div");
-            divider.className = "editcv-project-divider";
-
-            const techRow = document.createElement("div");
-            techRow.className = "editcv-tech-row";
-
-            (project.tech || []).forEach((t) => {
-                const tile = document.createElement("div");
-                tile.className = "editcv-tech-tile";
-
-                const img = document.createElement("img");
-                img.className = "editcv-tech-icon";
-                img.alt = t;
-                img.src = techIconPath(t);
-
-                tile.appendChild(img);
-                techRow.appendChild(tile);
-            });
-
-            card.appendChild(toggleWrap);
-            card.appendChild(title);
-            card.appendChild(desc);
-            card.appendChild(divider);
-            card.appendChild(techRow);
-
-            projectGrid.appendChild(card);
-        });
+        // Keep `selected` in sync with DOM.
+        selected = new Set(checked.map((c) => Number(c.value)));
+        syncSelectedJson();
     }
 
-    function renderFeaturedProjects() {
-        if (!featuredProjects) return;
-        featuredProjects.innerHTML = "";
+    function renderPicker() {
+        if (!picker) return;
+        picker.innerHTML = "";
 
-        const selectedList = Array.from(selected);
-            
-        if (selectedList.length === 0) return;
+        if (!projects || projects.length === 0) {
+            picker.innerHTML = `<div class="editcv-picker__empty">Du har inga projekt ännu.</div>`;
+            if (counter) counter.textContent = "0/4 valda";
+            return;
+        }
 
-        // Preserve selection order as stored in JSON
-        const selectedProjects = selectedList
-            .map((id) => projects.find((p) => p.id === id))
-            .filter(Boolean);
+        for (const p of projects) {
+            const row = document.createElement("label");
+            row.className = "editcv-picker__row";
 
-        selectedProjects.forEach((project) => {
-            const card = document.createElement("div");
-            card.className = "editcv-project-card";
+            const chk = document.createElement("input");
+            chk.type = "checkbox";
+            chk.className = "editcv-picker__chk";
+            chk.value = String(p.id);
+            chk.checked = selected.has(p.id);
 
-            const toggleWrap = document.createElement("div");
-            toggleWrap.className = "editcv-project-toggle";
+            const content = document.createElement("span");
+            content.className = "editcv-picker__content";
 
-            const toggle = document.createElement("div");
-            toggle.className = "editcv-toggle";
-            toggle.dataset.on = "true";
+            const title = document.createElement("span");
+            title.className = "editcv-picker__title";
+            title.textContent = p.title;
 
-            const knob = document.createElement("div");
-            knob.className = "editcv-toggle-knob";
-            toggle.appendChild(knob);
+            const meta = document.createElement("span");
+            meta.className = "editcv-picker__meta";
+            meta.textContent = p.createdUtc;
 
-            toggle.addEventListener("click", () => {
-                selected.delete(project.id);
-                syncSelectedProjects();
-                renderProjects(projectSearch?.value || "");
-                markDirty();
-            });
+            content.appendChild(title);
+            content.appendChild(meta);
 
-            toggleWrap.appendChild(toggle);
+            row.appendChild(chk);
+            row.appendChild(content);
 
-            const title = document.createElement("h3");
-            title.className = "editcv-project-title";
-            title.textContent = project.title;
+            picker.appendChild(row);
+        }
 
-            const divider = document.createElement("div");
-            divider.className = "editcv-project-divider";
-
-            const techRow = document.createElement("div");
-            techRow.className = "editcv-tech-row";
-
-            (project.tech || []).forEach((t) => {
-                const tile = document.createElement("div");
-                tile.className = "editcv-tech-tile";
-
-                const img = document.createElement("img");
-                img.className = "editcv-tech-icon";
-                img.alt = t;
-                img.src = techIconPath(t);
-
-                tile.appendChild(img);
-                techRow.appendChild(tile);
-            });
-
-            card.appendChild(toggleWrap);
-            card.appendChild(title);
-            card.appendChild(divider);
-            card.appendChild(techRow);
-
-            featuredProjects.appendChild(card);
-        });
+        updatePickerUi();
     }
 
-    projectSearch?.addEventListener("input", () => {
-        renderProjects(projectSearch.value);
+    // `projects` comes from server-rendered JSON in the hidden input area.
+    // We piggyback on existing hidden field content by embedding JSON into data attributes.
+    // (We create these data attributes in the view.)
+    const projectsDataEl = document.querySelector("[data-editcv-projects-json]");
+    if (projectsDataEl instanceof HTMLElement) {
+        try {
+            const raw = projectsDataEl.getAttribute("data-editcv-projects-json") || "[]";
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) {
+                projects = parsed
+                    .map((x) => ({
+                        id: Number(x.id),
+                        title: String(x.title || ""),
+                        createdUtc: String(x.createdUtc || "")
+                    }))
+                    .filter((x) => Number.isFinite(x.id) && x.title);
+            }
+        } catch {
+            projects = [];
+        }
+    }
+
+    selected = new Set(parseSelectedIds().slice(0, MAX_SELECTED_PROJECTS));
+    syncSelectedJson();
+    renderPicker();
+
+    document.addEventListener("click", (e) => {
+        const t = e.target;
+        if (!(t instanceof HTMLElement)) return;
+
+        const openBtn = t.closest("[data-editcv-modal-open]");
+        if (openBtn) {
+            const id = openBtn.getAttribute("data-editcv-modal-open");
+            if (id === "editcv-projects-modal") {
+                setModalOpen(true);
+                updatePickerUi();
+            }
+            return;
+        }
+
+        if (t.closest("[data-editcv-modal-close]")) {
+            if (modal?.getAttribute("aria-hidden") === "false") {
+                setModalOpen(false);
+            }
+        }
     });
 
-    manageProjectsBtn?.addEventListener("click", (e) => {
-        e.preventDefault();
-        alert("Placeholder: här kan du länka till Projektsidan (skapa/anslut projekt).");
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modal?.getAttribute("aria-hidden") === "false") {
+            setModalOpen(false);
+        }
     });
 
-    loadSelectedFromHidden();
-    renderProjects();
+    picker?.addEventListener("change", (e) => {
+        const t = e.target;
+        if (!(t instanceof HTMLInputElement)) return;
+        if (t.type !== "checkbox") return;
+
+        // Enforce limit immediately.
+        const checked = Array.from(picker.querySelectorAll('input[type="checkbox"]')).filter((c) => c.checked);
+        if (checked.length > MAX_SELECTED_PROJECTS) {
+            t.checked = false;
+        }
+
+        updatePickerUi();
+        markDirty();
+    });
 })();

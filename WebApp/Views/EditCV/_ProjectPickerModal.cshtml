@@ -1,0 +1,27 @@
+@model WebApp.ViewModels.EditCvViewModel
+
+<div id="editcv-projects-modal" class="editcv-modal" aria-hidden="true">
+    <div class="editcv-modal__backdrop" data-editcv-modal-close="true"></div>
+
+    <div class="editcv-modal__dialog" role="dialog" aria-modal="true" aria-label="Välj projekt">
+        <div class="editcv-modal__header">
+            <div class="editcv-modal__title">Välj projekt (max 4)</div>
+            <button type="button" class="editcv-modal__close" data-editcv-modal-close="true" aria-label="Stäng">×</button>
+        </div>
+
+        <!-- This modal edits the hidden `SelectedProjectsJson` input in the main EditCV form.
+             Keeping it DOM-only means the value will be saved when user clicks "Spara ändringar". -->
+        <div class="editcv-modal__body">
+            <div class="editcv-modal__hint">Markera upp till 4 projekt som ska synas på ditt CV.</div>
+
+            <div class="editcv-picker__list" id="editcv-projects-picker"></div>
+        </div>
+
+        <div class="editcv-modal__footer">
+            <div class="editcv-modal__counter" id="editcv-projects-counter"></div>
+            <div class="editcv-modal__actions">
+                <button type="button" class="btn-secondary-custom" data-editcv-modal-close="true">Klar</button>
+            </div>
+        </div>
+    </div>
+</div>

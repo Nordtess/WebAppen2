@@ -517,6 +517,22 @@
     color: inherit;
 }
 
+/* Tip pill between banner and main container */
+.cv-tip {
+    width: 100%;
+    max-width: var(--cv-max);
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 14px 26px rgba(0, 0, 0, 0.06);
+    padding: 10px 12px;
+    font-size: 13px;
+    font-weight: 850;
+    color: rgba(0, 0, 0, 0.75);
+    margin-top: 10px;
+    margin-bottom: 6px;
+}
+
 @media (max-width: 800px) {
     .cv-banner {
         height: 160px;

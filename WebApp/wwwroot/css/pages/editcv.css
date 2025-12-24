@@ -740,8 +740,162 @@
     margin-bottom: 10px;
 }
 
-.editcv-draft-actions .btn-secondary-custom {
-    padding: 0.55em 1.05em;
-    font-size: 0.92rem;
-    font-weight: 650;
+/* --- Modal (EditCV project picker) --- */
+.editcv-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: none;
+}
+
+.editcv-modal[aria-hidden="false"] {
+    display: block;
+}
+
+.editcv-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(3px);
+}
+
+.editcv-modal__dialog {
+    position: relative;
+    width: min(720px, calc(100% - 28px));
+    max-height: min(80vh, 720px);
+    margin: 70px auto;
+    border-radius: 18px;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.editcv-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.editcv-modal__title {
+    font-weight: 950;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.82);
+}
+
+.editcv-modal__close {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    font-size: 22px;
+    line-height: 1;
+    font-weight: 900;
+    color: rgba(0, 0, 0, 0.70);
+}
+
+.editcv-modal__body {
+    padding: 14px 16px 16px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.editcv-modal__hint {
+    font-size: 13px;
+    font-weight: 750;
+    color: rgba(0, 0, 0, 0.70);
+}
+
+.editcv-modal__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.98);
+}
+
+.editcv-modal__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.editcv-modal__counter {
+    font-size: 12px;
+    font-weight: 900;
+    color: rgba(0, 0, 0, 0.62);
+}
+
+body.editcv-modal-open {
+    overflow: hidden;
+}
+
+.editcv-picker__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.editcv-picker__row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: rgba(255, 255, 255, 0.96);
+    cursor: pointer;
+    user-select: none;
+}
+
+.editcv-picker__row.is-disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.editcv-picker__chk {
+    width: 18px;
+    height: 18px;
+    accent-color: #7fffd4;
+    flex: 0 0 auto;
+}
+
+.editcv-picker__content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 3px;
+}
+
+.editcv-picker__title {
+    font-weight: 950;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.82);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.editcv-picker__meta {
+    font-weight: 800;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.62);
+}
+
+.editcv-picker__empty {
+    font-size: 13px;
+    font-weight: 800;
+    color: rgba(0, 0, 0, 0.70);
+    padding: 6px 2px;
 }

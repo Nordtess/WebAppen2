@@ -25,7 +25,13 @@ public sealed class EditCvViewModel
 
     // Existing placeholders: keep as JSON strings until backed by tables.
     public string EducationJson { get; set; } = "[]";
+
+    // Selected projects stored as JSON array of ids (persisted on save)
     public string SelectedProjectsJson { get; set; } = "[]";
+
+    // Project picker data (EditCV)
+    public int[] SelectedProjectIds { get; set; } = Array.Empty<int>();
+    public List<EditCvProjectPickVm> AllMyProjects { get; set; } = new();
 
     // Existing stored image (for preview on GET)
     public string? ProfileImagePath { get; set; }

@@ -51,6 +51,9 @@ public class EditCVController : Controller
             })
             .ToListAsync();
 
+        var selectedIds = ParseSelectedProjectIds(profile.SelectedProjectsJson);
+        var allMyProjects = await GetAllMyProjectsAsync(user.Id);
+
         var vm = new EditCvViewModel
         {
             FullName = string.Join(' ', new[] { user.FirstName, user.LastName }.Where(s => !string.IsNullOrWhiteSpace(s))),
@@ -64,7 +67,12 @@ public class EditCVController : Controller
 
             // education is now stored in table
             EducationJson = JsonSerializer.Serialize(educations, JsonOptions),
+
+            // projects
             SelectedProjectsJson = string.IsNullOrWhiteSpace(profile.SelectedProjectsJson) ? "[]" : profile.SelectedProjectsJson!,
+            SelectedProjectIds = selectedIds.Take(4).ToArray(),
+            AllMyProjects = allMyProjects,
+
             SkillsJson = SkillsCsvToJson(profile.SkillsCsv)
         };
 
@@ -323,5 +331,37 @@ public class EditCVController : Controller
 
         // Web path
         return $"/uploads/avatars/{userId}/{fileName}";
+    }
+
+    private static int[] ParseSelectedProjectIds(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json)) return Array.Empty<int>();
+
+        try
+        {
+            return JsonSerializer.Deserialize<int[]>(json, JsonOptions) ?? Array.Empty<int>();
+        }
+        catch
+        {
+            return Array.Empty<int>();
+        }
+    }
+
+    private async Task<List<EditCvProjectPickVm>> GetAllMyProjectsAsync(string userId)
+    {
+        var q = from p in _db.Projekt.AsNoTracking()
+                where p.CreatedByUserId == userId
+                   || _db.ProjektAnvandare.AsNoTracking().Any(pu => pu.ProjectId == p.Id && pu.UserId == userId)
+                select new EditCvProjectPickVm
+                {
+                    Id = p.Id,
+                    Title = p.Titel,
+                    CreatedUtc = p.CreatedUtc
+                };
+
+        return await q
+            .OrderByDescending(x => x.CreatedUtc)
+            .ThenBy(x => x.Title)
+            .ToListAsync();
     }
 }

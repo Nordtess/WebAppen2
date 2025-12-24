@@ -2,8 +2,8 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/mycv.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/mycv-projects.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/components.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/pages/projects.css" asp-append-version="true" />
 }
 
 @{
@@ -16,6 +16,8 @@
     var headline = string.IsNullOrWhiteSpace(Model.Headline)
         ? "Systemvetenskap • Fullstack"
         : Model.Headline;
+
+    var myProjectsUrl = Url.Action("Index", "Projects", new { mine = true });
 }
 
 @Html.AntiForgeryToken()
@@ -25,6 +27,10 @@
         <img src="~/images/bannersandicons/mycv3.png"
              alt="Banner"
              class="cv-banner-img" />
+    </div>
+
+    <div class="cv-tip">
+        Tips: Vill du dölja dig för icke inloggade personer sätt på privat läge!
     </div>
 
     <div class="cv-card">
@@ -155,58 +161,62 @@
                 </section>
 
                 <section class="cv-box">
-                    <h3 class="cv-box-title">Projekt</h3>
+                    <div class="mycv-projects-header">
+                        <h3 class="cv-box-title" style="margin: 0;">Projekt</h3>
+                        <div class="mycv-projects-header__actions">
+                            <a class="btn-primary-custom" href="@myProjectsUrl">Mina projekt</a>
+                        </div>
+                    </div>
 
-                    <!-- Reuse the exact same card styling as "Alla projekt" -->
-                    <div class="projects-list-card" style="margin-top: 12px;">
-                        <div class="projects-grid">
+                    <div class="mycv-projects-card">
+                        <div class="mycv-projects-grid">
                             @if (Model.Projects is null || Model.Projects.Count == 0)
                             {
-                                <div class="projects-empty">Inga projekt valda ännu.</div>
+                                <div class="mycv-projects-empty">Inga projekt valda ännu.</div>
                             }
                             else
                             {
-                                foreach (var p in Model.Projects)
+                                foreach (var p in Model.Projects.Take(4))
                                 {
-                                    <a class="projects-card" href="@Url.Action("Details", "Projects", new { id = p.Id })" aria-label="Visa projekt: @p.Title">
-                                        <div class="projects-doc">
-                                            <div class="projects-doc-top">
-                                                <div class="projects-doc-grid">
-                                                    <div class="projects-doc-avatar" aria-hidden="true">
+                                    <a class="mycv-project-card" href="@Url.Action("Details", "Projects", new { id = p.Id })" aria-label="Visa projekt: @p.Title">
+                                        <div class="mycv-project-doc">
+                                            <div class="mycv-project-doc-top">
+                                                <div class="mycv-project-doc-grid">
+                                                    <div class="mycv-project-doc-avatar" aria-hidden="true">
                                                         <img src="@(string.IsNullOrWhiteSpace(p.ImagePath) ? "/images/projects/rocketship.png" : p.ImagePath)" alt="" />
                                                     </div>
 
-                                                    <div class="projects-doc-center">
-                                                        <div class="projects-doc-title">@p.Title</div>
-                                                        <div class="projects-doc-createdby">Skapare: @p.CreatedBy</div>
-                                                        <div class="projects-doc-meta">Skapad: @p.CreatedUtc.ToString("yyyy-MM-dd")</div>
+                                                    <div class="mycv-project-doc-center">
+                                                        <div class="mycv-project-doc-title">@p.Title</div>
+                                                        <div class="mycv-project-doc-createdby">Skapare: @p.CreatedBy</div>
+                                                        <div class="mycv-project-doc-meta">Skapad: @p.CreatedUtc.ToString("yyyy-MM-dd")</div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div class="projects-doc-body">
+                                            <div class="mycv-project-doc-body">
                                                 @if (!string.IsNullOrWhiteSpace(p.ShortDescription))
                                                 {
-                                                    <div class="projects-doc-desc-card">
-                                                        <div class="projects-doc-desc">@p.ShortDescription</div>
+                                                    <div class="mycv-project-doc_desc-card">
+                                                        <div class="mycv-project-doc-desc">@p.ShortDescription</div>
                                                     </div>
                                                 }
                                                 else
                                                 {
-                                                    <div class="projects-doc-desc-card">
-                                                        <div class="projects-doc-desc projects-doc-desc--muted">Ingen kort beskrivning.</div>
+                                                    <div class="mycv-project-doc_desc-card">
+                                                        <div class="mycv-project-doc-desc mycv-project-doc-desc--muted">Ingen kort beskrivning.</div>
                                                     </div>
                                                 }
 
                                                 @if (p.TechKeys is { Length: > 0 })
                                                 {
-                                                    <div class="projects-doc-bottom">
-                                                        <div class="projects-doc-sep" aria-hidden="true"></div>
-                                                        <div class="projects-doc-tech" aria-label="Tech stack">
+                                                    <div class="mycv-project-doc-bottom">
+                                                        <div class="mycv-project-doc-sep" aria-hidden="true"></div>
+                                                        <div class="mycv-project-doc-tech" aria-label="Tech stack">
                                                             @foreach (var key in p.TechKeys)
                                                             {
-                                                                <span class="projects-doc-tech-tile">
-                                                                    <img class="projects-doc-tech-icon" src="~/images/svg/techstack/@(key).svg" alt="@key" />
+                                                                <span class="mycv-project-doc-tech-tile">
+                                                                    <img class="mycv-project-doc-tech-icon" src="~/images/svg/techstack/@(key).svg" alt="@key" />
                                                                 </span>
                                                             }
                                                         </div>
