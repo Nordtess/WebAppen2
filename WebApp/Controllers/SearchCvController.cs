@@ -54,6 +54,16 @@ public sealed class SearchCvController : Controller
         // Base query: active users only.
         var q = _db.Users.AsNoTracking().Where(u => !u.IsDeactivated);
 
+        // Never show the viewer's own CV on SearchCv (MyCV exists for that)
+        if (isLoggedIn)
+        {
+            var viewerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!string.IsNullOrWhiteSpace(viewerId))
+            {
+                q = q.Where(u => u.Id != viewerId);
+            }
+        }
+
         // Privacy rule:
         if (!isLoggedIn)
         {

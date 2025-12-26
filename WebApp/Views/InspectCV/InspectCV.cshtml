@@ -1,4 +1,4 @@
-@model WebApp.Controllers.InspectCvController.InspectCvViewModel
+Ôªø@model WebApp.Controllers.InspectCvController.InspectCvViewModel
 
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/inspectcv.css" asp-append-version="true" />
@@ -14,7 +14,7 @@
         : Url.Content(Model.ProfileImagePath);
 
     var headline = string.IsNullOrWhiteSpace(Model.Headline)
-        ? "Systemvetenskap ï Fullstack"
+        ? "Systemvetenskap ‚Ä¢ Fullstack"
         : Model.Headline;
 
     var privacyText = Model.IsPrivate
@@ -37,7 +37,7 @@
     <div class="cv-card">
         <div class="cv-topbar">
             <div class="cv-visits">
-                Antal besˆk: <span class="cv-visits-num">@Model.VisitCount</span>
+                Antal bes√∂k: <span class="cv-visits-num">@Model.VisitCount</span>
             </div>
 
             <div class="inspectcv-actions">
@@ -65,7 +65,7 @@
 
                     <div class="cv-contact-list">
                         <div class="cv-contact-item">
-                            <span class="cv-contact-ico">?</span>
+                            <span class="cv-contact-ico">‚úâ</span>
                             <div>
                                 <div class="cv-contact-k">Email</div>
                                 <div class="cv-contact-v">@Model.Email</div>
@@ -73,7 +73,7 @@
                         </div>
 
                         <div class="cv-contact-item">
-                            <span class="cv-contact-ico">??</span>
+                            <span class="cv-contact-ico">üìç</span>
                             <div>
                                 <div class="cv-contact-k">Plats</div>
                                 <div class="cv-contact-v">@Model.City</div>
@@ -81,7 +81,7 @@
                         </div>
 
                         <div class="cv-contact-item">
-                            <span class="cv-contact-ico">?</span>
+                            <span class="cv-contact-ico">‚òé</span>
                             <div>
                                 <div class="cv-contact-k">Telefon</div>
                                 <div class="cv-contact-v">@Model.Phone</div>
@@ -102,7 +102,7 @@
                         }
                         else
                         {
-                            <span class="cv-paragraph cv-paragraph-muted">Inga kompetenser ‰nnu.</span>
+                            <span class="cv-paragraph cv-paragraph-muted">Inga kompetenser √§nnu.</span>
                         }
                     </div>
                 </section>
@@ -117,7 +117,7 @@
                     }
                     else
                     {
-                        <p class="cv-paragraph cv-paragraph-muted">Ingen profiltext ‰nnu.</p>
+                        <p class="cv-paragraph cv-paragraph-muted">Ingen profiltext √§nnu.</p>
                     }
                 </section>
 
@@ -130,7 +130,7 @@
                         {
                             <div class="cv-item">
                                 <div class="cv-item-title">@e.School</div>
-                                <div class="cv-item-sub">@e.Years ï @e.Program</div>
+                                <div class="cv-item-sub">@e.Years &#8226; @e.Program</div>
                                 @if (!string.IsNullOrWhiteSpace(e.Note))
                                 {
                                     <div class="cv-item-sub cv-item-muted">@e.Note</div>
@@ -140,7 +140,7 @@
                     }
                     else
                     {
-                        <p class="cv-paragraph cv-paragraph-muted">Inga utbildningar tillagda ‰nnu.</p>
+                        <p class="cv-paragraph cv-paragraph-muted">Inga utbildningar tillagda √§nnu.</p>
                     }
                 </section>
 
@@ -153,7 +153,7 @@
                         {
                             <div class="cv-item">
                                 <div class="cv-item-title">@ex.Company</div>
-                                <div class="cv-item-sub">@ex.Years ï @ex.Role</div>
+                                <div class="cv-item-sub">@ex.Years &#8226; @ex.Role</div>
                                 @if (!string.IsNullOrWhiteSpace(ex.Description))
                                 {
                                     <div class="cv-item-sub cv-item-muted">@ex.Description</div>
@@ -163,7 +163,7 @@
                     }
                     else
                     {
-                        <p class="cv-paragraph cv-paragraph-muted">Ingen erfarenhet tillagd ‰nnu.</p>
+                        <p class="cv-paragraph cv-paragraph-muted">Ingen erfarenhet tillagd √§nnu.</p>
                     }
                 </section>
 
@@ -176,7 +176,7 @@
                         <div class="mycv-projects-grid">
                             @if (Model.Projects is null || Model.Projects.Count == 0)
                             {
-                                <div class="mycv-projects-empty">Inga projekt valda ‰nnu.</div>
+                                <div class="mycv-projects-empty">Inga projekt valda √§nnu.</div>
                             }
                             else
                             {
@@ -254,7 +254,7 @@
                             <div class="inspectcv-form-row">
                                 <label class="inspectcv-label" for="Body">Meddelande</label>
                                 <textarea class="inspectcv-textarea" id="Body" name="Body" minlength="1" maxlength="500" required></textarea>
-                                <div class="inspectcv-help">1ñ500 tecken</div>
+                                <div class="inspectcv-help">1‚Äì500 tecken</div>
                             </div>
 
                             <button type="submit" class="btn-secondary-custom">Skicka</button>

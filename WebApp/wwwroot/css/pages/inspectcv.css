@@ -117,6 +117,8 @@
     opacity: 0.92;
 }
 
+/* (removed SVG contact icon styling – icons are plain emoji like MyCV) */
+
 @media (max-width: 800px) {
     .inspectcv-actions {
         justify-content: flex-start;
