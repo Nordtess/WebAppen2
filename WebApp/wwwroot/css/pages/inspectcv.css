@@ -108,6 +108,11 @@
     user-select: none;
 }
 
+/* Space between the summary button and the first line of content in <details> */
+.inspectcv-message-panel[open] .inspectcv-message-summary + .inspectcv-help {
+    margin-top: 10px;
+}
+
 .inspectcv-message-panel[open] .inspectcv-message-summary {
     opacity: 0.92;
 }
