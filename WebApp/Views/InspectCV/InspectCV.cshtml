@@ -21,8 +21,8 @@
         ? $"{Model.FirstName} har en privat profil"
         : $"{Model.FirstName} har en publik profil";
 
-    // Placeholder: later forward prefilled filters (skills/name) into SearchCV.
-    var findSimilarUrl = Url.Action("Index", "SearchCv", new { q = Model.FullName, skills = string.Join(',', Model.Skills) });
+    // Search for people who match at least one of this profile's skills.
+    var findSimilarUrl = Url.Action("Index", "SearchCv", new { skills = string.Join(' ', Model.Skills ?? Array.Empty<string>()) });
 }
 
 <div class="cv-page">
