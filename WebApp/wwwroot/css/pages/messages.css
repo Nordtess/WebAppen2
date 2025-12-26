@@ -342,67 +342,26 @@
     align-items: center;
 }
 
-.message-read-pill {
-    display: inline-flex;
-    align-items: center;
-    padding: 8px 12px;
-    border-radius: 999px;
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    background: rgba(0, 0, 0, 0.06);
-    font-size: 12px;
-    font-weight: 950;
-    color: rgba(0, 0, 0, 0.68);
-}
-
-.message-reply {
-    margin-top: 14px;
-    border-top: 1px dashed rgba(0, 0, 0, 0.14);
+.message-actions-bar {
+    margin-top: 12px;
     padding-top: 12px;
-}
-
-.message-reply-title {
-    font-size: 13px;
-    font-weight: 950;
-    color: rgba(0, 0, 0, 0.78);
-}
-
-.message-reply-muted {
-    margin-top: 6px;
-    font-size: 13px;
-    font-weight: 700;
-    color: rgba(0, 0, 0, 0.60);
-}
-
-.message-reply-form {
-    margin-top: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.message-textarea {
-    width: 100%;
-    box-sizing: border-box;
-    border-radius: 14px;
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    background: rgba(255, 255, 255, 0.96);
-    padding: 12px;
-    font-weight: 650;
-    font-size: 13px;
-    color: rgba(0, 0, 0, 0.74);
-    outline: none;
-    resize: vertical;
-    min-height: 88px;
-}
-
-.message-textarea:focus {
-    border-color: rgba(127, 255, 212, 0.95);
-    box-shadow: 0 0 0 4px rgba(127, 255, 212, 0.22);
-}
-
-.message-reply-actions {
+    border-top: 1px solid rgba(0, 0, 0, 0.10);
     display: flex;
     justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Compact button variant used only on Messages page */
+.messages-page .msg-btn {
+    padding: 0.55rem 0.9rem;
+    font-size: 0.9rem;
+    font-weight: 850;
+    border-radius: 12px;
+}
+
+.messages-page .msg-btn:hover {
+    transform: translateY(-1px) scale(1.02);
 }
 
 /* --- Delete confirmation modal --- */

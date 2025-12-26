@@ -20,15 +20,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (headerUnreadCount) headerUnreadCount.textContent = String(v);
 
-        if (headerUnreadText) {
+        if (headerUnreadText instanceof HTMLElement) {
             headerUnreadText.style.display = v > 0 ? "inline" : "none";
         }
 
-        if (headerNocco) {
+        if (headerNocco instanceof HTMLImageElement) {
             const sleep = headerNocco.getAttribute("data-sleep-src");
             const msg = headerNocco.getAttribute("data-message-src");
             const next = v > 0 ? msg : sleep;
-            if (next) headerNocco.setAttribute("src", next);
+            if (next) headerNocco.src = next;
         }
     }
 
@@ -44,9 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
         card.dataset.isread = isRead ? "1" : "0";
 
         const dot = card.querySelector(".message-dot");
-        if (dot) {
-            dot.remove();
-        }
+        if (dot) dot.remove();
 
         if (!isRead) {
             const from = card.querySelector(".message-from");
@@ -73,13 +71,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const method = (form.getAttribute("method") || "POST").toUpperCase();
         const fd = new FormData(form);
 
-        const res = await fetch(action, {
+        return await fetch(action, {
             method,
             body: fd,
             credentials: "same-origin"
         });
-
-        return res;
     }
 
     // Expand/collapse + auto-mark as read on open
@@ -96,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
             body.hidden = !nextOpen;
             card.classList.toggle("is-open", nextOpen);
 
-            // Auto-mark as read when opening (but keep manual toggle so user can set unread again).
+            // Auto-mark as read when opening.
             const isRead = card.getAttribute("data-isread") === "1";
             if (nextOpen && !isRead) {
                 const form = card.querySelector("[data-setread-form]");
@@ -111,7 +107,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     try {
                         const res = await postForm(form);
                         if (!res.ok) {
-                            // rollback
                             updateCardReadState(card, false);
                             incUnread();
                         }
@@ -123,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Manual read/unread toggle uses AJAX to update unread counter instantly.
+        // Manual read/unread toggle uses AJAX.
         const setReadForm = card.querySelector("[data-setread-form]");
         if (setReadForm instanceof HTMLFormElement) {
             setReadForm.addEventListener("submit", async (e) => {
@@ -134,11 +129,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 // Optimistic UI
                 updateCardReadState(card, nextIsRead);
-                if (currentIsRead && !nextIsRead) {
-                    incUnread();
-                } else if (!currentIsRead && nextIsRead) {
-                    decUnread();
-                }
+                if (currentIsRead && !nextIsRead) incUnread();
+                else if (!currentIsRead && nextIsRead) decUnread();
 
                 const val = setReadForm.querySelector("[data-setread-value]");
                 if (val instanceof HTMLInputElement) val.value = nextIsRead ? "true" : "false";
@@ -148,19 +140,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (!res.ok) {
                         // rollback
                         updateCardReadState(card, currentIsRead);
-                        if (currentIsRead && !nextIsRead) {
-                            decUnread();
-                        } else if (!currentIsRead && nextIsRead) {
-                            incUnread();
-                        }
+                        if (currentIsRead && !nextIsRead) decUnread();
+                        else if (!currentIsRead && nextIsRead) incUnread();
                     }
                 } catch {
                     updateCardReadState(card, currentIsRead);
-                    if (currentIsRead && !nextIsRead) {
-                        decUnread();
-                    } else if (!currentIsRead && nextIsRead) {
-                        incUnread();
-                    }
+                    if (currentIsRead && !nextIsRead) decUnread();
+                    else if (!currentIsRead && nextIsRead) incUnread();
                 }
             });
         }
@@ -239,10 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             try {
                 const res = await postForm(deleteForm);
-                if (!res.ok) {
-                    // If it fails, easiest safe fallback is reload.
-                    window.location.reload();
-                }
+                if (!res.ok) window.location.reload();
             } catch {
                 window.location.reload();
             }

@@ -101,17 +101,17 @@
                         <div class="message-body" hidden>
                             <div class="message-fulltext">@m.Body</div>
 
-                            <div class="message-actions">
+                            <div class="message-actions-bar" aria-label="Meddelandeåtgärder">
                                 <form method="post" asp-controller="Messages" asp-action="SetRead" data-setread-form>
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="id" value="@m.Id" />
                                     <input type="hidden" name="isRead" value="@(m.IsRead ? "true" : "false")" data-setread-value />
-                                    <button class="btn-secondary-custom" type="submit" data-setread-btn>
+                                    <button class="btn-secondary-custom msg-btn" type="submit" data-setread-btn>
                                         @(m.IsRead ? "Markera som oläst" : "Markera som läst")
                                     </button>
                                 </form>
 
-                                <button class="btn-danger-custom" type="button" data-delete-open data-delete-id="@m.Id" data-delete-from="@m.FromDisplayName">Ta bort</button>
+                                <button class="btn-danger-custom msg-btn" type="button" data-delete-open data-delete-id="@m.Id" data-delete-from="@m.FromDisplayName">Ta bort</button>
                             </div>
 
                             <div class="message-reply">
