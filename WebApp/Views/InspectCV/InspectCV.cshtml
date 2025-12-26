@@ -122,6 +122,16 @@
                 </section>
 
                 <section class="cv-box">
+                    <h3 class="cv-box-title">Utbildningar</h3>
+                    <p class="cv-paragraph cv-paragraph-muted">Inga utbildningar tillagda ännu.</p>
+                </section>
+
+                <section class="cv-box">
+                    <h3 class="cv-box-title">Tidigare erfarenhet</h3>
+                    <p class="cv-paragraph cv-paragraph-muted">Ingen erfarenhet tillagd ännu.</p>
+                </section>
+
+                <section class="cv-box">
                     <div class="mycv-projects-header">
                         <h3 class="cv-box-title" style="margin: 0;">Projekt</h3>
                     </div>
@@ -190,25 +200,29 @@
                 </section>
 
                 <section class="cv-box">
-                    <h3 class="inspectcv-message-title">Skicka meddelande</h3>
+                    <h3 class="inspectcv-message-title">Meddelande</h3>
                     <div class="inspectcv-help">Skickar till @Model.FullName</div>
 
-                    <form method="post" class="inspectcv-form" asp-action="SendMessage" asp-controller="InspectCv" asp-route-userId="@Model.UserId">
-                        @Html.AntiForgeryToken()
+                    <details class="inspectcv-message-panel">
+                        <summary class="btn-primary-custom inspectcv-message-summary">Skicka meddelande</summary>
 
-                        <div class="inspectcv-form-row">
-                            <label class="inspectcv-label" for="SenderName">Namn</label>
-                            <input class="inspectcv-input" id="SenderName" name="SenderName" value="@Model.MessagePrefillName" @(Model.MessageNameReadonly ? "readonly" : "") required />
-                        </div>
+                        <form method="post" class="inspectcv-form" asp-action="SendMessage" asp-controller="InspectCv" asp-route-userId="@Model.UserId">
+                            @Html.AntiForgeryToken()
 
-                        <div class="inspectcv-form-row">
-                            <label class="inspectcv-label" for="Body">Meddelande</label>
-                            <textarea class="inspectcv-textarea" id="Body" name="Body" minlength="1" maxlength="500" required></textarea>
-                            <div class="inspectcv-help">1–500 tecken</div>
-                        </div>
+                            <div class="inspectcv-form-row">
+                                <label class="inspectcv-label" for="SenderName">Namn</label>
+                                <input class="inspectcv-input" id="SenderName" name="SenderName" value="@Model.MessagePrefillName" @(Model.MessageNameReadonly ? "readonly" : "") required />
+                            </div>
 
-                        <button type="submit" class="btn-primary-custom">Skicka meddelande</button>
-                    </form>
+                            <div class="inspectcv-form-row">
+                                <label class="inspectcv-label" for="Body">Meddelande</label>
+                                <textarea class="inspectcv-textarea" id="Body" name="Body" minlength="1" maxlength="500" required></textarea>
+                                <div class="inspectcv-help">1–500 tecken</div>
+                            </div>
+
+                            <button type="submit" class="btn-secondary-custom">Skicka</button>
+                        </form>
+                    </details>
                 </section>
             </div>
         </div>

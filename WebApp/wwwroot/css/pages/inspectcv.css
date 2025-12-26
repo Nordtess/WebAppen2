@@ -39,6 +39,7 @@
 .inspectcv-form {
     display: grid;
     gap: 10px;
+    margin-top: 12px;
 }
 
 .inspectcv-form-row {
@@ -84,6 +85,31 @@
     font-size: 12px;
     font-weight: 750;
     color: rgba(0, 0, 0, 0.60);
+}
+
+/* Collapsible message UI */
+.inspectcv-message-panel {
+    margin-top: 10px;
+}
+
+.inspectcv-message-panel > summary {
+    list-style: none;
+}
+
+.inspectcv-message-panel > summary::-webkit-details-marker {
+    display: none;
+}
+
+.inspectcv-message-summary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.inspectcv-message-panel[open] .inspectcv-message-summary {
+    opacity: 0.92;
 }
 
 @media (max-width: 800px) {

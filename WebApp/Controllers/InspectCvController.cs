@@ -53,15 +53,19 @@ public sealed class InspectCvController : Controller
             var visitorUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
 
-            _db.ProfilBesok.Add(new ProfileVisit
+            // Do not count the profile owner's own visits.
+            if (!string.Equals(visitorUserId, userId, StringComparison.Ordinal))
             {
-                ProfileId = link.ProfileId,
-                VisitorUserId = string.IsNullOrWhiteSpace(visitorUserId) ? null : visitorUserId,
-                VisitorIp = ip,
-                VisitedUtc = DateTimeOffset.UtcNow
-            });
+                _db.ProfilBesok.Add(new ProfileVisit
+                {
+                    ProfileId = link.ProfileId,
+                    VisitorUserId = string.IsNullOrWhiteSpace(visitorUserId) ? null : visitorUserId,
+                    VisitorIp = ip,
+                    VisitedUtc = DateTimeOffset.UtcNow
+                });
 
-            await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
+            }
         }
 
         // Visit count shown on inspect page.
