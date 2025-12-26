@@ -10,7 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
     function setUnreadCount(n) {
         if (!unreadPill) return;
         const v = Math.max(0, Number.isFinite(n) ? n : 0);
-        unreadPill.textContent = `${v} olästa`;
+
+        // Keep this string ASCII-only to avoid encoding/mojibake issues.
+        unreadPill.textContent = `Du har ${v} olasta meddelanden`;
         unreadPill.classList.toggle("messages-unread-pill--ok", v <= 0);
 
         // keep header icon/text in sync if present
@@ -36,15 +38,8 @@ document.addEventListener("DOMContentLoaded", () => {
         setUnreadCount(getUnreadCount() - 1);
     }
 
-    function updateCardReadState(card) {
-        card.dataset.isread = "1";
-
-        const dot = card.querySelector(".message-dot");
-        if (dot) dot.remove();
-
-        // remove the 'mark as read' action once it's read
-        const setReadForm = card.querySelector("[data-setread-form]");
-        if (setReadForm) setReadForm.remove();
+    function incUnread() {
+        setUnreadCount(getUnreadCount() + 1);
     }
 
     async function postForm(form) {
@@ -73,8 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
             body.hidden = !nextOpen;
             card.classList.toggle("is-open", nextOpen);
         });
-
-        // Mark-as-read checkbox/button handlers are wired below.
     });
 
     // Delete modal
@@ -109,7 +102,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (idInput instanceof HTMLInputElement) idInput.value = id;
             if (text) {
-                text.textContent = from ? `Vill du ta bort meddelandet skickat av ${from}?` : "Vill du ta bort meddelandet?";
+                text.textContent = from
+                    ? `Vill du ta bort meddelandet skickat av ${from}?`
+                    : "Vill du ta bort meddelandet?";
             }
 
             setOpen(true);
@@ -157,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Wire up Läst checkbox toggle (AJAX)
+    // Wire up "Last:" checkbox toggle (AJAX) - keep comment ASCII-only
     document.querySelectorAll("[data-setread-form]").forEach((formEl) => {
         if (!(formEl instanceof HTMLFormElement)) return;
 
@@ -190,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         from.appendChild(d);
                     }
                 }
-                if (currentIsRead) setUnreadCount(getUnreadCount() + 1);
+                if (currentIsRead) incUnread();
             }
 
             try {

@@ -1,58 +1,84 @@
 ﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
-  <defs>
-    <radialGradient id="noccoFurPerfect" cx="50%" cy="40%" r="70%">
-      <stop offset="0%" stop-color="#f5ba95"/>
-      <stop offset="100%" stop-color="#E6955E"/>
-    </radialGradient>
-    <filter id="mailGlowPerfect" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
-      <feFlood flood-color="#7FFFD4" flood-opacity="0.8" result="color"/>
-      <feComposite in="color" in2="blur" operator="in" result="coloredBlur"/>
-      <feMerge>
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-  </defs>
-  <g transform="translate(15, 15)">
-<!--PAWS: pushed slightly downward + tiny highlight so they show a bit more-->
-    <g>
-      <g fill="#D47E45">
-        <ellipse cx="40" cy="116" rx="16" ry="13"/>
-        <ellipse cx="80" cy="116" rx="16" ry="13"/>
-      </g>
-      <g fill="#F8F8FF" opacity="0.35">
-        <ellipse cx="40" cy="118" rx="10" ry="7"/>
-        <ellipse cx="80" cy="118" rx="10" ry="7"/>
-      </g>
-    </g>
-    <path d="M 30 100 Q 20 120 60 120 Q 100 120 90 100 Q 95 80 85 65 Q 60 55 35 65 Q 25 80 30 100 Z" fill="url(#noccoFurPerfect)"/>
-    <path d="M 45 95 Q 60 115 75 95 Q 70 120 60 120 Q 50 120 45 95 Z" fill="#F8F8FF"/>
-    <g transform="translate(0, 5)">
-<!--EARS drawn FIRST so they sit BEHIND the head-->
-      <g fill="#E6955E" transform="translate(0,8)">
-        <path d="M 42 35 C 10 0, -5 45, 38 60 Z" transform="rotate(-5, 42, 35)"/>
-        <path d="M 78 35 C 110 0, 125 45, 82 60 Z" transform="rotate(5, 78, 35)"/>
-      </g>
-<!--HEAD drawn AFTER ears, covering the ear bases (hides gaps)-->
-      <path d="M 35 55 Q 20 70 35 85 Q 60 100 85 85 Q 100 70 85 55 Q 60 30 35 55 Z" fill="url(#noccoFurPerfect)"/>
-      <ellipse cx="60" cy="72" rx="18" ry="13" fill="#F8F8FF"/>
-      <g fill="#3a225f">
-        <circle cx="48" cy="58" r="3.5"/>
-        <circle cx="72" cy="58" r="3.5"/>
-        <circle cx="49" cy="56" r="1.2" fill="#FFFFFF"/>
-        <circle cx="73" cy="56" r="1.2" fill="#FFFFFF"/>
-        <circle cx="60" cy="65" r="3"/>
-      </g>
-      <path d="M 55 74 Q 60 79 65 74" fill="none" stroke="#3a225f" stroke-width="1.5" stroke-linecap="round"/>
-    </g>
-    <path d="M 95 95 Q 125 85 110 55" stroke="url(#noccoFurPerfect)" stroke-width="14" stroke-linecap="round" fill="none">
-      <animateTransform attributeName="transform" type="rotate" values="0 95 95; 15 95 95; 0 95 95" dur="1.2s" repeatCount="indefinite"/>
-    </path>
-  </g>
-  <g transform="translate(120, 35)" filter="url(#mailGlowPerfect)">
-    <rect x="0" y="0" width="28" height="20" rx="5" fill="#F8F8FF"/>
-    <path d="M 0 5 L 14 14 L 28 5" fill="none" stroke="#7FFFD4" stroke-width="2.5"/>
-    <animateTransform attributeName="transform" type="translate" values="120 35; 120 28; 120 35" dur="2.5s" repeatCount="indefinite"/>
-  </g>
+	<defs>
+		<radialGradient id="noccoFurPerfect" cx="50%" cy="40%" r="70%">
+			<stop offset="0%" stop-color="#f5ba95"/>
+			<stop offset="100%" stop-color="#E6955E"/>
+		</radialGradient>
+
+		<!-- NEW: black border + soft "black glow" + drop shadow for the mail -->
+		<filter id="mailPopBlack" x="-80%" y="-80%" width="260%" height="260%">
+			<!-- Drop shadow -->
+			<feGaussianBlur in="SourceAlpha" stdDeviation="2.4" result="shadowBlur"/>
+			<feOffset in="shadowBlur" dx="0" dy="2" result="shadowOffset"/>
+			<feFlood flood-color="#000000" flood-opacity="0.38" result="shadowColor"/>
+			<feComposite in="shadowColor" in2="shadowOffset" operator="in" result="shadow"/>
+
+			<!-- Outer dark "glow" (soft) -->
+			<feGaussianBlur in="SourceAlpha" stdDeviation="3.6" result="glowBlur"/>
+			<feFlood flood-color="#000000" flood-opacity="0.35" result="glowColor"/>
+			<feComposite in="glowColor" in2="glowBlur" operator="in" result="glow"/>
+
+			<!-- Crisp black border -->
+			<feMorphology in="SourceAlpha" operator="dilate" radius="1.8" result="outline"/>
+			<feFlood flood-color="#000000" flood-opacity="0.95" result="outlineColor"/>
+			<feComposite in="outlineColor" in2="outline" operator="in" result="outlineFill"/>
+
+			<feMerge>
+				<feMergeNode in="shadow"/>
+				<feMergeNode in="glow"/>
+				<feMergeNode in="outlineFill"/>
+				<feMergeNode in="SourceGraphic"/>
+			</feMerge>
+		</filter>
+	</defs>
+
+	<g transform="translate(15, 15)">
+		<!--PAWS: pushed slightly downward + tiny highlight so they show a bit more-->
+		<g>
+			<g fill="#D47E45">
+				<ellipse cx="40" cy="116" rx="16" ry="13"/>
+				<ellipse cx="80" cy="116" rx="16" ry="13"/>
+			</g>
+			<g fill="#F8F8FF" opacity="0.35">
+				<ellipse cx="40" cy="118" rx="10" ry="7"/>
+				<ellipse cx="80" cy="118" rx="10" ry="7"/>
+			</g>
+		</g>
+
+		<path d="M 30 100 Q 20 120 60 120 Q 100 120 90 100 Q 95 80 85 65 Q 60 55 35 65 Q 25 80 30 100 Z" fill="url(#noccoFurPerfect)"/>
+		<path d="M 45 95 Q 60 115 75 95 Q 70 120 60 120 Q 50 120 45 95 Z" fill="#F8F8FF"/>
+
+		<g transform="translate(0, 5)">
+			<!--EARS drawn FIRST so they sit BEHIND the head-->
+			<g fill="#E6955E" transform="translate(0,8)">
+				<path d="M 42 35 C 10 0, -5 45, 38 60 Z" transform="rotate(-5, 42, 35)"/>
+				<path d="M 78 35 C 110 0, 125 45, 82 60 Z" transform="rotate(5, 78, 35)"/>
+			</g>
+
+			<!--HEAD drawn AFTER ears, covering the ear bases (hides gaps)-->
+			<path d="M 35 55 Q 20 70 35 85 Q 60 100 85 85 Q 100 70 85 55 Q 60 30 35 55 Z" fill="url(#noccoFurPerfect)"/>
+			<ellipse cx="60" cy="72" rx="18" ry="13" fill="#F8F8FF"/>
+
+			<g fill="#3a225f">
+				<circle cx="48" cy="58" r="3.5"/>
+				<circle cx="72" cy="58" r="3.5"/>
+				<circle cx="49" cy="56" r="1.2" fill="#FFFFFF"/>
+				<circle cx="73" cy="56" r="1.2" fill="#FFFFFF"/>
+				<circle cx="60" cy="65" r="3"/>
+			</g>
+
+			<path d="M 55 74 Q 60 79 65 74" fill="none" stroke="#3a225f" stroke-width="1.5" stroke-linecap="round"/>
+		</g>
+
+		<path d="M 95 95 Q 125 85 110 55" stroke="url(#noccoFurPerfect)" stroke-width="14" stroke-linecap="round" fill="none">
+			<animateTransform attributeName="transform" type="rotate" values="0 95 95; 15 95 95; 0 95 95" dur="1.2s" repeatCount="indefinite"/>
+		</path>
+	</g>
+
+	<!-- MAIL: mint -> black + strong black glow/border/shadow -->
+	<g transform="translate(120, 35)" filter="url(#mailPopBlack)">
+		<rect x="0" y="0" width="28" height="20" rx="5" fill="#F8F8FF" stroke="#000000" stroke-width="2.2"/>
+		<path d="M 0 5 L 14 14 L 28 5" fill="none" stroke="#000000" stroke-width="2.6"/>
+		<animateTransform attributeName="transform" type="translate" values="120 35; 120 28; 120 35" dur="2.5s" repeatCount="indefinite"/>
+	</g>
 </svg>

@@ -350,18 +350,7 @@
     justify-content: flex-end;
     gap: 10px;
     flex-wrap: wrap;
-}
-
-/* Compact button variant used only on Messages page */
-.messages-page .msg-btn {
-    padding: 0.55rem 0.9rem;
-    font-size: 0.9rem;
-    font-weight: 850;
-    border-radius: 12px;
-}
-
-.messages-page .msg-btn:hover {
-    transform: translateY(-1px) scale(1.02);
+    align-items: center;
 }
 
 /* --- Delete confirmation modal --- */
@@ -393,6 +382,13 @@
     box-shadow: 0 30px 70px rgba(0, 0, 0, 0.25);
     overflow: hidden;
     animation: msgModalIn 180ms ease;
+
+    /* Center within viewport and offset slightly down */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin: 0;
+    transform: translate(-50%, -50%) translateY(40px);
 }
 
 @keyframes msgModalIn {
@@ -489,20 +485,48 @@ body.messages-modal-open {
     margin-top: 12px;
 }
 
+.message-reply-form {
+    margin-top: 10px;
+}
+
 .message-textarea {
     width: 100%;
-    min-height: 90px;
+    min-height: 110px;
     resize: vertical;
+
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 0.96);
+    padding: 12px 14px;
+
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.45;
+    color: rgba(0, 0, 0, 0.74);
+
+    outline: none;
+    transition: box-shadow 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
 }
 
-.message-read-toggle {
-    margin: 0;
+.message-textarea::placeholder {
+    color: rgba(0, 0, 0, 0.52);
+    font-weight: 650;
 }
 
+.message-textarea:focus {
+    border-color: rgba(127, 255, 212, 0.95);
+    box-shadow: 0 0 0 4px rgba(127, 255, 212, 0.22);
+}
+
+.message-reply-actions {
+    margin-top: 10px;
+}
+
+/* --- 'Läst' toggle (custom checkbox) --- */
 .message-read-label {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     padding: 0.55rem 0.9rem;
     border-radius: 12px;
     border: 1px solid rgba(0, 0, 0, 0.12);
@@ -511,28 +535,66 @@ body.messages-modal-open {
     font-size: 0.9rem;
     cursor: pointer;
     user-select: none;
+    min-height: 40px;
 }
 
 .message-read-text {
     color: rgba(0, 0, 0, 0.78);
 }
 
+/* Hide native checkbox but keep it accessible */
 .message-read-checkbox {
-    width: 18px;
-    height: 18px;
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
     margin: 0;
-    accent-color: #7fffd4;
 }
 
+/* Custom box */
 .message-read-indicator {
-    width: 10px;
-    height: 10px;
-    border-radius: 999px;
-    background: rgba(0, 0, 0, 0.20);
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.06);
+    position: relative;
+    display: grid;
+    place-items: center;
 }
 
+/* Checkmark */
+.message-read-indicator::after {
+    content: "";
+    width: 10px;
+    height: 6px;
+    border-left: 3px solid rgba(255, 255, 255, 0.96);
+    border-bottom: 3px solid rgba(255, 255, 255, 0.96);
+    transform: rotate(-45deg) scale(0.6);
+    opacity: 0;
+    transition: transform 140ms ease, opacity 140ms ease;
+}
+
+.message-read-label:hover {
+    transform: translateY(-1px);
+    border-color: rgba(127, 255, 212, 0.75);
+    box-shadow: 0 0 0 3px rgba(127, 255, 212, 0.14);
+}
+
+.message-read-label:focus-within {
+    border-color: rgba(127, 255, 212, 0.95);
+    box-shadow: 0 0 0 4px rgba(127, 255, 212, 0.22);
+}
+
+/* Checked state: green glow + checkmark */
 .message-read-label:has(.message-read-checkbox:checked) .message-read-indicator {
     background: rgba(52, 199, 89, 0.95);
-    box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.18), 0 0 12px rgba(52, 199, 89, 0.25);
+    border-color: rgba(52, 199, 89, 0.55);
+    box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.18), 0 0 12px rgba(52, 199, 89, 0.22);
+}
+
+.message-read-label:has(.message-read-checkbox:checked) .message-read-indicator::after {
+    opacity: 1;
+    transform: rotate(-45deg) scale(1);
 }
