@@ -150,11 +150,12 @@ p {
     gap: 12px;
 }
 
-.icon-mail {
-    width: 26px;
-    height: 26px;
-    opacity: 0.85;
+.icon-sleepingnocco {
+    width: 52px;
+    height: 52px;
+    opacity: 0.9;
     flex-shrink: 0;
+    display: block;
 }
 
 .unread-text {
@@ -357,9 +358,9 @@ p {
         font-size: 13px;
     }
 
-    .icon-mail {
-        width: 22px;
-        height: 22px;
+    .icon-sleepingnocco {
+        width: 44px;
+        height: 44px;
     }
 
     .app-sidebar {
