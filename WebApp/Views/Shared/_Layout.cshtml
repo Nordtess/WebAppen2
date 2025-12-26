@@ -77,13 +77,15 @@
                         @* Always show Nocco: sleeping when 0 unread, message (animated) when >0 *@
                         <img src="@Url.Content(noccoIcon)"
                              alt="Meddelanden"
-                             class="icon-sleepingnocco" />
+                             class="icon-sleepingnocco"
+                             id="headerNocco"
+                             data-sleep-src="@Url.Content("~/images/svg/icons/noccosleeping.svg")"
+                             data-message-src="@Url.Content("~/images/svg/icons/noccomessage.svg")" />
 
-                        @* Only show text when there are unread messages *@
-                        @if (hasUnread)
-                        {
-                            <span class="unread-text">Du har <strong>@unreadCount</strong> olästa meddelanden</span>
-                        }
+                        <div id="headerUnreadArea" style="display:inline-block;">
+                            @* Only show text when there are unread messages *@
+                            <span class="unread-text" style="@(hasUnread ? "" : "display:none;")">Du har <strong id="headerUnreadCount">@unreadCount</strong> olästa meddelanden</span>
+                        </div>
 
                         <span class="user-email">@userEmail</span>
                     }

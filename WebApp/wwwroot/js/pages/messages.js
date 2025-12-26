@@ -12,6 +12,24 @@ document.addEventListener("DOMContentLoaded", () => {
         const v = Math.max(0, Number.isFinite(n) ? n : 0);
         unreadPill.textContent = `${v} olästa`;
         unreadPill.classList.toggle("messages-unread-pill--ok", v <= 0);
+
+        // keep header icon/text in sync if present
+        const headerUnreadText = document.querySelector(".unread-text");
+        const headerUnreadCount = document.getElementById("headerUnreadCount");
+        const headerNocco = document.getElementById("headerNocco");
+
+        if (headerUnreadCount) headerUnreadCount.textContent = String(v);
+
+        if (headerUnreadText) {
+            headerUnreadText.style.display = v > 0 ? "inline" : "none";
+        }
+
+        if (headerNocco) {
+            const sleep = headerNocco.getAttribute("data-sleep-src");
+            const msg = headerNocco.getAttribute("data-message-src");
+            const next = v > 0 ? msg : sleep;
+            if (next) headerNocco.setAttribute("src", next);
+        }
     }
 
     function decUnread() {
