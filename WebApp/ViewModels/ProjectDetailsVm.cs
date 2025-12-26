@@ -27,5 +27,6 @@ public sealed class ProjectDetailsVm
         public string UserId { get; init; } = string.Empty;
         public string FullName { get; init; } = string.Empty;
         public string City { get; init; } = string.Empty;
+        public string? Headline { get; init; }
     }
 }

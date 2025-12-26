@@ -236,9 +236,13 @@ public sealed class ProjectsController : Controller
         // Participants: hide private users if viewer is anonymous.
         var participantsQuery = from pu in _db.ProjektAnvandare.AsNoTracking()
                                 join u in _db.Users.AsNoTracking() on pu.UserId equals u.Id
+                                join link in _db.ApplicationUserProfiles.AsNoTracking() on u.Id equals link.UserId into links
+                                from link in links.DefaultIfEmpty()
+                                join prof in _db.Profiler.AsNoTracking() on link.ProfileId equals prof.Id into profs
+                                from prof in profs.DefaultIfEmpty()
                                 where pu.ProjectId == id
                                 where pu.UserId != project.CreatedByUserId
-                                select new { u.Id, u.FirstName, u.LastName, u.City, u.IsProfilePrivate };
+                                select new { u.Id, u.FirstName, u.LastName, u.City, u.IsProfilePrivate, Headline = prof != null ? prof.Headline : null };
 
         if (!isLoggedIn)
         {
@@ -252,7 +256,8 @@ public sealed class ProjectsController : Controller
             {
                 UserId = x.Id,
                 FullName = (x.FirstName + " " + x.LastName).Trim(),
-                City = x.City
+                City = x.City,
+                Headline = x.Headline
             })
             .ToListAsync();
 

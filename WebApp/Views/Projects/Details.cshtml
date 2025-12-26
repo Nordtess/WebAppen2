@@ -67,6 +67,10 @@
                     </div>
 
                     <div class="projectdetails-members">
+                        <div class="projectdetails-muted projectdetails-muted--corner">
+                            Klicka på ett namn för att inspektera personens CV
+                        </div>
+
                         @if (Model.Participants.Count == 0)
                         {
                             @* Intentionally blank when no members *@
@@ -76,7 +80,13 @@
                             foreach (var m in Model.Participants)
                             {
                                 <a class="projectdetails-member" href="@Url.Action("ByUserId", "InspectCv", new { userId = m.UserId })">
-                                    <div class="projectdetails-member-name">@m.FullName</div>
+                                    <div class="projectdetails-member-left">
+                                        <div class="projectdetails-member-name">@m.FullName</div>
+                                        @if (!string.IsNullOrWhiteSpace(m.Headline))
+                                        {
+                                            <div class="projectdetails-member-headline">@m.Headline</div>
+                                        }
+                                    </div>
                                     <div class="projectdetails-member-city">@m.City</div>
                                 </a>
                             }

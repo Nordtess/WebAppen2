@@ -110,6 +110,7 @@ public sealed class InspectCvController : Controller
             : await _db.Utbildningar.AsNoTracking()
                 .Where(x => x.ProfileId == link.ProfileId)
                 .OrderBy(x => x.SortOrder)
+                .Take(2)
                 .Select(x => new InspectCvEducationVm
                 {
                     School = x.School,
@@ -124,6 +125,7 @@ public sealed class InspectCvController : Controller
             : await _db.Erfarenheter.AsNoTracking()
                 .Where(x => x.ProfileId == link.ProfileId)
                 .OrderBy(x => x.SortOrder)
+                .Take(2)
                 .Select(x => new InspectCvExperienceVm
                 {
                     Company = x.Company,

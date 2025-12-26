@@ -205,11 +205,28 @@
     background: rgba(255, 255, 255, 0.95);
     text-decoration: none;
     color: inherit;
+
+    will-change: transform, box-shadow;
+    transition:
+        transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1),
+        box-shadow 180ms cubic-bezier(0.2, 0.8, 0.2, 1),
+        border-color 180ms ease;
 }
 
 .projectdetails-member:hover {
-    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.08);
-    transform: translateY(-1px);
+    text-decoration: none;
+    border-color: rgba(127, 255, 212, 0.55);
+    box-shadow:
+        0 16px 34px rgba(0, 0, 0, 0.10),
+        0 0 0 3px rgba(127, 255, 212, 0.14);
+    transform: translateY(-2px) scale(1.01);
+}
+
+.projectdetails-member-left {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
 }
 
 .projectdetails-member-name {
@@ -217,10 +234,24 @@
     color: rgba(0, 0, 0, 0.82);
 }
 
+.projectdetails-member-headline {
+    font-weight: 800;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.62);
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+}
+
 .projectdetails-member-city {
     font-weight: 750;
     color: rgba(0, 0, 0, 0.62);
     font-size: 13px;
+    flex: 0 0 auto;
 }
 
 .projectdetails-muted {

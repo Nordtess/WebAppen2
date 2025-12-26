@@ -221,6 +221,13 @@
     color: rgba(0, 0, 0, 0.74);
     line-height: 1.45;
     overflow-wrap: anywhere;
+
+    /* clamp so pills don't grow indefinitely */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
 }
 
 .mycv-project-pill--muted .mycv-project-pill__text {

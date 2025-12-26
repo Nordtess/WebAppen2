@@ -136,7 +136,7 @@ public class MyCvController : Controller
             Headline = profile?.Headline,
             AboutMe = profile?.AboutMe,
             ProfileImagePath = profile?.ProfileImagePath ?? user.ProfileImagePath,
-            Skills = ParseSkills(profile?.SkillsCsv),
+            Skills = NormalizeSkillsForDisplay(ParseSkills(profile?.SkillsCsv)),
 
             Educations = educations,
             Experiences = experiences,
@@ -200,6 +200,43 @@ public class MyCvController : Controller
 
         return csv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .Where(s => !string.IsNullOrWhiteSpace(s))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+    }
+
+    private static string[] NormalizeSkillsForDisplay(string[] skills)
+    {
+        if (skills.Length == 0) return skills;
+
+        static string Display(string s)
+        {
+            var t = (s ?? string.Empty).Trim();
+            if (t.Length == 0) return "";
+
+            var low = t.ToLowerInvariant();
+            return low switch
+            {
+                "c#" => "C#",
+                "f#" => "F#",
+                "sql" => "SQL",
+                "html" => "HTML",
+                "css" => "CSS",
+                "js" or "javascript" => "JavaScript",
+                "ts" or "typescript" => "TypeScript",
+                ".net" or "dotnet" => ".NET",
+                "asp.net" or "aspnet" => "ASP.NET",
+                "mvc" => "MVC",
+                "api" => "API",
+                "mongodb" or "mongo db" or "mongo-db" => "MongoDB",
+                "aws" => "AWS",
+                "azure" => "Azure",
+                _ => (t.Length <= 4 && t.All(char.IsLetter)) ? t.ToUpperInvariant() : char.ToUpper(t[0]) + t[1..]
+            };
+        }
+
+        return skills
+            .Select(Display)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToArray();
     }
