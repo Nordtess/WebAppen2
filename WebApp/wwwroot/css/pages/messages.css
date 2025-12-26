@@ -1,10 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
-:root {
+﻿:root {
     --msg-max: 980px;
     --msg-radius: 24px;
     --msg-border: 1px solid rgba(0, 0, 0, 0.14);
@@ -137,6 +131,20 @@
 
 .messages-toolbar {
     padding: 14px 18px 6px;
+}
+
+.messages-toolbar-top {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: start;
+}
+
+.messages-toolbar-actions {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding-top: 22px;
 }
 
 .messages-label {
@@ -500,6 +508,15 @@ body.messages-modal-open {
 
     .messages-actions {
         justify-content: flex-start;
+    }
+
+    .messages-toolbar-top {
+        grid-template-columns: 1fr;
+    }
+
+    .messages-toolbar-actions {
+        justify-content: flex-start;
+        padding-top: 0;
     }
 
     .message-preview { max-width: 100%; }

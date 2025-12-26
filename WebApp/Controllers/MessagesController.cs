@@ -19,7 +19,7 @@ public sealed class MessagesController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index([FromQuery] string? sort, [FromQuery] string? q)
+    public async Task<IActionResult> Index([FromQuery] string? sort, [FromQuery] string? q, [FromQuery] string? unreadOnly)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrWhiteSpace(userId)) return Forbid();
@@ -27,11 +27,19 @@ public sealed class MessagesController : Controller
         var sortMode = (sort ?? "new").Trim().ToLowerInvariant();
         if (sortMode is not ("new" or "old")) sortMode = "new";
 
+        var onlyUnread = string.Equals((unreadOnly ?? "0").Trim(), "1", StringComparison.OrdinalIgnoreCase)
+            || string.Equals((unreadOnly ?? "").Trim(), "true", StringComparison.OrdinalIgnoreCase);
+
         var query = (q ?? string.Empty).Trim();
         var qNorm = query.ToUpperInvariant();
 
         var baseQuery = _db.UserMessages.AsNoTracking()
             .Where(m => m.RecipientUserId == userId);
+
+        if (onlyUnread)
+        {
+            baseQuery = baseQuery.Where(m => !m.IsRead);
+        }
 
         // Join sender for nicer filtering + display for logged-in senders.
         var joined = from m in baseQuery
@@ -42,12 +50,10 @@ public sealed class MessagesController : Controller
         if (!string.IsNullOrWhiteSpace(qNorm))
         {
             joined = joined.Where(x =>
-                // Sender name from Identity user
                 (x.su != null &&
                  (x.su.FirstNameNormalized + " " + x.su.LastNameNormalized).Contains(qNorm) ||
                  x.su.FirstNameNormalized.Contains(qNorm) ||
                  x.su.LastNameNormalized.Contains(qNorm))
-                // Sender name from anonymous sender
                 || (!string.IsNullOrWhiteSpace(x.m.SenderName) && x.m.SenderName.ToUpper().Contains(qNorm)));
         }
 
@@ -78,6 +84,7 @@ public sealed class MessagesController : Controller
         {
             Sort = sortMode,
             Query = query,
+            UnreadOnly = onlyUnread,
             UnreadCount = unreadCount,
             Messages = rows.Select(x => new MessagesIndexVm.MessageCardVm
             {
@@ -96,20 +103,50 @@ public sealed class MessagesController : Controller
         return View("Messages", vm);
     }
 
+    public sealed class SetReadInput
+    {
+        public int Id { get; init; }
+        public bool IsRead { get; init; }
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> MarkRead([FromForm] int id)
+    public async Task<IActionResult> SetRead([FromForm] SetReadInput input)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrWhiteSpace(userId)) return Forbid();
 
-        var msg = await _db.UserMessages.FirstOrDefaultAsync(m => m.Id == id && m.RecipientUserId == userId);
+        var msg = await _db.UserMessages.FirstOrDefaultAsync(m => m.Id == input.Id && m.RecipientUserId == userId);
         if (msg is null) return NotFound();
 
-        if (!msg.IsRead)
+        msg.IsRead = input.IsRead;
+        msg.ReadUtc = input.IsRead ? DateTimeOffset.UtcNow : null;
+
+        await _db.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> MarkAllRead()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrWhiteSpace(userId)) return Forbid();
+
+        var unread = await _db.UserMessages
+            .Where(m => m.RecipientUserId == userId && !m.IsRead)
+            .ToListAsync();
+
+        if (unread.Count > 0)
         {
-            msg.IsRead = true;
-            msg.ReadUtc = DateTimeOffset.UtcNow;
+            var now = DateTimeOffset.UtcNow;
+            foreach (var m in unread)
+            {
+                m.IsRead = true;
+                m.ReadUtc = now;
+            }
+
             await _db.SaveChangesAsync();
         }
 

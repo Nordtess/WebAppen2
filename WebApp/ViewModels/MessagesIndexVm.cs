@@ -4,6 +4,7 @@ public sealed class MessagesIndexVm
 {
     public required string Sort { get; init; }
     public required string Query { get; init; }
+    public required bool UnreadOnly { get; init; }
 
     public required int UnreadCount { get; init; }
     public required List<MessageCardVm> Messages { get; init; }

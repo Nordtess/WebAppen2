@@ -3,8 +3,11 @@
 @{
     ViewData["Title"] = "Meddelanden";
 
-    var sortNewUrl = Url.Action("Index", "Messages", new { sort = "new", q = Model.Query });
-    var sortOldUrl = Url.Action("Index", "Messages", new { sort = "old", q = Model.Query });
+    var sortNewUrl = Url.Action("Index", "Messages", new { sort = "new", q = Model.Query, unreadOnly = Model.UnreadOnly ? "1" : "0" });
+    var sortOldUrl = Url.Action("Index", "Messages", new { sort = "old", q = Model.Query, unreadOnly = Model.UnreadOnly ? "1" : "0" });
+
+    var unreadOnlyOnUrl = Url.Action("Index", "Messages", new { sort = Model.Sort, q = Model.Query, unreadOnly = "1" });
+    var unreadOnlyOffUrl = Url.Action("Index", "Messages", new { sort = Model.Sort, q = Model.Query, unreadOnly = "0" });
 }
 
 @section Styles {
@@ -14,42 +17,53 @@
 
 <div class="messages-page">
     <div class="messages-banner" aria-label="Meddelanden-banner">
-        <img src="~/images/bannersandicons/message.png" alt="Banner" class="messages-banner-img" />
+        <img src="~/images/bannersandicons/messageboard.png" alt="Banner" class="messages-banner-img" />
     </div>
 
     <div class="messages-card">
         <div class="messages-topbar">
             <div class="messages-titlewrap">
                 <h1 class="messages-title">Meddelanden</h1>
-                @if (Model.UnreadCount > 0)
-                {
-                    <span class="messages-unread-pill" aria-label="Olasta">@Model.UnreadCount olästa</span>
-                }
-                else
-                {
-                    <span class="messages-unread-pill messages-unread-pill--ok" aria-label="Inga olasta">0 olästa</span>
-                }
+
+                <span class="messages-unread-pill @(Model.UnreadCount > 0 ? "" : "messages-unread-pill--ok")" aria-label="Olasta" id="messagesUnreadPill">
+                    @Model.UnreadCount olästa
+                </span>
             </div>
 
             <div class="messages-actions">
                 <a class="messages-filter @((Model.Sort == "new") ? "is-active" : "")" href="@sortNewUrl">Senast mottagna</a>
                 <a class="messages-filter @((Model.Sort == "old") ? "is-active" : "")" href="@sortOldUrl">Äldst först</a>
+
+                <a class="messages-filter @(Model.UnreadOnly ? "is-active" : "")" href="@(Model.UnreadOnly ? unreadOnlyOffUrl : unreadOnlyOnUrl)">
+                    Olästa
+                </a>
             </div>
         </div>
 
         <div class="messages-divider" aria-hidden="true"></div>
 
         <div class="messages-toolbar">
-            <form method="get" class="messages-search" action="@Url.Action("Index", "Messages")">
-                <input type="hidden" name="sort" value="@Model.Sort" />
-                <label class="messages-label" for="q">Filtrera på avsändare</label>
-                <div class="messages-search-row">
-                    <input class="messages-input" id="q" name="q" value="@Model.Query" placeholder="Skriv namn (förnamn/efternamn)..." maxlength="80" />
-                    <button class="btn-secondary-custom" type="submit">Sök</button>
-                    <a class="btn-secondary-custom" href="@Url.Action("Index", "Messages", new { sort = Model.Sort })" style="text-decoration:none;">Rensa</a>
+            <div class="messages-toolbar-top">
+                <form method="get" class="messages-search" action="@Url.Action("Index", "Messages")">
+                    <input type="hidden" name="sort" value="@Model.Sort" />
+                    <input type="hidden" name="unreadOnly" value="@(Model.UnreadOnly ? "1" : "0")" />
+
+                    <label class="messages-label" for="q">Filtrera på avsändare</label>
+                    <div class="messages-search-row">
+                        <input class="messages-input" id="q" name="q" value="@Model.Query" placeholder="Skriv namn (förnamn/efternamn)..." maxlength="80" />
+                        <button class="btn-secondary-custom" type="submit">Sök</button>
+                        <a class="btn-secondary-custom" href="@Url.Action("Index", "Messages", new { sort = Model.Sort, unreadOnly = Model.UnreadOnly ? "1" : "0" })" style="text-decoration:none;">Rensa</a>
+                    </div>
+                    <div class="messages-hint">Tips: använd delar av namnet. Filtreringen matchar både kontonamn och anonyma avsändare.</div>
+                </form>
+
+                <div class="messages-toolbar-actions">
+                    <form method="post" asp-controller="Messages" asp-action="MarkAllRead">
+                        @Html.AntiForgeryToken()
+                        <button class="btn-secondary-custom" type="submit">Markera alla som lästa</button>
+                    </form>
                 </div>
-                <div class="messages-hint">Tips: använd delar av namnet. Filtreringen matchar både kontonamn och anonyma avsändare.</div>
-            </form>
+            </div>
         </div>
 
         <div class="messages-list" id="messagesList">
@@ -65,7 +79,7 @@
                 foreach (var m in Model.Messages)
                 {
                     var canReply = !string.IsNullOrWhiteSpace(m.FromUserId);
-                    <article class="message" data-message data-id="@m.Id" aria-label="Meddelande från @m.FromDisplayName">
+                    <article class="message" data-message data-id="@m.Id" data-isread="@(m.IsRead ? "1" : "0")" aria-label="Meddelande från @m.FromDisplayName">
                         <button class="message-head" type="button" data-message-toggle aria-expanded="false">
                             <div class="message-left">
                                 <div class="message-from">
@@ -88,18 +102,14 @@
                             <div class="message-fulltext">@m.Body</div>
 
                             <div class="message-actions">
-                                @if (!m.IsRead)
-                                {
-                                    <form method="post" asp-controller="Messages" asp-action="MarkRead">
-                                        @Html.AntiForgeryToken()
-                                        <input type="hidden" name="id" value="@m.Id" />
-                                        <button class="btn-secondary-custom" type="submit">Markera som läst</button>
-                                    </form>
-                                }
-                                else
-                                {
-                                    <div class="message-read-pill">Läst</div>
-                                }
+                                <form method="post" asp-controller="Messages" asp-action="SetRead" data-setread-form>
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@m.Id" />
+                                    <input type="hidden" name="isRead" value="@(m.IsRead ? "true" : "false")" data-setread-value />
+                                    <button class="btn-secondary-custom" type="submit" data-setread-btn>
+                                        @(m.IsRead ? "Markera som oläst" : "Markera som läst")
+                                    </button>
+                                </form>
 
                                 <button class="btn-danger-custom" type="button" data-delete-open data-delete-id="@m.Id" data-delete-from="@m.FromDisplayName">Ta bort</button>
                             </div>
@@ -150,7 +160,7 @@
         <div class="messages-modal__footer">
             <button class="btn-secondary-custom" type="button" data-delete-cancel>Avbryt</button>
 
-            <form method="post" asp-controller="Messages" asp-action="Delete" id="deleteForm">
+            <form method="post" asp-controller="Messages" asp-action="Delete" id="deleteForm" data-delete-form>
                 @Html.AntiForgeryToken()
                 <input type="hidden" id="deleteIdInput" name="id" value="" />
                 <button class="btn-danger-custom" type="submit">Ta bort</button>
