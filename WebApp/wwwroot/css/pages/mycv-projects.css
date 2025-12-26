@@ -169,12 +169,25 @@
     overflow-wrap: anywhere;
 }
 
+/* Keep "Skapare" and "Skapad" inside the card even with long names */
+.mycv-project-doc-createdby,
+.mycv-project-doc-meta {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    white-space: normal;
+    word-break: break-word;
+}
+
 .mycv-project-doc-createdby {
     margin-top: 6px;
     font-size: 10px;
     font-weight: 850;
     color: rgba(0, 0, 0, 0.62);
-    white-space: nowrap;
 }
 
 .mycv-project-doc-meta {
@@ -182,7 +195,6 @@
     font-size: 10px;
     font-weight: 900;
     color: rgba(0, 0, 0, 0.60);
-    white-space: nowrap;
 }
 
 .mycv-project-doc-body {
