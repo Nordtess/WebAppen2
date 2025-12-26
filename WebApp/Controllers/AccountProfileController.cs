@@ -84,7 +84,7 @@ public class AccountProfileController : Controller
         user.LastNameNormalized = NameNormalizer.ToNormalized(user.LastName);
 
         user.PhoneNumberDisplay = model.PhoneNumberDisplay;
-        user.City = model.City;
+        user.City = NameNormalizer.ToDisplayName(model.City);
         user.PostalCode = model.PostalCode;
 
         // Persist onboarding completion.

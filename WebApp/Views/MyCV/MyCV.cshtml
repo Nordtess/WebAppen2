@@ -134,7 +134,25 @@
 
                 <section class="cv-box">
                     <h3 class="cv-box-title">Utbildningar</h3>
-                    <p class="cv-paragraph cv-paragraph-muted">Inga utbildningar tillagda ännu.</p>
+
+                    @if (Model.Educations is { Count: > 0 })
+                    {
+                        foreach (var e in Model.Educations)
+                        {
+                            <div class="cv-item">
+                                <div class="cv-item-title">@e.School</div>
+                                <div class="cv-item-sub">@e.Years • @e.Program</div>
+                                @if (!string.IsNullOrWhiteSpace(e.Note))
+                                {
+                                    <div class="cv-item-sub cv-item-muted">@e.Note</div>
+                                }
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="cv-paragraph cv-paragraph-muted">Inga utbildningar tillagda ännu.</p>
+                    }
                 </section>
 
                 <section class="cv-box">
@@ -177,7 +195,6 @@
                                             </div>
 
                                             <div class="mycv-project-doc-body">
-                                                @* Short description pill *@
                                                 @if (!string.IsNullOrWhiteSpace(p.ShortDescription))
                                                 {
                                                     <div class="mycv-project-pill">

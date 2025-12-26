@@ -58,6 +58,20 @@ public class MyCvController : Controller
             .AsNoTracking()
             .CountAsync(v => v.ProfileId == link.ProfileId);
 
+        // Educations from table.
+        var educations = await _db.Utbildningar
+            .AsNoTracking()
+            .Where(x => x.ProfileId == link.ProfileId)
+            .OrderBy(x => x.SortOrder)
+            .Select(x => new MyCvEducationItemVm
+            {
+                School = x.School,
+                Program = x.Program,
+                Years = x.Years,
+                Note = x.Note
+            })
+            .ToListAsync();
+
         // Resolve selected projects (stored as JSON array of ids in Profile.SelectedProjectsJson).
         var selectedProjectIds = ParseSelectedProjectIds(profile?.SelectedProjectsJson);
 
@@ -110,6 +124,7 @@ public class MyCvController : Controller
             ProfileImagePath = profile?.ProfileImagePath ?? user.ProfileImagePath,
             Skills = ParseSkills(profile?.SkillsCsv),
 
+            Educations = educations,
             Projects = projects
         };
 
@@ -174,6 +189,14 @@ public class MyCvController : Controller
             .ToArray();
     }
 
+    public sealed class MyCvEducationItemVm
+    {
+        public string School { get; init; } = string.Empty;
+        public string Program { get; init; } = string.Empty;
+        public string Years { get; init; } = string.Empty;
+        public string? Note { get; init; }
+    }
+
     public sealed class MyCvProjectCardVm
     {
         public int Id { get; init; }
@@ -201,6 +224,8 @@ public class MyCvController : Controller
         public string? AboutMe { get; init; }
         public string? ProfileImagePath { get; init; }
         public string[] Skills { get; init; } = Array.Empty<string>();
+
+        public List<MyCvEducationItemVm> Educations { get; init; } = new();
 
         // Selected projects to show on CV (read-only cards)
         public List<MyCvProjectCardVm> Projects { get; init; } = new();
