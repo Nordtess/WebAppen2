@@ -428,7 +428,7 @@
 
     const MAX_SELECTED_PROJECTS = 4;
 
-    /** @type {{id:number,title:string,createdUtc:string}[]} */
+    /** @type {{id:number,title:string,createdUtc:string,imagePath?:string,shortDescription?:string,techKeysCsv?:string,createdByName?:string,createdByEmail?:string}[]} */
     let projects = [];
 
     /** @type {Set<number>} */
@@ -458,40 +458,60 @@
             return;
         }
 
-        // Use the exact same markup/classes as Projects/Home showcase.
         preview.innerHTML = `
-            <div class="projects-grid">
+            <div class="mycv-projects-grid">
                 ${selectedList
                     .slice(0, MAX_SELECTED_PROJECTS)
                     .map((id) => {
                         const p = projects.find((x) => x.id === id);
                         if (!p) return "";
 
+                        const imgSrc = (p.imagePath || "").trim() || "/images/projects/rocketship.png";
+                        const shortDesc = (p.shortDescription || "").trim();
+                        const techKeys = String(p.techKeysCsv || "")
+                            .split(",")
+                            .map((s) => s.trim())
+                            .filter(Boolean)
+                            .slice(0, 4);
+
+                        const creator = (p.createdByName || "").trim() || (p.createdByEmail || "").trim() || "Okänd";
+
                         return `
-                            <div class="projects-card" role="group" aria-label="Förhandsvisning projekt: ${escapeHtml(p.title)}">
-                                <div class="projects-doc">
-                                    <div class="projects-doc-top">
-                                        <div class="projects-doc-grid">
-                                            <div class="projects-doc-avatar" aria-hidden="true">
-                                                <img src="/images/projects/rocketship.png" alt="" />
+                            <div class="mycv-project-card" role="group" aria-label="Förhandsvisning projekt: ${escapeHtml(p.title)}">
+                                <div class="mycv-project-doc">
+                                    <div class="mycv-project-doc-top">
+                                        <div class="mycv-project-doc-grid">
+                                            <div class="mycv-project-doc-avatar" aria-hidden="true">
+                                                <img src="${escapeHtml(imgSrc)}" alt="" />
                                             </div>
 
-                                            <div class="projects-doc-center">
-                                                <div class="projects-doc-title">${escapeHtml(p.title)}</div>
-                                                <div class="projects-doc-createdby">Skapare: (förhandsvisning)</div>
-                                                <div class="projects-doc-meta">Skapad: ${escapeHtml(p.createdUtc)}</div>
+                                            <div class="mycv-project-doc-center">
+                                                <div class="mycv-project-doc-title">${escapeHtml(p.title)}</div>
+                                                <div class="mycv-project-doc-createdby">Skapare: ${escapeHtml(creator)}</div>
+                                                <div class="mycv-project-doc-meta">Skapad: ${escapeHtml(p.createdUtc)}</div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="projects-doc-body">
-                                        <div class="projects-doc_desc-card">
-                                            <div class="projects-doc-desc projects-doc-desc--muted" style="text-align:center;">(Kort beskrivning visas på MyCV)</div>
+                                    <div class="mycv-project-doc-body">
+                                        <div class="mycv-project-pill${shortDesc ? "" : " mycv-project-pill--muted"}">
+                                            <div class="mycv-project-pill__text">${escapeHtml(shortDesc || "Ingen kort beskrivning.")}</div>
                                         </div>
 
-                                        <div class="projects-doc-bottom">
-                                            <div class="projects-doc-sep" aria-hidden="true"></div>
-                                        </div>
+                                        ${techKeys.length
+                                            ? `
+                                            <div class="mycv-project-doc-bottom">
+                                                <div class="mycv-project-doc-sep" aria-hidden="true"></div>
+                                                <div class="mycv-project-doc-tech" aria-label="Tech stack">
+                                                    ${techKeys
+                                                        .map(
+                                                            (k) =>
+                                                                `<span class="mycv-project-doc-tech-tile"><img class="mycv-project-doc-tech-icon" src="/images/svg/techstack/${encodeURIComponent(k)}.svg" alt="${escapeHtml(k)}" /></span>`
+                                                        )
+                                                        .join("")}
+                                                </div>
+                                            </div>`
+                                            : ""}
                                     </div>
                                 </div>
                             </div>`;
@@ -605,7 +625,12 @@
                     .map((x) => ({
                         id: Number(x.id),
                         title: String(x.title || ""),
-                        createdUtc: String(x.createdUtc || "")
+                        createdUtc: String(x.createdUtc || ""),
+                        imagePath: x.imagePath ? String(x.imagePath) : "",
+                        shortDescription: x.shortDescription ? String(x.shortDescription) : "",
+                        techKeysCsv: x.techKeysCsv ? String(x.techKeysCsv) : "",
+                        createdByName: x.createdByName ? String(x.createdByName) : "",
+                        createdByEmail: x.createdByEmail ? String(x.createdByEmail) : ""
                     }))
                     .filter((x) => Number.isFinite(x.id) && x.title);
             }

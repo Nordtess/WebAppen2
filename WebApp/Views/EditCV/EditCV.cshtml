@@ -3,7 +3,7 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/components.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/pages/editcv.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/pages/projects.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/mycv-projects.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/pages/editcv-project-preview.css" asp-append-version="true" />
 }
 
@@ -241,7 +241,7 @@
                                     <a class="btn-secondary-custom" href="@Url.Action("Index", "Projects", new { mine = true })" style="text-decoration:none;">Mina projekt</a>
                                 </div>
 
-                                <div data-editcv-projects-json='@System.Text.Json.JsonSerializer.Serialize(Model.AllMyProjects.Select(p => new { id = p.Id, title = p.Title, createdUtc = p.CreatedUtc.ToString("yyyy-MM-dd") }), new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web))'></div>
+                                <div data-editcv-projects-json='@System.Text.Json.JsonSerializer.Serialize(Model.AllMyProjects.Select(p => new { id = p.Id, title = p.Title, createdUtc = p.CreatedUtc.ToString("yyyy-MM-dd"), imagePath = p.ImagePath, shortDescription = p.ShortDescription, techKeysCsv = p.TechKeysCsv, createdByName = p.CreatedByName, createdByEmail = p.CreatedByEmail }), new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web))'></div>
 
                                 <div class="editcv-project-preview" id="editcvProjectPreview"></div>
 

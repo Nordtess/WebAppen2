@@ -366,13 +366,20 @@ public class EditCVController : Controller
     private async Task<List<EditCvProjectPickVm>> GetAllMyProjectsAsync(string userId)
     {
         var q = from p in _db.Projekt.AsNoTracking()
+                join u in _db.Users.AsNoTracking() on p.CreatedByUserId equals u.Id into users
+                from u in users.DefaultIfEmpty()
                 where p.CreatedByUserId == userId
                    || _db.ProjektAnvandare.AsNoTracking().Any(pu => pu.ProjectId == p.Id && pu.UserId == userId)
                 select new EditCvProjectPickVm
                 {
                     Id = p.Id,
                     Title = p.Titel,
-                    CreatedUtc = p.CreatedUtc
+                    CreatedUtc = p.CreatedUtc,
+                    ImagePath = p.ImagePath,
+                    ShortDescription = p.KortBeskrivning,
+                    TechKeysCsv = p.TechStackKeysCsv,
+                    CreatedByName = u == null ? null : ((u.FirstName + " " + u.LastName).Trim()),
+                    CreatedByEmail = u == null ? null : u.Email
                 };
 
         return await q
