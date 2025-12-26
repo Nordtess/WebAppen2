@@ -3,7 +3,8 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/components.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/pages/editcv.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/pages/mycv-projects.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/projects.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/editcv-project-preview.css" asp-append-version="true" />
 }
 
 @{
@@ -11,6 +12,9 @@
 
     // Används för att styra visuell status i UI baserat på TempData, utan att påverka backend-logik.
     var initialSaveState = TempData["Saved"]?.ToString() == "1" ? "saved" : "dirty";
+
+    // If user came here from MyCV because they have no CV yet, prevent navigating back without saving.
+    var isFirstCvEdit = TempData.Peek("FirstCvEdit")?.ToString() == "1";
 
     var avatarSrc = string.IsNullOrWhiteSpace(Model.ProfileImagePath)
         ? Url.Content("~/images/bannersandicons/cvplaceholder2.png")
@@ -249,9 +253,18 @@
 
                 <div class="editcv-bottom">
                     <div class="editcv-bottom-inner">
-                        <a class="btn-secondary-custom" href="@Url.Action("Index", "MyCV")" style="text-decoration:none;" id="backBtn">
-                            Tillbaka
-                        </a>
+                        @if (isFirstCvEdit)
+                        {
+                            <button type="button" class="btn-secondary-custom" disabled style="text-decoration:none; opacity:0.55; cursor:not-allowed;" title="Spara ditt CV först">
+                                Tillbaka
+                            </button>
+                        }
+                        else
+                        {
+                            <a class="btn-secondary-custom" href="@Url.Action("Index", "MyCV")" style="text-decoration:none;" id="backBtn">
+                                Tillbaka
+                            </a>
+                        }
 
                         <div class="editcv-bottom-right">
                             <button type="submit" class="btn-primary-custom" id="saveBtnBottom">

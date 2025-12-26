@@ -1,0 +1,41 @@
+/* EditCV: project preview cards should match the exact size/feel of the Home latest-project showcase.
+   We reuse the same underlying `.projects-*` markup and only scope sizing/layout here.
+*/
+
+.editcv-project-preview {
+    margin-top: 12px;
+}
+
+/* Use the same card width behavior as Home showcase, but allow a 2-column grid */
+.editcv-project-preview .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+@media (max-width: 800px) {
+    .editcv-project-preview .projects-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Match home showcase proportions (same avatar size & min height as projects.css) */
+.editcv-project-preview .projects-card {
+    min-height: 420px;
+}
+
+.editcv-project-preview .projects-doc-avatar,
+.editcv-project-preview .projects-doc-spacer {
+    width: 128px;
+    height: 128px;
+}
+
+/* Home showcase adds extra space before divider; mirror that spacing in preview */
+.editcv-project-preview .projects-doc-bottom {
+    margin-top: auto;
+    padding-top: 14px;
+}
+
+.editcv-project-preview .projects-doc-sep {
+    margin: 70px auto 10px;
+}

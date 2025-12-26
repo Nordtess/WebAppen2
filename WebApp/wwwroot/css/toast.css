@@ -1,55 +1,71 @@
-.toast-wrap {
-    position: fixed;
-    left: 50%;
-    bottom: 18px;
-    transform: translateX(-50%);
-    z-index: 5000;
-    pointer-events: none;
-}
-
-.toast {
-    pointer-events: auto;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-
-    max-width: min(560px, calc(100vw - 28px));
-    padding: 12px 14px;
-    border-radius: 18px;
+/* ~100% larger */
+    max-width: min(900px, calc(100vw - 28px));
+    width: min(900px, calc(100vw - 28px));
+    padding: 24px 28px;
+    border-radius: 24px;
 
     border: 1px solid rgba(0, 0, 0, 0.18);
     background: rgba(255, 255, 255, 0.92);
     box-shadow:
         0 24px 68px rgba(0, 0, 0, 0.18),
-        0 0 0 4px rgba(127, 255, 212, 0.12);
+        0 0 0 6px rgba(127, 255, 212, 0.12);
 
     backdrop-filter: blur(10px);
 
     animation: toastIn 260ms ease-out;
 }
 
+.toast-content {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.toast-ok {
+    pointer-events: auto;
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-weight: 900;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.toast-ok:hover {
+    background: rgba(127, 255, 212, 0.22);
+}
+
 .toast-ico {
-    width: 28px;
-    height: 28px;
-    border-radius: 10px;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
     background: rgba(127, 255, 212, 0.35);
     display: grid;
     place-items: center;
     flex: 0 0 auto;
     border: 1px solid rgba(0, 0, 0, 0.10);
+    font-size: 18px;
 }
 
 .toast-title {
     margin: 0;
-    font-size: 13px;
+    font-size: 20px;
     font-weight: 950;
     color: rgba(0, 0, 0, 0.86);
     line-height: 1.2;
 }
 
 .toast-msg {
-    margin-top: 2px;
-    font-size: 13px;
+    margin-top: 6px;
+    font-size: 18px;
     font-weight: 650;
     color: rgba(0, 0, 0, 0.72);
     line-height: 1.35;
@@ -60,9 +76,9 @@
     background: transparent;
     border: 0;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 26px;
     line-height: 1;
-    padding: 0 4px;
+    padding: 0 6px;
     color: rgba(0, 0, 0, 0.65);
 }
 
@@ -76,4 +92,10 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+.toast--out {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 140ms ease, transform 140ms ease;
 }

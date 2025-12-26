@@ -38,9 +38,14 @@ public class MyCvController : Controller
             // First time: after successful save, redirect back here so user sees the result.
             TempData["FirstCvEdit"] = "1";
 
-            // Friendly, non-blocking notification.
-            TempData["ToastTitle"] = "Skapa ditt första CV";
-            TempData["ToastMessage"] = "Du har inget CV ännu. Fyll i CV-sidan och klicka ‘Spara ändringar’ så visas det i ‘Mitt CV’.";
+            if (!user.HasCreatedCv)
+            {
+                return RedirectToAction("Index", "EditCV", new
+                {
+                    toastTitle = "Skapa ditt första CV",
+                    toastMessage = "Du har inget CV ännu. Fyll i CV-sidan och klicka ‘Spara ändringar’ så visas det i ‘Mitt CV’."
+                });
+            }
 
             return RedirectToAction("Index", "EditCV");
         }
@@ -77,6 +82,7 @@ public class MyCvController : Controller
                     Id = x.p.Id,
                     Title = x.p.Titel,
                     ShortDescription = x.p.KortBeskrivning,
+                    Description = x.p.Beskrivning,
                     CreatedUtc = x.p.CreatedUtc,
                     ImagePath = x.p.ImagePath,
                     TechKeys = ParseCsv(x.p.TechStackKeysCsv),
@@ -173,6 +179,7 @@ public class MyCvController : Controller
         public int Id { get; init; }
         public string Title { get; init; } = string.Empty;
         public string? ShortDescription { get; init; }
+        public string? Description { get; init; }
         public DateTimeOffset CreatedUtc { get; init; }
         public string? ImagePath { get; init; }
         public string CreatedBy { get; init; } = string.Empty;

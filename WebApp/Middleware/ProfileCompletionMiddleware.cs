@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using WebApp.Domain.Identity;
 
 namespace WebApp.Middleware;
@@ -16,7 +17,7 @@ public class ProfileCompletionMiddleware
         _next = next;
     }
 
-    public async Task InvokeAsync(HttpContext context, UserManager<ApplicationUser> userManager)
+    public async Task InvokeAsync(HttpContext context, UserManager<ApplicationUser> userManager, ITempDataDictionaryFactory tempDataFactory)
     {
         if (context.User?.Identity?.IsAuthenticated == true)
         {
@@ -44,6 +45,11 @@ public class ProfileCompletionMiddleware
 
                     if (isProfileIncomplete)
                     {
+                        // Set toast for the next request.
+                        var tempData = tempDataFactory.GetTempData(context);
+                        tempData["ToastTitle"] = "Välkommen!";
+                        tempData["ToastMessage"] = "Komplettera ditt konto med dina personliga uppgifter så att du blir synlig för andra.";
+
                         context.Response.Redirect("/AccountProfile/Edit");
                         return;
                     }

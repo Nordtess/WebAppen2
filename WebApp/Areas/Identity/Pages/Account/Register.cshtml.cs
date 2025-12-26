@@ -117,10 +117,6 @@ namespace WebApp.Areas.Identity.Pages.Account
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
-                    // Friendly, non-blocking notification: explain why user is redirected.
-                    TempData["ToastTitle"] = "Välkommen!";
-                    TempData["ToastMessage"] = "Komplettera ditt konto med dina personliga uppgifter så att du blir synlig för andra.";
-
                     // Tvinga användaren att slutföra sin profil innan den använder webbplatsen.
                     return RedirectToAction("Edit", "AccountProfile");
                 }

@@ -21,8 +21,8 @@
     var isAuthenticated = User?.Identity?.IsAuthenticated == true;
     var userEmail = isAuthenticated ? (User?.Identity?.Name ?? "") : "";
 
-    var toastTitle = TempData["ToastTitle"] as string;
-    var toastMessage = TempData["ToastMessage"] as string;
+    var toastTitle = ViewData["ToastTitle"] as string ?? (TempData.Peek("ToastTitle") as string);
+    var toastMessage = ViewData["ToastMessage"] as string ?? (TempData.Peek("ToastMessage") as string);
 }
 
 <!DOCTYPE html>
@@ -207,16 +207,31 @@
         <div class="toast-wrap" aria-live="polite">
             <div class="toast" data-toast>
                 <div class="toast-ico" aria-hidden="true">i</div>
-                <div>
-                    @if (!string.IsNullOrWhiteSpace(toastTitle))
-                    {
-                        <p class="toast-title">@toastTitle</p>
-                    }
-                    <div class="toast-msg">@toastMessage</div>
+
+                <div class="toast-content">
+                    <div>
+                        @if (!string.IsNullOrWhiteSpace(toastTitle))
+                        {
+                            <p class="toast-title">@toastTitle</p>
+                        }
+                        <div class="toast-msg">@toastMessage</div>
+                    </div>
+
+                    <div class="toast-actions">
+                        <button class="toast-ok" type="button" data-toast-close>Ok</button>
+                    </div>
                 </div>
+
                 <button class="toast-close" type="button" aria-label="Stäng" data-toast-close>×</button>
             </div>
         </div>
+
+        @* Clear TempData toasts only if they were sourced from TempData *@
+        @if (ViewData["ToastMessage"] is null)
+        {
+            TempData.Remove("ToastTitle");
+            TempData.Remove("ToastMessage");
+        }
     }
 
     <div class="circle" aria-hidden="true"></div>
@@ -227,6 +242,7 @@
     <script src="~/js/mouse-circle.js" asp-append-version="true"></script>
     <script src="~/js/space-background.js" asp-append-version="true"></script>
     <script src="~/js/toast.js" asp-append-version="true"></script>
+    <script src="~/js/placeholder-clear.js" asp-append-version="true"></script>
     @if (string.Equals(ViewContext.RouteData.Values["controller"]?.ToString(), "Home", StringComparison.OrdinalIgnoreCase)
        && string.Equals(ViewContext.RouteData.Values["action"]?.ToString(), "Index", StringComparison.OrdinalIgnoreCase))
     {

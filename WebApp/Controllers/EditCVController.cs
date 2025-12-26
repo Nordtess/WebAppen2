@@ -28,12 +28,18 @@ public class EditCVController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index([FromQuery] string? toastTitle = null, [FromQuery] string? toastMessage = null)
     {
         var user = await _userManager.GetUserAsync(User);
         if (user is null)
         {
             return Challenge();
+        }
+
+        if (!string.IsNullOrWhiteSpace(toastMessage))
+        {
+            ViewData["ToastTitle"] = toastTitle;
+            ViewData["ToastMessage"] = toastMessage;
         }
 
         var (profile, _) = await GetOrCreateProfileForUserAsync(user.Id);
@@ -107,7 +113,8 @@ public class EditCVController : Controller
 
         // If user is creating their CV for the first time from MyCV,
         // MyCvController sets this flag so we can redirect them back after successful save.
-        var redirectToMyCvAfterSave = TempData["FirstCvEdit"]?.ToString() == "1";
+        // Use Peek so the view can still read it during the request.
+        var isFirstCvEdit = TempData.Peek("FirstCvEdit")?.ToString() == "1";
 
         var (profile, _) = await GetOrCreateProfileForUserAsync(user.Id);
 
@@ -138,11 +145,22 @@ public class EditCVController : Controller
 
         TempData["Saved"] = "1";
 
+        // After the first successful save we must clear the flag,
+        // otherwise EditCV will keep behaving like it's the first-time flow.
+        if (isFirstCvEdit)
+        {
+            TempData.Remove("FirstCvEdit");
+        }
+
+        // Persist onboarding: the user has now created a CV.
+        if (!user.HasCreatedCv)
+        {
+            user.HasCreatedCv = true;
+            await _userManager.UpdateAsync(user);
+        }
+
         // Always bring user back to MyCV after a successful save.
-        // (First-time flow already expects this redirect.)
-        return redirectToMyCvAfterSave
-            ? RedirectToAction("Index", "MyCV")
-            : RedirectToAction("Index", "MyCV");
+        return RedirectToAction("Index", "MyCV");
     }
 
     private async Task ReplaceEducationsAsync(int profileId, string? educationJson)

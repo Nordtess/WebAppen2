@@ -44,4 +44,18 @@ public class ApplicationUser : IdentityUser
 
     [StringLength(260)]
     public string? ProfileImagePath { get; set; }
+
+    // --- Onboarding flags (persisted) ---
+
+    /// <summary>
+    /// True when the user has saved their account/profile details at least once.
+    /// Used to show the one-time "complete your profile" toast reliably.
+    /// </summary>
+    public bool HasCompletedAccountProfile { get; set; }
+
+    /// <summary>
+    /// True when the user has created/saved their CV at least once.
+    /// Used to show the one-time "create your first CV" toast reliably.
+    /// </summary>
+    public bool HasCreatedCv { get; set; }
 }

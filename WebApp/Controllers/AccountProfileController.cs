@@ -44,6 +44,12 @@ public class AccountProfileController : Controller
             return Challenge();
         }
 
+        if (!user.HasCompletedAccountProfile)
+        {
+            ViewData["ToastTitle"] = "Välkommen!";
+            ViewData["ToastMessage"] = "Komplettera ditt konto med dina personliga uppgifter så att du blir synlig för andra.";
+        }
+
         var viewModel = new AccountEditViewModel
         {
             FirstName = user.FirstName,
@@ -81,6 +87,10 @@ public class AccountProfileController : Controller
         user.City = model.City;
         user.PostalCode = model.PostalCode;
 
+        // Persist onboarding completion.
+        var wasCompleted = user.HasCompletedAccountProfile;
+        user.HasCompletedAccountProfile = true;
+
         var result = await _userManager.UpdateAsync(user);
         if (!result.Succeeded)
         {
@@ -94,6 +104,12 @@ public class AccountProfileController : Controller
 
         // Uppdaterar inloggningssessionen så att ändringar syns direkt.
         await _signInManager.RefreshSignInAsync(user);
+
+        if (!wasCompleted)
+        {
+            TempData["ToastTitle"] = "Klart!";
+            TempData["ToastMessage"] = "Dina uppgifter är sparade.";
+        }
 
         return RedirectToAction("Index", "AccountProfile");
     }

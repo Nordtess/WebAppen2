@@ -458,41 +458,45 @@
             return;
         }
 
-        // Use the same markup classes as MyCV cards (but without links).
+        // Use the exact same markup/classes as Projects/Home showcase.
         preview.innerHTML = `
-            <div class="mycv-projects-card">
-                <div class="mycv-projects-grid">
-                    ${selectedList
-                        .slice(0, MAX_SELECTED_PROJECTS)
-                        .map((id) => {
-                            const p = projects.find((x) => x.id === id);
-                            if (!p) return "";
+            <div class="projects-grid">
+                ${selectedList
+                    .slice(0, MAX_SELECTED_PROJECTS)
+                    .map((id) => {
+                        const p = projects.find((x) => x.id === id);
+                        if (!p) return "";
 
-                            return `
-                                <div class="mycv-project-card" role="group" aria-label="Förhandsvisning projekt: ${escapeHtml(p.title)}">
-                                    <div class="mycv-project-doc">
-                                        <div class="mycv-project-doc-top">
-                                            <div class="mycv-project-doc-grid">
-                                                <div class="mycv-project-doc-avatar" aria-hidden="true">
-                                                    <img src="/images/projects/rocketship.png" alt="" />
-                                                </div>
-                                                <div class="mycv-project-doc-center">
-                                                    <div class="mycv-project-doc-title">${escapeHtml(p.title)}</div>
-                                                    <div class="mycv-project-doc-createdby">Skapare: (förhandsvisning)</div>
-                                                    <div class="mycv-project-doc-meta">Skapad: ${escapeHtml(p.createdUtc)}</div>
-                                                </div>
+                        return `
+                            <div class="projects-card" role="group" aria-label="Förhandsvisning projekt: ${escapeHtml(p.title)}">
+                                <div class="projects-doc">
+                                    <div class="projects-doc-top">
+                                        <div class="projects-doc-grid">
+                                            <div class="projects-doc-avatar" aria-hidden="true">
+                                                <img src="/images/projects/rocketship.png" alt="" />
                                             </div>
-                                        </div>
-                                        <div class="mycv-project-doc-body">
-                                            <div class="mycv-project-doc-desc-card">
-                                                <div class="mycv-project-doc-desc mycv-project-doc-desc--muted">(Kort beskrivning visas på MyCV)</div>
+
+                                            <div class="projects-doc-center">
+                                                <div class="projects-doc-title">${escapeHtml(p.title)}</div>
+                                                <div class="projects-doc-createdby">Skapare: (förhandsvisning)</div>
+                                                <div class="projects-doc-meta">Skapad: ${escapeHtml(p.createdUtc)}</div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>`;
-                        })
-                        .join("")}
-                </div>
+
+                                    <div class="projects-doc-body">
+                                        <div class="projects-doc_desc-card">
+                                            <div class="projects-doc-desc projects-doc-desc--muted" style="text-align:center;">(Kort beskrivning visas på MyCV)</div>
+                                        </div>
+
+                                        <div class="projects-doc-bottom">
+                                            <div class="projects-doc-sep" aria-hidden="true"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+                    })
+                    .join("")}
             </div>`;
     }
 
