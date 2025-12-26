@@ -1,32 +1,26 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const unreadPill = document.getElementById("messagesUnreadPill");
+    /** @type {HTMLElement | null} */
+    const headerUnreadText = document.querySelector(".unread-text");
+    /** @type {HTMLElement | null} */
+    const headerUnreadCount = document.getElementById("headerUnreadCount");
+    /** @type {HTMLImageElement | null} */
+    const headerNocco = document.getElementById("headerNocco");
 
-    function getUnreadCount() {
-        if (!unreadPill) return 0;
-        const m = (unreadPill.textContent || "").match(/(\d+)/);
-        return m ? parseInt(m[1], 10) : 0;
+    function getHeaderUnreadCount() {
+        const n = Number(headerUnreadCount?.textContent || "0");
+        return Number.isFinite(n) ? n : 0;
     }
 
-    function setUnreadCount(n) {
-        if (!unreadPill) return;
+    function setHeaderUnreadCount(n) {
         const v = Math.max(0, Number.isFinite(n) ? n : 0);
-
-        // Keep this string ASCII-only to avoid encoding/mojibake issues.
-        unreadPill.textContent = `Du har ${v} olasta meddelanden`;
-        unreadPill.classList.toggle("messages-unread-pill--ok", v <= 0);
-
-        // keep header icon/text in sync if present
-        const headerUnreadText = document.querySelector(".unread-text");
-        const headerUnreadCount = document.getElementById("headerUnreadCount");
-        const headerNocco = document.getElementById("headerNocco");
 
         if (headerUnreadCount) headerUnreadCount.textContent = String(v);
 
-        if (headerUnreadText instanceof HTMLElement) {
+        if (headerUnreadText) {
             headerUnreadText.style.display = v > 0 ? "inline" : "none";
         }
 
-        if (headerNocco instanceof HTMLImageElement) {
+        if (headerNocco) {
             const sleep = headerNocco.getAttribute("data-sleep-src");
             const msg = headerNocco.getAttribute("data-message-src");
             const next = v > 0 ? msg : sleep;
@@ -35,11 +29,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function decUnread() {
-        setUnreadCount(getUnreadCount() - 1);
+        setHeaderUnreadCount(getHeaderUnreadCount() - 1);
     }
 
     function incUnread() {
-        setUnreadCount(getUnreadCount() + 1);
+        setHeaderUnreadCount(getHeaderUnreadCount() + 1);
     }
 
     async function postForm(form) {
@@ -54,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Expand/collapse only (no auto-mark-as-read)
+    // Expand/collapse only
     document.querySelectorAll("[data-message]").forEach((card) => {
         const toggle = card.querySelector("[data-message-toggle]");
         const body = card.querySelector(".message-body");
@@ -125,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // AJAX delete: remove card + update unread pill instantly.
+    // AJAX delete: remove card + update header unread instantly.
     if (deleteForm instanceof HTMLFormElement) {
         deleteForm.addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -152,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Wire up "Last:" checkbox toggle (AJAX) - keep comment ASCII-only
+    // Wire up read checkbox toggle (AJAX)
     document.querySelectorAll("[data-setread-form]").forEach((formEl) => {
         if (!(formEl instanceof HTMLFormElement)) return;
 

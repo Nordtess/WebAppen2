@@ -20,13 +20,17 @@
         <img src="~/images/bannersandicons/messageboard.png" alt="Banner" class="messages-banner-img" />
     </div>
 
+    <div class="messages-tip">
+        <strong>Tips:</strong> Du kan svara på inloggade personers meddelanden!
+    </div>
+
     <div class="messages-card">
         <div class="messages-topbar">
             <div class="messages-titlewrap">
                 <h1 class="messages-title">Meddelanden</h1>
 
-                <span class="messages-unread-pill @(Model.UnreadCount > 0 ? "" : "messages-unread-pill--ok")" aria-label="Olasta" id="messagesUnreadPill">
-                    @Model.UnreadCount olästa
+                <span class="messages-count-pill" aria-label="Antal meddelanden" id="messagesCountPill">
+                    @Model.Messages.Count meddelanden
                 </span>
             </div>
 
@@ -117,14 +121,14 @@
                             </div>
 
                             <div class="message-reply">
-                                <div class="message-reply-title">Svara</div>
-
                                 @if (!canReply)
                                 {
-                                    <div class="message-reply-muted">Det här meddelandet skickades anonymt, så du kan inte svara här.</div>
+                                    <div class="message-reply-muted message-reply-muted--anon">Det här meddelandet skickades anonymt, så du kan inte svara här.</div>
                                 }
                                 else
                                 {
+                                    <div class="message-reply-title">Svara</div>
+
                                     <form method="post" asp-controller="Messages" asp-action="Reply" class="message-reply-form">
                                         @Html.AntiForgeryToken()
                                         <input type="hidden" name="OriginalMessageId" value="@m.Id" />
@@ -173,4 +177,4 @@
 
 @section Scripts {
     <script src="~/js/pages/messages.js" asp-append-version="true"></script>
-}}
+}
