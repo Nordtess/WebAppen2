@@ -51,9 +51,9 @@ public sealed class MessagesController : Controller
         {
             joined = joined.Where(x =>
                 (x.su != null &&
-                 (x.su.FirstNameNormalized + " " + x.su.LastNameNormalized).Contains(qNorm) ||
-                 x.su.FirstNameNormalized.Contains(qNorm) ||
-                 x.su.LastNameNormalized.Contains(qNorm))
+                 ((x.su.FirstNameNormalized + " " + x.su.LastNameNormalized).Contains(qNorm) ||
+                  x.su.FirstNameNormalized.Contains(qNorm) ||
+                  x.su.LastNameNormalized.Contains(qNorm)))
                 || (!string.IsNullOrWhiteSpace(x.m.SenderName) && x.m.SenderName.ToUpper().Contains(qNorm)));
         }
 

@@ -1,0 +1,79 @@
+@model WebApp.ViewModels.AdminIndexVm
+
+@{
+    ViewData["Title"] = "Admin";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/admin.css" asp-append-version="true" />
+}
+
+@Html.AntiForgeryToken()
+
+<div class="admin-page">
+    <div class="admin-card">
+        <div class="admin-hero">
+            <h1 class="admin-title">Admin</h1>
+            <p class="admin-sub">Hantera användare. Admin-konton kan inte tas bort.</p>
+        </div>
+
+        <div class="admin-actions">
+            <form asp-controller="Admin" asp-action="DeleteAllNonAdmins" method="post" class="admin-inline" onsubmit="return confirm('Detta tar bort ALLA icke-admin användare och deras data. Fortsätt?');">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn-danger-custom">Ta bort alla icke-admin</button>
+            </form>
+        </div>
+
+        <div class="admin-divider" aria-hidden="true"></div>
+
+        <div class="admin-list">
+            @foreach (var u in Model.Users)
+            {
+                <div class="admin-user" role="group" aria-label="Användare: @u.Email">
+                    <div class="admin-user__main">
+                        <div class="admin-user__title">
+                            <span class="admin-user__email">@u.Email</span>
+                            @if (!string.IsNullOrWhiteSpace(u.FullName))
+                            {
+                                <span class="admin-user__name">(@u.FullName)</span>
+                            }
+                        </div>
+
+                        <div class="admin-user__meta">
+                            <span class="admin-pill">@(u.IsAdmin ? "Admin" : "User")</span>
+                            @if (u.IsDeactivated)
+                            {
+                                <span class="admin-pill admin-pill--warn">Deactivated</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="admin-user__actions">
+                        @if (!u.IsAdmin)
+                        {
+                            <form asp-controller="Admin" asp-action="MakeAdmin" method="post" class="admin-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@u.Id" />
+                                <button type="submit" class="btn-secondary-custom">Gör admin</button>
+                            </form>
+
+                            <form asp-controller="Admin" asp-action="DeleteUser" method="post" class="admin-inline" onsubmit="return confirm('Ta bort användare: @u.Email ?');">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@u.Id" />
+                                <button type="submit" class="btn-danger-custom">Ta bort</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form asp-controller="Admin" asp-action="RemoveAdmin" method="post" class="admin-inline" onsubmit="return confirm('Ta bort admin-roll för @u.Email ?');">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@u.Id" />
+                                <button type="submit" class="btn-secondary-custom">Ta bort admin</button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

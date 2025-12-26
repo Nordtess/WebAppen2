@@ -149,8 +149,12 @@ public sealed class ProjectsController : Controller
                  CreatedUtc = x.p.CreatedUtc,
                  TechKeysCsv = x.p.TechStackKeysCsv,
                  ImagePath = x.p.ImagePath,
-                 CreatedByName = x.u == null ? null : ((x.u.FirstName + " " + x.u.LastName).Trim()),
-                 CreatedByEmail = x.u == null ? null : x.u.Email
+                 CreatedByName = x.u == null
+                     ? null
+                     : (((x.u.FirstName ?? "") + " " + (x.u.LastName ?? "")).Trim() == ""
+                         ? null
+                         : (((x.u.FirstName ?? "") + " " + (x.u.LastName ?? "")).Trim())),
+                 CreatedByEmail = x.u == null ? "" : (x.u.Email ?? "")
              })
              .ToListAsync();
 
@@ -274,8 +278,12 @@ public sealed class ProjectsController : Controller
             ShortDescription = project.KortBeskrivning,
             Description = project.Beskrivning,
             ImagePath = project.ImagePath,
-            CreatedByName = creator == null ? null : ((creator.FirstName + " " + creator.LastName).Trim()),
-            CreatedByEmail = creator?.Email,
+            CreatedByName = creator == null
+                ? null
+                : (string.IsNullOrWhiteSpace(((creator.FirstName ?? "") + " " + (creator.LastName ?? "")).Trim())
+                    ? null
+                    : ((creator.FirstName ?? "") + " " + (creator.LastName ?? "")).Trim()),
+            CreatedByEmail = creator?.Email ?? "Okänd",
             CreatedUtc = project.CreatedUtc,
             CreatedByUserId = project.CreatedByUserId,
             TechKeys = ParseCsv(project.TechStackKeysCsv),

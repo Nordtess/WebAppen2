@@ -1,0 +1,98 @@
+:root {
+    --help-max: 860px;
+    --help-radius: 18px;
+    --help-border: 1px solid rgba(0, 0, 0, 0.16);
+    --help-shadow: 0 24px 50px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.help-page {
+    max-width: var(--help-max);
+    margin: 0 auto;
+    padding: 22px 18px 28px;
+    color: rgba(248, 248, 255, 0.92);
+}
+
+.help-card {
+    background: rgba(255, 255, 255, 0.96);
+    border: var(--help-border);
+    border-radius: var(--help-radius);
+    box-shadow: var(--help-shadow);
+    overflow: hidden;
+}
+
+.help-hero {
+    padding: 22px 22px 14px;
+    background:
+        radial-gradient(900px 520px at 20% 0%, rgba(127, 255, 212, 0.26) 0%, rgba(127, 255, 212, 0) 60%),
+        radial-gradient(700px 420px at 80% 35%, rgba(127, 255, 212, 0.14) 0%, rgba(127, 255, 212, 0) 62%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.help-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 950;
+    letter-spacing: -0.02em;
+    color: rgba(0, 0, 0, 0.90);
+}
+
+.help-sub {
+    margin: 8px 0 0;
+    font-size: 14px;
+    font-weight: 650;
+    color: rgba(0, 0, 0, 0.65);
+}
+
+.help-section {
+    padding: 18px 22px;
+}
+
+.help-h2 {
+    margin: 0 0 10px;
+    font-size: 16px;
+    font-weight: 950;
+    letter-spacing: -0.01em;
+    color: rgba(0, 0, 0, 0.88);
+}
+
+.help-p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.65;
+    font-weight: 620;
+    color: rgba(0, 0, 0, 0.72);
+}
+
+.help-list {
+    margin: 10px 0 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 6px;
+    font-size: 14px;
+    line-height: 1.65;
+    font-weight: 620;
+    color: rgba(0, 0, 0, 0.72);
+}
+
+.help-divider {
+    height: 1px;
+    background: rgba(0, 0, 0, 0.08);
+    margin: 0 22px;
+}
+
+@media (max-width: 800px) {
+    .help-page {
+        padding: 18px 14px 24px;
+    }
+
+    .help-hero,
+    .help-section {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .help-divider {
+        margin-left: 16px;
+        margin-right: 16px;
+    }
+}

@@ -1,0 +1,154 @@
+:root {
+    --admin-max: 980px;
+    --admin-radius: 18px;
+    --admin-border: 1px solid rgba(0, 0, 0, 0.16);
+    --admin-shadow: 0 24px 50px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.admin-page {
+    max-width: var(--admin-max);
+    margin: 0 auto;
+    padding: 22px 18px 28px;
+}
+
+.admin-card {
+    background: rgba(255, 255, 255, 0.96);
+    border: var(--admin-border);
+    border-radius: var(--admin-radius);
+    box-shadow: var(--admin-shadow);
+    overflow: hidden;
+}
+
+.admin-hero {
+    padding: 22px 22px 14px;
+    background:
+        radial-gradient(900px 520px at 20% 0%, rgba(127, 255, 212, 0.22) 0%, rgba(127, 255, 212, 0) 60%),
+        radial-gradient(700px 420px at 80% 35%, rgba(127, 255, 212, 0.12) 0%, rgba(127, 255, 212, 0) 62%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.admin-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 950;
+    letter-spacing: -0.02em;
+    color: rgba(0, 0, 0, 0.90);
+}
+
+.admin-sub {
+    margin: 8px 0 0;
+    font-size: 14px;
+    font-weight: 650;
+    color: rgba(0, 0, 0, 0.65);
+}
+
+.admin-actions {
+    padding: 14px 22px 0;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.admin-divider {
+    height: 1px;
+    background: rgba(0, 0, 0, 0.08);
+    margin: 14px 22px;
+}
+
+.admin-list {
+    padding: 0 22px 22px;
+    display: grid;
+    gap: 10px;
+}
+
+.admin-user {
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 14px 26px rgba(0, 0, 0, 0.06);
+    padding: 12px 12px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: center;
+}
+
+.admin-user__title {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: baseline;
+}
+
+.admin-user__email {
+    font-weight: 950;
+    color: rgba(0, 0, 0, 0.85);
+}
+
+.admin-user__name {
+    font-weight: 750;
+    color: rgba(0, 0, 0, 0.62);
+}
+
+.admin-user__meta {
+    margin-top: 6px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.admin-pill {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    background: rgba(127, 255, 212, 0.28);
+    color: rgba(0, 0, 0, 0.78);
+    font-weight: 900;
+    font-size: 12px;
+}
+
+.admin-pill--warn {
+    background: rgba(255, 193, 7, 0.22);
+}
+
+.admin-user__actions {
+    display: inline-flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.admin-inline {
+    display: inline;
+    margin: 0;
+}
+
+@media (max-width: 800px) {
+    .admin-page {
+        padding: 18px 14px 24px;
+    }
+
+    .admin-user {
+        grid-template-columns: 1fr;
+        justify-items: start;
+    }
+
+    .admin-user__actions {
+        justify-content: flex-start;
+    }
+
+    .admin-hero,
+    .admin-actions,
+    .admin-list {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .admin-divider {
+        margin-left: 16px;
+        margin-right: 16px;
+    }
+}

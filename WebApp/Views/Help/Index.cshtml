@@ -1,0 +1,60 @@
+@{
+    ViewData["Title"] = "Hjälp";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/help.css" asp-append-version="true" />
+}
+
+<div class="help-page">
+    <div class="help-card">
+        <div class="help-hero">
+            <h1 class="help-title">Hjälp</h1>
+            <p class="help-sub">Snabbguide för att komma igång med NotLinkedIn.</p>
+        </div>
+
+        <div class="help-section">
+            <h2 class="help-h2">1) Skapa konto</h2>
+            <p class="help-p">Gå till <strong>Bli medlem</strong> och fyll i dina uppgifter. När du registrerat dig kan du logga in direkt.</p>
+        </div>
+
+        <div class="help-divider" aria-hidden="true"></div>
+
+        <div class="help-section">
+            <h2 class="help-h2">2) Skapa ditt CV</h2>
+            <p class="help-p">Öppna <strong>Mitt CV</strong>. Om du inte har något CV ännu skickas du vidare till redigeraren. Fyll i:</p>
+            <ul class="help-list">
+                <li><strong>Headline</strong> (t.ex. “Systemvetenskap • Fullstack”)</li>
+                <li><strong>Profiltext</strong> (kort och konkret)</li>
+                <li><strong>Kompetenser</strong> (lägg till flera för bättre matchning)</li>
+                <li><strong>Utbildning</strong> och <strong>Erfarenhet</strong></li>
+                <li><strong>Projekt</strong> (välj upp till 4)</li>
+            </ul>
+        </div>
+
+        <div class="help-divider" aria-hidden="true"></div>
+
+        <div class="help-section">
+            <h2 class="help-h2">3) Privat läge</h2>
+            <p class="help-p">På <strong>Mitt CV</strong> kan du slå på <strong>Privat läge</strong>. Då syns ditt CV bara för inloggade användare.</p>
+        </div>
+
+        <div class="help-divider" aria-hidden="true"></div>
+
+        <div class="help-section">
+            <h2 class="help-h2">4) Sök och kontakta</h2>
+            <p class="help-p">Under <strong>Sök CV</strong> kan du filtrera på namn, stad och kompetenser. Klicka på en profil för att öppna CV:t och skicka ett meddelande.</p>
+        </div>
+
+        <div class="help-divider" aria-hidden="true"></div>
+
+        <div class="help-section">
+            <h2 class="help-h2">5) Vanliga problem</h2>
+            <ul class="help-list">
+                <li><strong>Jag hittar inga resultat:</strong> prova att logga in (privata CV visas då också).</li>
+                <li><strong>Min profil syns inte:</strong> kontrollera att du inte har <strong>Privat läge</strong> på om du testar utloggad vy.</li>
+                <li><strong>Jag vill ändra min profil:</strong> gå till <strong>Redigera CV</strong> från <strong>Mitt CV</strong>.</li>
+            </ul>
+        </div>
+    </div>
+</div>
