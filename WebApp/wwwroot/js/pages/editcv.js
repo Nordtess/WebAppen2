@@ -167,13 +167,56 @@
         reader.readAsDataURL(file);
     });
 
-    // Back navigation guard: don't let user leave with invalid required fields.
+    // Back navigation guard: no modal, no window.confirm.
+    // If form is dirty and user clicks "Tillbaka", show an inline confirmation row.
     const backBtn = document.getElementById("backBtn");
+    const bottomBar = document.querySelector(".editcv-bottom-inner");
+
+    function ensureLeaveRow() {
+        if (!bottomBar) return null;
+
+        let row = document.getElementById("editcvLeaveRow");
+        if (row) return row;
+
+        row = document.createElement("div");
+        row.id = "editcvLeaveRow";
+        row.style.display = "none";
+        row.style.marginLeft = "10px";
+        row.style.marginRight = "10px";
+        row.style.flex = "1 1 auto";
+
+        row.innerHTML = `
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-start;">
+                <span style="font-weight:850;font-size:12px;color:rgba(0,0,0,0.72);">Du har osparade ändringar. Lämna ändå?</span>
+                <a class="btn-primary-custom" href="#" id="editcvLeaveConfirm" style="text-decoration:none;">Lämna</a>
+                <button type="button" class="btn-secondary-custom" id="editcvLeaveCancel">Stanna</button>
+            </div>`;
+
+        // Insert after back button (near left side).
+        bottomBar.insertBefore(row, bottomBar.children[1] ?? null);
+
+        const cancel = row.querySelector("#editcvLeaveCancel");
+        cancel?.addEventListener("click", () => {
+            row.style.display = "none";
+        });
+
+        return row;
+    }
+
     backBtn?.addEventListener("click", (e) => {
         if (!isDirty()) return;
 
-        const ok = window.confirm("Du har osparade ändringar – vill du lämna?\n\nTryck OK för att lämna eller Avbryt för att stanna kvar.");
-        if (!ok) e.preventDefault();
+        e.preventDefault();
+
+        const row = ensureLeaveRow();
+        if (!row) return;
+
+        const confirmLink = row.querySelector("#editcvLeaveConfirm");
+        if (confirmLink instanceof HTMLAnchorElement && backBtn instanceof HTMLAnchorElement) {
+            confirmLink.href = backBtn.href;
+        }
+
+        row.style.display = "block";
     });
 
     // On submit, validate and show inline messages.
