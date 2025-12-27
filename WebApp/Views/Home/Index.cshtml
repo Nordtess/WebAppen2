@@ -211,18 +211,6 @@
                 <div class="carousel-nav-zone right">
                     @await Html.PartialAsync("_CarouselNavButtonRight")
                 </div>
-
-                <div class="cv-dots" aria-label="Välj profil">
-                    @{ 
-                        var dotCount = (Model.LatestPublicCvs?.Count ?? 0);
-                        if (dotCount == 0) dotCount = 1;
-
-                        for (var i = 0; i < dotCount; i++)
-                        {
-                            <button class="cv-dot @(i == 0 ? "is-active" : "")" type="button" aria-label="Visa profil @(i + 1)"></button>
-                        }
-                    }
-                </div>
             </div>
         </div>
     </section>
