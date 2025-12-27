@@ -1,6 +1,4 @@
-﻿
-
-:root {
+﻿:root {
     --scv-max: 1100px;
     --scv-banner-max: 1120px;
     --scv-banner-offset-x: 10px;
@@ -443,4 +441,12 @@
     box-shadow:
         0 0 0 4px rgba(127, 255, 212, 0.18),
         0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Trunkera 'about' i karusellen till en rad med ellipsis för att hålla kortens höjd konstant */
+.cv-stage .searchcv-about,
+.cv-carousel .searchcv-about {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
