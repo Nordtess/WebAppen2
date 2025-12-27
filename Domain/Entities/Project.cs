@@ -1,9 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApp.Domain.Entities;
 
 /// <summary>
-/// Projekt som kan kopplas till en användare (t.ex. för att visa i ett CV).
+/// Projekt som kan kopplas till en användare och visas i t.ex. ett CV.
 /// </summary>
 public class Project
 {
@@ -11,33 +12,28 @@ public class Project
 
     [Required]
     [StringLength(80)]
-    public string Titel { get; set; } = "";
+    public string Titel { get; set; } = string.Empty;
 
     [StringLength(140)]
     public string? KortBeskrivning { get; set; }
 
     [Required]
     [StringLength(500)]
-    public string Beskrivning { get; set; } = "";
+    public string Beskrivning { get; set; } = string.Empty;
 
-    /// <summary>
-    /// Relative image path (wwwroot) chosen in the create/edit form.
-    /// Example: "/images/projects/rocketship.png".
-    /// </summary>
-    [System.ComponentModel.DataAnnotations.Schema.Column("ProjectImagePath")]
+    [Column("ProjectImagePath")]
     [StringLength(260)]
+    // Relativ sökväg under wwwroot till vald bild, t.ex. "/images/projects/rocketship.png"
     public string? ImagePath { get; set; }
 
-    /// <summary>
-    /// Komma-separerade tech-nycklar som matchar SVG-filer i wwwroot/images/svg/techstack.
-    /// Ex: "csharp,mysql,aspnet".
-    /// </summary>
     [StringLength(500)]
+    // Komma-separerade nycklar som matchar SVG-filer i wwwroot/images/svg/techstack
     public string? TechStackKeysCsv { get; set; }
 
-    // Identity-användarens UserId för den som skapade projektet.
+    // Identity-användarens id för den som skapade projektet
     public string? CreatedByUserId { get; set; }
 
+    // UTC-tidsstämplar initierade vid instansiering
     public DateTimeOffset CreatedUtc { get; set; } = DateTimeOffset.UtcNow;
 
     public DateTimeOffset UpdatedUtc { get; set; } = DateTimeOffset.UtcNow;

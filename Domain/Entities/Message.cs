@@ -1,7 +1,8 @@
 namespace WebApp.Domain.Entities;
 
 /// <summary>
-/// Legacy-entitet för bakåtkompatibilitet. Nyare meddelandefunktionalitet använder `Conversation` och `DirectMessage`.
+/// Legacy-entitet för bakåtkompatibilitet.
+/// Nyare meddelandefunktionalitet använder `Conversation` och `DirectMessage`.
 /// </summary>
 public class Message
 {

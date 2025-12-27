@@ -1,7 +1,7 @@
 namespace WebApp.Domain.Entities;
 
 /// <summary>
-/// Koppling mellan ett projekt och en Identity-användare.
+/// Entitet som representerar en koppling mellan ett projekt och en Identity-användare.
 /// </summary>
 public class ProjectUser
 {
@@ -9,8 +9,9 @@ public class ProjectUser
 
     public int ProjectId { get; set; }
 
-    // Identity-användarens Id (AspNetUsers.Id).
-    public string UserId { get; set; } = "";
+    // Identity-användarens id (AspNetUsers.Id)
+    public string UserId { get; set; } = string.Empty;
 
+    // UTC-tidsstämpel som anger när kopplingen skapades
     public DateTimeOffset ConnectedUtc { get; set; } = DateTimeOffset.UtcNow;
 }

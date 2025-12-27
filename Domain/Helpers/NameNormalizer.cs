@@ -3,10 +3,11 @@ using System.Globalization;
 namespace WebApp.Domain.Helpers;
 
 /// <summary>
-/// Hjälpmetoder för att formatera och normalisera namnsträngar på ett konsekvent sätt.
+/// Hjälpmetoder för formatering och normalisering av namnsträngar.
 /// </summary>
 public static class NameNormalizer
 {
+    // Svensk kultur används för att TitleCase hanterar å/ä/ö korrekt.
     private static readonly CultureInfo SwedishCulture = CultureInfo.GetCultureInfo("sv-SE");
 
     public static string ToDisplayName(string? value)
@@ -16,7 +17,7 @@ public static class NameNormalizer
             return string.Empty;
         }
 
-        // Trimma och bygg sedan upp strängen tecken för tecken för att behålla separatorer (mellanslag och bindestreck).
+        // Trimma och bygg upp resultatet tecken för tecken så att mellanslag och bindestreck bevaras.
         value = value.Trim();
 
         var parts = new List<string>();
@@ -32,7 +33,7 @@ public static class NameNormalizer
             var word = new string(currentWord.ToArray());
             currentWord.Clear();
 
-            // TitleCase med svensk kultur (påverkar t.ex. å/ä/ö).
+            // Normalisera ord: till små bokstäver och sedan TitleCase med svensk kultur.
             word = word.ToLower(SwedishCulture);
             word = SwedishCulture.TextInfo.ToTitleCase(word);
 
@@ -53,7 +54,7 @@ public static class NameNormalizer
 
         FlushWord();
 
-        // Slå ihop resultatet och komprimera eventuella dubbla mellanslag.
+        // Slå ihop och komprimera eventuella dubbla mellanslag.
         var joined = string.Concat(parts);
         while (joined.Contains("  ", StringComparison.Ordinal))
         {
@@ -70,7 +71,7 @@ public static class NameNormalizer
             return string.Empty;
         }
 
-        // Normaliserad form används för jämförelser/sökning: trim + versaler med invariant kultur.
+        // Normaliseringsform för jämförelser/sökning: trim + versaler (kulturinvariant).
         return value.Trim().ToUpperInvariant();
     }
 }
