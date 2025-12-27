@@ -33,6 +33,43 @@ public class MyCvController : Controller
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.UserId == user.Id);
 
+        // Self-heal for older accounts:
+        // If user has created a CV before but the link row is missing, restore consistency.
+        if (link is null && user.HasCreatedCv)
+        {
+            var existingProfile = await _db.Profiler
+                .FirstOrDefaultAsync(p => p.OwnerUserId == user.Id);
+
+            if (existingProfile is null)
+            {
+                var now = DateTimeOffset.UtcNow;
+                existingProfile = new WebApp.Domain.Entities.Profile
+                {
+                    OwnerUserId = user.Id,
+                    CreatedUtc = now,
+                    UpdatedUtc = now,
+                    IsPublic = true
+                };
+
+                _db.Profiler.Add(existingProfile);
+                await _db.SaveChangesAsync();
+            }
+
+            var newLink = new WebApp.Domain.Entities.ApplicationUserProfile
+            {
+                UserId = user.Id,
+                ProfileId = existingProfile.Id
+            };
+
+            _db.ApplicationUserProfiles.Add(newLink);
+            await _db.SaveChangesAsync();
+
+            // Re-load as no-tracking for the rest of the action.
+            link = await _db.ApplicationUserProfiles
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.UserId == user.Id);
+        }
+
         if (link is null)
         {
             // First time: after successful save, redirect back here so user sees the result.
