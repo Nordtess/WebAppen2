@@ -123,16 +123,32 @@
     margin-top: 0;
     /* keep extra headroom minimal */
     min-height: calc(var(--carousel-h) + 18px);
+    position: relative;
 }
 
 /* Pull the whole stage upward so it sits just below the banner */
 .cv-stage {
-    height: calc(var(--carousel-h) - 70px);
+    position: relative;
+    height: var(--carousel-h);
+    overflow: visible;
 }
 
 /* Move slides upward without affecting JS transforms */
 .cv-slide {
-    top: calc(50% - 60px);
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    width: min(var(--slide-w), 92%);
+    height: var(--slide-h);
+    transform: translate(-50%, -50%) scale(0.92);
+    transform-origin: center;
+    opacity: 0;
+    z-index: 1;
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none !important;
+    color: inherit;
+    transition: transform 0.28s ease, opacity 0.22s ease, filter 0.22s ease, box-shadow 0.28s ease;
 }
 
 /* Keep side cards closer and reduce overall spread */
@@ -142,21 +158,29 @@
 
 /* Bring nav buttons closer to the carousel instead of far sides */
 .carousel-nav-zone {
-    width: 88px;
-    height: 110px;
+    position: absolute;
+    top: calc(50% + var(--nav-offset-y));
+    transform: translateY(-50%);
+    width: 140px;
+    height: 120px;
+    pointer-events: none;
+    z-index: 19;
 }
 
 .cv-nav--prev {
-    left: 10px;
+    left: 20px;
 }
 
 .cv-nav--next {
-    right: 10px;
+    right: 20px;
 }
 
 .cv-dots {
-    margin-top: 10px;
-    padding-bottom: 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 34px;
+    padding-bottom: 8px;
 }
 
 .cv-slide *,
@@ -281,8 +305,8 @@
     position: absolute;
     top: calc(50% + var(--nav-offset-y));
     transform: translateY(-50%);
-    width: 88px;
-    height: 110px;
+    width: 140px;
+    height: 120px;
     pointer-events: none;
     z-index: 19;
 }
@@ -343,19 +367,19 @@
 }
 
 .cv-nav--prev {
-    left: 10px;
+    left: 20px;
 }
 
 .cv-nav--next {
-    right: 10px;
+    right: 20px;
 }
 
 .cv-dots {
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-top: 10px;
-    padding-bottom: 0;
+    margin-top: 34px;
+    padding-bottom: 8px;
 }
 
 .cv-dot {
