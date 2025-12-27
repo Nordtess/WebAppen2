@@ -124,13 +124,15 @@
     /* keep extra headroom minimal */
     min-height: calc(var(--carousel-h) + 18px);
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Pull the whole stage upward so it sits just below the banner */
 .cv-stage {
     position: relative;
     height: var(--carousel-h);
     overflow: visible;
+    flex: 1 1 auto;
 }
 
 /* Move slides upward without affecting JS transforms */
@@ -165,6 +167,100 @@
     height: 120px;
     pointer-events: none;
     z-index: 19;
+    display: flex;
+    align-items: center;
+}
+
+.carousel-nav-zone.left {
+    left: 0;
+    justify-content: flex-start;
+    padding-left: 14px;
+}
+
+.carousel-nav-zone.right {
+    right: 0;
+    justify-content: flex-end;
+    padding-right: 14px;
+}
+
+.carousel-nav-zone .elastic-btn-left,
+.carousel-nav-zone .elastic-btn-right {
+    pointer-events: auto;
+}
+
+.elastic-btn-right,
+.elastic-btn-left {
+    background: #0b0b1a;
+    border: 2px solid #00E5FF;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow:
+        0 10px 20px rgba(0, 229, 255, 0.2),
+        0 0 15px rgba(0, 229, 255, 0.1);
+}
+
+.elastic-svg-right,
+.elastic-svg-left {
+    width: 40px;
+    height: 40px;
+    stroke: #00E5FF;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    filter: drop-shadow(0 0 5px #00E5FF);
+}
+
+.arrow-head-right,
+.arrow-head-left {
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.arrow-shaft-right,
+.arrow-shaft-left {
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.3s ease;
+    opacity: 0;
+    transform-origin: left center;
+}
+
+.elastic-btn-right:hover,
+.elastic-btn-left:hover {
+    background: #11112b;
+    transform: scale(1.1);
+    box-shadow:
+        0 0 25px rgba(0, 229, 255, 0.5),
+        0 0 40px rgba(0, 229, 255, 0.2);
+    border-color: #fff;
+}
+
+.elastic-btn-right:hover .arrow-head-right { transform: translateX(-12px); }
+.elastic-btn-left:hover .arrow-head-left { transform: translateX(12px); }
+
+.elastic-btn-right:hover .arrow-shaft-right,
+.elastic-btn-left:hover .arrow-shaft-left {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+.elastic-btn-right:active,
+.elastic-btn-left:active {
+    transform: scale(0.95);
+}
+
+.elastic-btn-right:active .arrow-head-right {
+    transform: translateX(8px);
+    transition: transform 0.1s ease;
+}
+
+.elastic-btn-left:active .arrow-head-left {
+    transform: translateX(-8px);
+    transition: transform 0.1s ease;
 }
 
 .cv-nav--prev {
@@ -179,8 +275,9 @@
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-top: 34px;
-    padding-bottom: 8px;
+    margin-top: auto;
+    padding-top: 14px;
+    padding-bottom: 0;
 }
 
 .cv-slide *,
@@ -309,16 +406,25 @@
     height: 120px;
     pointer-events: none;
     z-index: 19;
+    display: flex;
+    align-items: center;
 }
 
 .carousel-nav-zone.left {
     left: 0;
-    background: linear-gradient(to right, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%);
+    justify-content: flex-start;
+    padding-left: 14px;
 }
 
 .carousel-nav-zone.right {
     right: 0;
-    background: linear-gradient(to left, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%);
+    justify-content: flex-end;
+    padding-right: 14px;
+}
+
+.carousel-nav-zone .elastic-btn-left,
+.carousel-nav-zone .elastic-btn-right {
+    pointer-events: auto;
 }
 
 .cv-nav {
@@ -344,6 +450,10 @@
     outline: none;
     -webkit-tap-highlight-color: transparent;
     background-clip: padding-box;
+}
+
+.cv-nav img {
+    display: none;
 }
 
 .cv-nav:hover {
@@ -378,8 +488,9 @@
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-top: 34px;
-    padding-bottom: 8px;
+    margin-top: auto;
+    padding-top: 14px;
+    padding-bottom: 0;
 }
 
 .cv-dot {
@@ -574,69 +685,72 @@
     font-size: 15px;
 }
 
-@media (max-width: 800px) {
-    :root {
-        --carousel-h: 360px;
-        /* 40% narrower than 440px */
-        --slide-w: 264px;
-        /* 20% shorter than 240px */
-        --slide-h: 192px;
-        --side-x: 170px;
-        --side-scale: 0.82;
-        --nav-offset-y: -18px;
+/* --- Smoke effect for left carousel button --- */
+.elastic-btn-left {
+    overflow: visible; /* allow smoke to go outside the circle */
+}
+
+.smoke-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    transition: opacity 0.3s ease;
+}
+
+.smoke-wisp {
+    fill: none;
+    stroke: #00E5FF;
+    stroke-width: 2;
+    opacity: 0;
+    filter: blur(2px);
+    transform-origin: center bottom;
+}
+
+@keyframes smokeRise {
+    0% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.5) translateX(0);
     }
 
-    .home-page {
-        padding: 18px 14px 24px;
+    30% {
+        opacity: 0.6;
     }
 
-    .home-h1 {
-        font-size: 26px;
+    100% {
+        opacity: 0;
+        transform: translateY(-40px) scale(1.5) translateX(var(--drift, 5px));
     }
+}
 
-    .home-h2 {
-        font-size: 20px;
-    }
+.smoke-wisp:nth-child(1) {
+    animation: smokeRise 2s ease-out infinite;
+    --drift: -5px;
+}
 
-    .home-banner {
-        height: 160px;
-    }
+.smoke-wisp:nth-child(2) {
+    animation: smokeRise 2.5s ease-out infinite 0.5s;
+    --drift: 5px;
+}
 
-    .home-banner-img--cv {
-        object-position: center 62%;
-    }
+.smoke-wisp:nth-child(3) {
+    animation: smokeRise 3s ease-out infinite 1s;
+    --drift: 2px;
+}
 
-    .carousel-nav-zone {
-        width: 100px;
-        height: 100px;
-    }
+/* On hover, stop/hide smoke */
+.elastic-btn-left:hover .smoke-container {
+    opacity: 0;
+}
 
-    .cv-nav {
-        width: 44px;
-        height: 44px;
-        font-size: 24px;
-    }
+/* --- Smoke effect for right carousel button --- */
+.elastic-btn-right {
+    overflow: visible;
+}
 
-    .cv-nav--prev {
-        left: 12px;
-    }
-
-    .cv-nav--next {
-        right: 12px;
-    }
-
-    .project-spotlight {
-        padding: 22px;
-    }
-
-    .story-card,
-    .story-card--reverse {
-        grid-template-columns: 1fr;
-    }
-
-    .story-title,
-    .story-lead,
-    .story-quote {
-        text-align: center;
-    }
+.elastic-btn-right:hover .smoke-container {
+    opacity: 0;
 }

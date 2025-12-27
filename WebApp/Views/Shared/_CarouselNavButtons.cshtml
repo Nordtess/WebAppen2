@@ -1,0 +1,14 @@
+@* Neon carousel LEFT nav button (real button; JS looks for .cv-nav--prev).
+   Includes smoke effect as provided by left.svg (implemented here, not served as .svg). *@
+<button type="button" class="elastic-btn-left elastic-btn cv-nav--prev" aria-label="Previous profile">
+    <svg class="smoke-container" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+        <path class="smoke-wisp" d="M20 40 Q 25 30 20 20" />
+        <path class="smoke-wisp" d="M30 40 Q 25 30 30 20" />
+        <path class="smoke-wisp" d="M25 45 Q 25 35 25 25" />
+    </svg>
+
+    <svg class="elastic-svg-left elastic-svg" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+        <path class="arrow-head-left arrow-head" d="M22 12 L10 25 L22 38" />
+        <line class="arrow-shaft-left arrow-shaft" x1="40" y1="25" x2="10" y2="25" transform="scaleX(0.5)" />
+    </svg>
+</button>

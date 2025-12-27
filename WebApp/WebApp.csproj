@@ -30,6 +30,7 @@
     <Folder Include="Areas\Identity\Data\" />
     <Folder Include="Views\DevAuth\" />
     <Folder Include="Views\InspectProject\" />
+    <Folder Include="wwwroot\images\svg\buttons\" />
   </ItemGroup>
 
 </Project>

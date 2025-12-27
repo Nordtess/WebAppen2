@@ -92,11 +92,11 @@
         <div class="home-card-body home-cv-body">
             <div class="cv-carousel" data-carousel="cv">
                 <div class="carousel-nav-zone left">
-                    <button class="cv-nav cv-nav--prev" type="button" aria-label="Föregående profil">‹</button>
+                    @await Html.PartialAsync("_CarouselNavButtons")
                 </div>
 
                 <div class="cv-stage" aria-label="Karusell med CV-profiler">
-                    @{
+                    @{ 
                         var cvs = Model.LatestPublicCvs ?? new List<WebApp.Controllers.HomeIndexVm.CvCardVm>();
                         if (cvs.Count == 0)
                         {
@@ -209,11 +209,11 @@
                 </div>
 
                 <div class="carousel-nav-zone right">
-                    <button class="cv-nav cv-nav--next" type="button" aria-label="Nästa profil">›</button>
+                    @await Html.PartialAsync("_CarouselNavButtonRight")
                 </div>
 
                 <div class="cv-dots" aria-label="Välj profil">
-                    @{
+                    @{ 
                         var dotCount = (Model.LatestPublicCvs?.Count ?? 0);
                         if (dotCount == 0) dotCount = 1;
 
