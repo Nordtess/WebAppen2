@@ -367,7 +367,6 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    /* Adjust this value to move the image up/down inside the frame */
     object-position: center var(--avatar-y, 50%);
 }
 
@@ -429,7 +428,7 @@
     padding: 12px;
     display: flex;
     justify-content: space-between;
-    align-items: center; /* was flex-start; center aligns text like C# */
+    align-items: center;
     gap: 10px;
 }
 
@@ -500,7 +499,7 @@
     margin-top: 10px;
 }
 
-/* Unify sizes for mini-form action buttons ("Lägg till i listan" / "Avbryt") */
+
 .editcv-mini-form-actions .btn-primary-custom,
 .editcv-mini-form-actions .btn-secondary-custom {
     padding: 0.6em 1.0em;
@@ -553,7 +552,7 @@
     margin-top: 8px;
 }
 
-/* Preview of selected projects using the same card style as MyCV/Alla projekt */
+
 .editcv-project-preview {
     margin-top: 12px;
 }
@@ -762,7 +761,7 @@
     margin-bottom: 10px;
 }
 
-/* --- Modal (EditCV project picker) --- */
+
 .editcv-modal {
     position: fixed;
     inset: 0;

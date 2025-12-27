@@ -1,15 +1,10 @@
-/* Projects section styling for `MyCV`.
-   Goal: use the exact same card look/feel as `Alla projekt` but keep it self-contained
-   (no dependency on `projects.css`).
-*/
-
 :root {
     --mycv-proj-radius: 22px;
     --mycv-proj-border: rgba(0, 0, 0, 0.10);
     --mycv-proj-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
-/* Wrapper card (like `.projects-list-card`) */
+
 .mycv-projects-card {
     width: 100%;
     padding: 0;
@@ -22,7 +17,7 @@
     box-shadow: none;
 }
 
-/* Grid: max 4 projects, 2x2 on desktop */
+
 .mycv-projects-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -44,7 +39,7 @@
     font-weight: 850;
     color: rgba(0, 0, 0, 0.70);
 
-    /* plain text, no inner pill */
+   
     padding: 8px 2px;
     border: 0;
     border-radius: 0;
@@ -58,7 +53,7 @@
     color: inherit;
 }
 
-/* Play-card look (scoped) */
+
 .mycv-project-card {
     border: 1px solid rgba(0, 0, 0, 0.78);
     background:
@@ -75,7 +70,7 @@
     display: flex;
     flex-direction: column;
 
-    /* Slightly taller than the ultra-compact version */
+  
     min-height: 270px;
 
     will-change: transform, box-shadow;
@@ -110,7 +105,7 @@
     transform: translateY(0);
 }
 
-/* Mini "document" layout */
+
 .mycv-project-doc {
     width: 100%;
     display: flex;
@@ -122,7 +117,7 @@
     padding: 2px 2px 10px;
 }
 
-/* Image + title/meta as two columns */
+
 .mycv-project-doc-grid {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -130,7 +125,7 @@
     align-items: start;
 }
 
-/* Image: ~50% smaller and sits top-left */
+
 .mycv-project-doc-avatar {
     width: 84px;
     height: 84px;
@@ -148,7 +143,7 @@
     display: block;
 }
 
-/* Meta block starts at same height as image */
+
 .mycv-project-doc-center {
     text-align: left;
     display: flex;
@@ -169,7 +164,7 @@
     overflow-wrap: anywhere;
 }
 
-/* Keep "Skapare" and "Skapad" inside the card even with long names */
+
 .mycv-project-doc-createdby,
 .mycv-project-doc-meta {
     max-width: 100%;
@@ -205,7 +200,7 @@
     gap: 8px;
 }
 
-/* Pills for descriptions (short + long) */
+
 .mycv-project-pill {
     border-radius: 16px;
     border: 1px solid rgba(0, 0, 0, 0.75);
@@ -222,7 +217,7 @@
     line-height: 1.45;
     overflow-wrap: anywhere;
 
-    /* clamp so pills don't grow indefinitely */
+
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
@@ -238,7 +233,7 @@
     padding: 10px 12px;
 }
 
-/* Tech strip bottom */
+
 .mycv-project-doc-bottom {
     margin-top: auto;
     padding-top: 8px;
@@ -255,7 +250,7 @@
     display: flex;
     justify-content: center;
     gap: 8px;
-    flex-wrap: nowrap; /* keep on one row */
+    flex-wrap: nowrap;
 }
 
 .mycv-project-doc-tech-tile {
@@ -276,7 +271,7 @@
     display: block;
 }
 
-/* Header row inside section */
+
 .mycv-projects-header {
     display: flex;
     align-items: center;
@@ -296,14 +291,14 @@
     color: #fff;
 }
 
-/* Header actions */
+
 .mycv-projects-header__actions {
     display: inline-flex;
     align-items: center;
     gap: 10px;
 }
 
-/* --- Modal (project picker) --- */
+
 .mycv-modal {
     position: fixed;
     inset: 0;
@@ -400,12 +395,12 @@
     color: rgba(0, 0, 0, 0.62);
 }
 
-/* Prevent page scroll when modal open */
+
 body.mycv-modal-open {
     overflow: hidden;
 }
 
-/* --- Picker list --- */
+
 .mycv-picker__list {
     display: flex;
     flex-direction: column;

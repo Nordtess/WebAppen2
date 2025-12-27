@@ -1,8 +1,3 @@
-/* Home-only styling for the latest project showcase card.
-   Goal: match 'Alla projekt' bottom layout (divider + tech icons at the bottom)
-   without relying on projects page containers.
-*/
-
 .home-project-showcase {
     width: 100%;
     display: flex;
@@ -13,9 +8,7 @@
     width: min(100%, 360px);
 }
 
-/* Ensure the card content area is a flex column so the bottom section can stick.
-   The markup already uses `.projects-doc` + `.projects-doc-body`.
-*/
+
 .home-project-showcase .projects-doc {
     flex: 1 1 auto;
     display: flex;
@@ -28,15 +21,13 @@
     flex-direction: column;
 }
 
-/* Home tweak: keep the bottom section at the bottom, but add a bit more breathing room
-   between the description and the divider (your screenshot). */
+
 .home-project-showcase .projects-doc-bottom {
     margin-top: auto;
     padding-top: 14px;
 }
 
-/* Add spacing ABOVE the divider line (only on Home showcase).
-   This does not change the card size; it just moves the divider down. */
+
 .home-project-showcase .projects-doc-sep {
     margin: 70px auto 10px;
 }

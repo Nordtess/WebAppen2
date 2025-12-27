@@ -12,14 +12,8 @@
     --active-bg: rgba(0, 0, 0, 0.10);
     --mint: #7fffd4;
     --mint-soft: rgba(127, 255, 212, 0.18);
-
-    /* Space theme */
     --space-text: #F8F8FF;
-
-    /* Header theme */
     --header-icon-size: 97px;
-
-    /* Scrollbar theme */
     --sb-track-color: transparent;
     --sb-thumb-color: #7FFFD4;
     --sb-thumb-hover: #98FFEB;
@@ -92,8 +86,6 @@ p {
     align-items: center;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
     z-index: 1000;
-
-    /* Allow the icon to be visible even if it's taller than --header-height */
     overflow: visible;
 }
 
@@ -102,8 +94,6 @@ p {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    /* Prevent accidental clipping on some browsers */
     overflow: visible;
 }
 
@@ -158,8 +148,6 @@ p {
     display: flex;
     align-items: center;
     gap: 12px;
-
-    /* Keep items vertically aligned and prevent odd baseline shifts */
     flex-wrap: nowrap;
     overflow: visible;
 }
@@ -170,8 +158,6 @@ p {
     opacity: 0.9;
     flex-shrink: 0;
     display: block;
-
-    /* Always center the icon within the header height */
     margin-top: calc((var(--header-height) - var(--header-icon-size)) / 2);
     margin-bottom: calc((var(--header-height) - var(--header-icon-size)) / 2);
 
@@ -274,13 +260,11 @@ p {
     overflow-y: auto;
     overflow-x: hidden;
     height: 100%;
-
-    /* Firefox */
     scrollbar-width: thin;
     scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
 }
 
-/* WebKit (Chromium/Edge/Safari) */
+
 .app-main::-webkit-scrollbar {
     width: 10px;
 }
@@ -292,12 +276,8 @@ p {
 .app-main::-webkit-scrollbar-thumb {
     background-color: var(--sb-thumb-color);
     border-radius: 10px;
-
-    /* Use transparent border to create padding without revealing track color */
     border: 2px solid transparent;
     background-clip: padding-box;
-
-    /* Mint laser glow */
     filter:
         drop-shadow(0 0 2px #7FFFD4)
         drop-shadow(0 0 6px #7FFFD4);

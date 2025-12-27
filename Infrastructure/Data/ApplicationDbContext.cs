@@ -6,7 +6,7 @@ using WebApp.Domain.Identity;
 namespace WebApp.Infrastructure.Data;
 
 /// <summary>
-/// Applikationens EF Core-kontext. Innehåller både Identity-tabeller och domänens tabeller.
+/// Applikationens EF Core-kontext som innehåller Identity-tabeller och domänens tabeller.
 /// </summary>
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
@@ -15,7 +15,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
     }
 
-    // Domänmodellen (CV).
+    // Domänmodellens DbSet: profiler, CV-relaterade entiteter och meddelandesystem
     public DbSet<Profile> Profiler => Set<Profile>();
     public DbSet<Education> Utbildningar => Set<Education>();
     public DbSet<Skill> Kompetenser => Set<Skill>();
@@ -26,7 +26,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<UserMessage> UserMessages => Set<UserMessage>();
 
-    // Äldre entitet som kan finnas kvar för bakåtkompatibilitet.
+    // Äldre entitet för bakåtkompatibilitet
     public DbSet<Message> Meddelanden => Set<Message>();
 
     public DbSet<ApplicationUserProfile> ApplicationUserProfiles => Set<ApplicationUserProfile>();
@@ -38,7 +38,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(builder);
 
-        // Index och constraints sätts med Fluent API för att stödja vanliga sökningar och förhindra dubletter.
+        // Fluent API: index och constraints för vanliga sökningar och förhindrande av dubletter
 
         builder.Entity<Profile>()
             .HasIndex(p => p.OwnerUserId);
@@ -55,10 +55,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<Project>()
             .HasIndex(p => p.CreatedByUserId);
 
+        // Unikt sammansatt index för att förhindra duplicerade projekt/användare-relationer
         builder.Entity<ProjectUser>()
             .HasIndex(x => new { x.ProjectId, x.UserId })
             .IsUnique();
 
+        // En användare får högst en koppling till en profil (1:1)
         builder.Entity<ApplicationUserProfile>()
             .HasIndex(x => x.UserId)
             .IsUnique();
@@ -67,8 +69,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(x => x.Profile)
             .WithMany()
             .HasForeignKey(x => x.ProfileId)
+            // Cascade delete: ta bort kopplingen om profilen tas bort
             .OnDelete(DeleteBehavior.Cascade);
 
+        // Unikt sammansatt index för att förhindra duplicerade deltagare i en konversation
         builder.Entity<ConversationParticipant>()
             .HasIndex(x => new { x.ConversationId, x.UserId })
             .IsUnique();
@@ -85,6 +89,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<ProfileVisit>()
             .HasIndex(v => v.VisitedUtc);
 
+        // Index för snabba frågor över mottagare, läst-status och tid
         builder.Entity<UserMessage>()
             .HasIndex(m => new { m.RecipientUserId, m.IsRead, m.SentUtc });
 
@@ -98,6 +103,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(x => x.Profile)
             .WithMany()
             .HasForeignKey(x => x.ProfileId)
+            // Cascade delete: ta bort utbildningsposter när profilen tas bort
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<WorkExperience>()
@@ -107,6 +113,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(x => x.Profile)
             .WithMany()
             .HasForeignKey(x => x.ProfileId)
+            // Cascade delete: ta bort erfarenheter när profilen tas bort
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

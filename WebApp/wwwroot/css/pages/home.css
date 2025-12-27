@@ -6,18 +6,13 @@
     --home-pad: 18px;
 
     --carousel-h: 340px;
-    /* 40% narrower than 520px */
     --slide-w: 312px;
-    /* 20% shorter than 210px */
     --slide-h: 168px;
     --side-scale: 0.86;
-    /* move side cards closer for the smaller width */
     --side-x: 190px;
     --side-tilt: 0deg;
     --card-border-strong: 2px solid rgba(0, 0, 0, 0.92);
     --nav-offset-y: -26px;
-
-    /* Space theme text */
     --home-space-text: #F8F8FF;
 }
 
@@ -25,8 +20,6 @@
     max-width: var(--home-max);
     margin: 0 auto;
     padding: 22px 18px 28px;
-
-    /* default text on the space background */
     color: var(--home-space-text);
 }
 
@@ -82,7 +75,7 @@
     padding: 26px 26px 30px;
 }
 
-/* When a banner is present, give the text extra distance from the banner */
+
 .home-banner + .home-card-body {
     padding-top: 26px;
 }
@@ -114,14 +107,12 @@
 }
 
 .home-cv-body {
-    /* allow nav zones to sit inside the card without being clipped */
-    padding: 90px 90px 90px;  /* var 18px 18px 22px */
+    padding: 90px 90px 90px;
     overflow: visible;
 }
 
 .cv-carousel {
     margin-top: 0;
-    /* keep extra headroom minimal */
     min-height: calc(var(--carousel-h) + 18px);
     position: relative;
     display: flex;
@@ -135,7 +126,6 @@
     flex: 1 1 auto;
 }
 
-/* Move slides upward without affecting JS transforms */
 .cv-slide {
     position: absolute;
     top: 20%;
@@ -153,12 +143,10 @@
     transition: transform 0.28s ease, opacity 0.22s ease, filter 0.22s ease, box-shadow 0.28s ease;
 }
 
-/* Keep side cards closer and reduce overall spread */
 :root {
     --side-x: 190px;
 }
 
-/* Bring nav buttons closer to the carousel instead of far sides */
 .carousel-nav-zone {
     position: absolute;
     top: calc(50% + var(--nav-offset-y));
@@ -506,8 +494,8 @@
 }
 
 .home-project-card {
-    position: relative; /* allow absolute positioning for badge */
-    padding: 0; /* banner should touch the card edges */
+    position: relative;
+    padding: 0;
     overflow: hidden;
     margin-top: 12px;
 }
@@ -629,7 +617,7 @@
 
 .home-split-card {
     padding: 0;
-    overflow: hidden; /* ensures the banner corners follow the card radius */
+    overflow: hidden;
 }
 
 .home-banner {
@@ -646,13 +634,11 @@
     object-fit: cover;
 }
 
-/* Banner image positioning (change these to move images inside their banners) */
 .home-banner-img--welcome { object-position: center 40%; }
 .home-banner-img--message { object-position: center 35%; }
 .home-banner-img--cv { object-position: center 25%; }
 .home-banner-img--project { object-position: center 33%; }
 
-/* Undo the previous override that could force images to the wrong height */
 .home-banner-img {
     max-width: 100%;
 }
@@ -690,9 +676,8 @@
     font-size: 15px;
 }
 
-/* --- Smoke effect for left carousel button --- */
 .elastic-btn-left {
-    overflow: visible; /* allow smoke to go outside the circle */
+    overflow: visible;
 }
 
 .smoke-container {
@@ -746,12 +731,10 @@
     --drift: 2px;
 }
 
-/* On hover, stop/hide smoke */
 .elastic-btn-left:hover .smoke-container {
     opacity: 0;
 }
 
-/* --- Smoke effect for right carousel button --- */
 .elastic-btn-right {
     overflow: visible;
 }
@@ -765,8 +748,8 @@
 }
 
 .home-project-card {
-    position: relative; /* allow absolute positioning for badge */
-    padding: 0; /* banner should touch the card edges */
+    position: relative;
+    padding: 0;
     overflow: hidden;
     margin-top: 12px;
 }

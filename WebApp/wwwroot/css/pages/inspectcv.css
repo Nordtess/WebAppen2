@@ -1,12 +1,6 @@
-/*
-  Inspect CV
-  - Design matches `mycv.css`, but lives in its own file for independent styling.
-  - Only includes overrides/additions specific to InspectCV.
-*/
-
 @import url("/css/pages/mycv.css");
 
-/* Replace "edit" affordances with read-only feel */
+
 .inspectcv-readonly-note {
     width: 100%;
     max-width: var(--cv-max);
@@ -29,7 +23,7 @@
     gap: 10px;
 }
 
-/* Message card inside the CV page uses the same design language */
+
 .inspectcv-message-title {
     font-size: 16px;
     font-weight: 900;
@@ -87,7 +81,7 @@
     color: rgba(0, 0, 0, 0.60);
 }
 
-/* Collapsible message UI */
+
 .inspectcv-message-panel {
     margin-top: 10px;
 }
@@ -108,7 +102,7 @@
     user-select: none;
 }
 
-/* Space between the summary button and the first line of content in <details> */
+
 .inspectcv-message-panel[open] .inspectcv-message-summary + .inspectcv-help {
     margin-top: 10px;
 }
@@ -117,7 +111,7 @@
     opacity: 0.92;
 }
 
-/* (removed SVG contact icon styling – icons are plain emoji like MyCV) */
+
 
 @media (max-width: 800px) {
     .inspectcv-actions {

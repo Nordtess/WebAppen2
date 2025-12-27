@@ -25,11 +25,7 @@
     border: 1px solid rgba(0, 0, 0, 0.16);
     background: rgba(255, 255, 255, 0.95);
     box-shadow: 0 18px 38px rgba(0, 0, 0, 0.07), 0 2px 6px rgba(0, 0, 0, 0.04);
-
-    /* Match visual width of the cards below (prevents "looks narrower" effect) */
     box-sizing: border-box;
-
-    /* Optional sideways nudge, without affecting the rest of the layout */
     transform: translateX(var(--proj-banner-offset-x));
 }
 
@@ -69,7 +65,6 @@
     font-size: 13px;
 }
 
-/* Login tip shouldn't be plain text - keep it as a pill */
 .projects-tip {
     width: 100%;
     max-width: var(--proj-max);
@@ -90,14 +85,10 @@
     box-shadow: var(--proj-shadow);
     padding: 14px;
     margin-bottom: 14px;
-
-    /* makes the top section feel like a single "big card" */
     position: sticky;
     top: 12px;
     z-index: 2;
     backdrop-filter: blur(8px);
-
-    /* Match banner width */
     width: 100%;
     max-width: var(--proj-max);
 }
@@ -240,7 +231,7 @@
     padding: 14px;
 }
 
-/* Make each project card feel like a "play card" */
+
 .projects-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -305,8 +296,6 @@
     display: flex;
     flex-direction: column;
     min-height: 420px;
-
-    /* avoid blurry text during transform animations */
     will-change: transform, box-shadow;
     transform: translateY(0);
     backface-visibility: visible;
@@ -342,7 +331,7 @@
     transform: translateY(0);
 }
 
-/* Mini "document" style for project cards (list) */
+
 .projects-doc {
     width: 100%;
     display: flex;
@@ -366,7 +355,7 @@
     padding-top: 2px;
 }
 
-/* Single source of truth for avatar sizing (keep the large play-card size) */
+
 .projects-doc-avatar,
 .projects-doc-spacer {
     width: 128px;
@@ -430,7 +419,7 @@
     flex: 1 1 auto;
 }
 
-/* Description as its own inner card */
+
 .projects-doc-desc-card {
     margin-top: 10px;
     border-radius: 16px;
@@ -449,7 +438,7 @@
     text-align: left;
 }
 
-/* Bottom section (underline + tech at the bottom) */
+
 .projects-doc-bottom {
     margin-top: auto;
     padding-top: 14px;
@@ -486,7 +475,7 @@
     display: block;
 }
 
-/* Force themed inputs/selects inside projects page controls */
+
 .projects-controls .projects-input {
     appearance: none;
     -webkit-appearance: none;
@@ -512,7 +501,7 @@
         0 12px 24px rgba(0, 0, 0, 0.08);
 }
 
-/* Select arrow (only for selects) */
+
 .projects-controls select.projects-input {
     padding-right: 40px;
     background-image:
@@ -530,7 +519,7 @@
     background-repeat: no-repeat;
 }
 
-/* Fix weird header wrapping: keep center column readable and prevent excessive line breaks */
+
 .projects-doc-grid {
     align-items: center;
     grid-template-columns: auto 1fr;

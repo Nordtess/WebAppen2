@@ -1,26 +1,22 @@
-/* Space background shared by all pages.
-   Scoped to the main scroll area so it sits behind page content.
-*/
-
 :root {
     --space-mint: #7FFFD4;
     --space-purple-1: #3a225f;
     --space-purple-2: #150a24;
 }
 
-/* app-main is the scroll container; it must be the positioning context */
+
 .app-main {
     position: relative;
 }
 
-/* Make sure main-inner stays above background */
+
 .main-inner {
     min-height: 100%;
     position: relative;
     z-index: 10;
 }
 
-/* Background layer behind all content in app-main */
+
 .space-background {
     position: absolute;
     top: 0;
@@ -30,13 +26,10 @@
     width: 100%;
     height: 100%;
     min-height: 100%;
-
     pointer-events: none;
     z-index: 0;
     border-radius: inherit;
     overflow: visible;
-
-    /* Keep the perfect gradient */
     background: linear-gradient(180deg, var(--space-mint) -10%, var(--space-purple-1) 40%, var(--space-purple-2) 100%);
 }
 
@@ -45,8 +38,6 @@
     inset: 0;
     pointer-events: none;
     z-index: 0;
-
-    /* Allow shooting stars to travel beyond container bounds */
     overflow: visible;
 }
 
@@ -71,24 +62,19 @@
     filter: url(#whiteLaserGlow);
     animation: whiteTwinkle infinite ease-in-out;
     transform-origin: center;
-
-    /* Start in a known state on first paint and keep keyframe values applied */
     opacity: 0.22;
     transform: scale(0.75) rotate(0deg);
     animation-fill-mode: both;
-
-    /* Hint for smoother animation */
     will-change: transform, opacity;
 }
 
-/* Remove shooting star feature styles */
-/* (Previously: #shootingStarsLayer, .moving-star, .moving-star::after) */
+
 
 .space-moon {
     position: absolute;
     top: 18px;
     right: 18px;
-    z-index: 6; /* above shooting layer (5) and background (0), below content (10) */
+    z-index: 6;
     pointer-events: none;
 }
 
@@ -97,8 +83,6 @@
     height: 308px;
     opacity: 0.95;
     display: block;
-
-    /* Prevent the SVG glow/filter region from appearing as a square edge */
     border-radius: 50%;
     overflow: hidden;
 }
@@ -115,7 +99,7 @@
         height: 227px;
     }
 
-    /* Mobile perf: disable heavy/animated decor */
+   
     .space-moon,
     #meteorLayer,
     #ufoLayer {
@@ -123,11 +107,11 @@
     }
 }
 
-/* Meteor overlay layer (above space background, below content) */
+
 #meteorLayer {
     position: absolute;
     inset: 0;
-    z-index: 6; /* keep consistent with moon; layer itself is behind content */
+    z-index: 6;
     pointer-events: none;
     overflow: visible;
 }
@@ -149,7 +133,7 @@
 }
 
 
-/* UFO overlay layer (above background, below content) */
+
 #ufoLayer {
     position: absolute;
     inset: 0;

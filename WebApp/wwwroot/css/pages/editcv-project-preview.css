@@ -1,12 +1,8 @@
-/* EditCV: selected project preview should match MyCV project cards 1:1.
-   We reuse the exact `.mycv-*` markup/classes and only scope layout here.
-*/
-
 .editcv-project-preview {
     margin-top: 12px;
 }
 
-/* Use the same grid behavior as MyCV */
+
 .editcv-project-preview .mycv-projects-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -19,7 +15,7 @@
     }
 }
 
-/* Ensure preview cards don't look like links */
+
 .editcv-project-preview .mycv-project-card {
     cursor: default;
 }

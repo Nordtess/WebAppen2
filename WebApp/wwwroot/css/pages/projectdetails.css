@@ -30,7 +30,7 @@
     height: 100%;
     display: block;
     object-fit: cover;
-    object-position: center 20%; /* object-position can take two values, but we only need to adjust vertical position */
+    object-position: center 20%;
 }
 
 .projectdetails-container {
@@ -38,7 +38,7 @@
     max-width: var(--pd-max);
 }
 
-/* "Document" wrapper */
+
 .projectdetails-document {
     border: 1px solid var(--pd-border);
     border-radius: var(--pd-radius);
@@ -46,7 +46,7 @@
     box-shadow: var(--pd-shadow);
     padding: 16px;
 
-    /* Subtle watermark (very low opacity, lightweight) */
+   
     background-image:
         radial-gradient(circle at 22% 18%, rgba(127, 255, 212, 0.10) 0 1px, transparent 2px),
         radial-gradient(circle at 72% 42%, rgba(255, 255, 255, 0.16) 0 1px, transparent 2px),
@@ -55,7 +55,7 @@
     background-repeat: repeat;
 }
 
-/* Header like create-project: image left + centered title stack */
+
 .projectdetails-top {
     padding: 6px 6px 14px;
 }
@@ -122,8 +122,6 @@
     font-size: 12px;
     font-weight: 950;
     color: rgba(0, 0, 0, 0.74);
-
-    /* Mint glow */
     box-shadow:
         0 10px 26px rgba(127, 255, 212, 0.18),
         0 2px 8px rgba(0, 0, 0, 0.06);
@@ -134,7 +132,7 @@
     height: 252px;
 }
 
-/* Sections as paper cards */
+
 .projectdetails-section {
     border: 1px solid var(--pd-border);
     border-radius: var(--pd-radius);
@@ -184,8 +182,6 @@
     flex-direction: column;
     gap: 10px;
     position: relative;
-
-    /* make room for the hint above the first member card */
     padding-top: 48px;
 }
 
@@ -222,8 +218,6 @@
 
 .projectdetails-member:hover {
     text-decoration: none;
-
-    /* Keep the hover feel to the standard mint border + glow (no blur). */
     border-color: rgba(127, 255, 212, 0.75);
     box-shadow:
         0 16px 34px rgba(0, 0, 0, 0.10),
@@ -235,8 +229,6 @@
 .projectdetails-member-left {
     flex: 1 1 auto;
     min-width: 0;
-
-    /* Name + headline on one row */
     display: flex;
     align-items: baseline;
     gap: 10px;
@@ -252,8 +244,6 @@
     font-weight: 800;
     font-size: 12px;
     color: rgba(0, 0, 0, 0.62);
-
-    /* Allow truncation when long */
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -284,7 +274,7 @@
     margin: 0;
 }
 
-/* Tech stack (match create card feel) */
+
 .projectdetails-tech-row {
     margin-top: 14px;
     display: flex;
