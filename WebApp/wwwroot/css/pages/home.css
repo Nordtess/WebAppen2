@@ -12,7 +12,7 @@
     --slide-h: 168px;
     --side-scale: 0.86;
     /* move side cards closer for the smaller width */
-    --side-x: 220px;
+    --side-x: 190px;
     --side-tilt: 0deg;
     --card-border-strong: 2px solid rgba(0, 0, 0, 0.92);
     --nav-offset-y: -26px;
@@ -114,38 +114,49 @@
 }
 
 .home-cv-body {
-    padding: 26px 26px 30px;
+    /* allow nav zones to sit inside the card without being clipped */
+    padding: 18px 18px 22px;
     overflow: visible;
 }
 
 .cv-carousel {
-    margin-top: 10px;
-    position: relative;
-    min-height: calc(var(--carousel-h) + 68px);
+    margin-top: 0;
+    /* keep extra headroom minimal */
+    min-height: calc(var(--carousel-h) + 18px);
 }
 
+/* Pull the whole stage upward so it sits just below the banner */
 .cv-stage {
-    position: relative;
-    height: var(--carousel-h);
-    overflow: visible;
+    height: calc(var(--carousel-h) - 70px);
 }
 
+/* Move slides upward without affecting JS transforms */
 .cv-slide {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: min(var(--slide-w), 92%);
-    height: var(--slide-h);
-    transform: translate(-50%, -50%) scale(0.92);
-    transform-origin: center;
-    opacity: 0;
-    z-index: 1;
-    pointer-events: none;
-    cursor: default;
-    text-decoration: none !important;
-    color: inherit;
-    transition: transform 0.28s ease, opacity 0.22s ease, filter 0.22s ease, box-shadow 0.28s ease;
-    filter: none;
+    top: calc(50% - 60px);
+}
+
+/* Keep side cards closer and reduce overall spread */
+:root {
+    --side-x: 190px;
+}
+
+/* Bring nav buttons closer to the carousel instead of far sides */
+.carousel-nav-zone {
+    width: 88px;
+    height: 110px;
+}
+
+.cv-nav--prev {
+    left: 10px;
+}
+
+.cv-nav--next {
+    right: 10px;
+}
+
+.cv-dots {
+    margin-top: 10px;
+    padding-bottom: 0;
 }
 
 .cv-slide *,
@@ -270,8 +281,8 @@
     position: absolute;
     top: calc(50% + var(--nav-offset-y));
     transform: translateY(-50%);
-    width: 140px;
-    height: 120px;
+    width: 88px;
+    height: 110px;
     pointer-events: none;
     z-index: 19;
 }
@@ -332,19 +343,19 @@
 }
 
 .cv-nav--prev {
-    left: 20px;
+    left: 10px;
 }
 
 .cv-nav--next {
-    right: 20px;
+    right: 10px;
 }
 
 .cv-dots {
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-top: 34px;
-    padding-bottom: 8px;
+    margin-top: 10px;
+    padding-bottom: 0;
 }
 
 .cv-dot {
