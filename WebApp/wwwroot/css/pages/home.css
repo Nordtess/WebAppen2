@@ -506,6 +506,7 @@
 }
 
 .home-project-card {
+    position: relative; /* allow absolute positioning for badge */
     padding: 0; /* banner should touch the card edges */
     overflow: hidden;
     margin-top: 12px;
@@ -761,4 +762,23 @@
 
 .home-cv-card .searchcv-doc-sep {
     display: none;
+}
+
+.home-project-card {
+    position: relative; /* allow absolute positioning for badge */
+    padding: 0; /* banner should touch the card edges */
+    overflow: hidden;
+    margin-top: 12px;
+}
+
+.home-project-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 5;
+    display: block;
+    width: 46px;
+    height: auto;
+    margin: 0;
+    pointer-events: none;
 }
