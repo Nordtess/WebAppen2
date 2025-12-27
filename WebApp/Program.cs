@@ -3,6 +3,7 @@ using WebApp.Domain.Identity;
 using WebApp.Infrastructure.Data;
 using WebApp.Middleware;
 using WebApp.Infrastructure.Services;
+using WebApp.Services;
 
 namespace WebApp;
 
@@ -34,6 +35,8 @@ public class Program
 
         // App services
         builder.Services.AddScoped<IUnreadMessagesService, UnreadMessagesService>();
+        // Account deletion service (scoped because it uses DbContext)
+        builder.Services.AddScoped<AccountDeletionService>();
 
         var app = builder.Build();
 

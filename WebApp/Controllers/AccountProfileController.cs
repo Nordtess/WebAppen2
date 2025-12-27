@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApp.Domain.Helpers;
 using WebApp.Domain.Identity;
 using WebApp.Models;
+using WebApp.Services;
 
 namespace WebApp.Controllers;
 
@@ -15,13 +16,16 @@ public class AccountProfileController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly AccountDeletionService _deletionService;
 
     public AccountProfileController(
         UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager)
+        SignInManager<ApplicationUser> signInManager,
+        AccountDeletionService deletionService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _deletionService = deletionService;
     }
 
     public async Task<IActionResult> Index()
@@ -180,6 +184,47 @@ public class AccountProfileController : Controller
         }
 
         await _signInManager.SignOutAsync();
+        return RedirectToAction("Index", "Home");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteAccount([FromForm] string ConfirmText, [FromForm] string Password)
+    {
+        if (!string.Equals(ConfirmText?.Trim(), "RADERA", StringComparison.OrdinalIgnoreCase))
+        {
+            TempData["Error"] = "Du måste skriva RADERA för att bekräfta.";
+            return RedirectToAction("Index", "AccountProfile");
+        }
+
+        var user = await _userManager.GetUserAsync(User);
+        if (user is null) return Challenge();
+
+        // Verify password
+        var ok = await _userManager.CheckPasswordAsync(user, Password ?? "");
+        if (!ok)
+        {
+            TempData["Error"] = "Fel lösenord.";
+            return RedirectToAction("Index", "AccountProfile");
+        }
+
+        var result = await _deletionService.DeleteUserAndOwnedDataAsync(user.Id);
+        if (!result.Success)
+        {
+            TempData["Error"] = result.ErrorMessage ?? "Kunde inte radera kontot.";
+            return RedirectToAction("Index", "AccountProfile");
+        }
+
+        // Finally delete identity user
+        var deleteResult = await _userManager.DeleteAsync(user);
+        if (!deleteResult.Succeeded)
+        {
+            TempData["Error"] = "Kunde inte radera identity-kontot.";
+            return RedirectToAction("Index", "AccountProfile");
+        }
+
+        await _signInManager.SignOutAsync();
+        TempData["Success"] = "Ditt konto raderades permanent.";
         return RedirectToAction("Index", "Home");
     }
 }
