@@ -1,8 +1,7 @@
 namespace WebApp.Domain.Entities;
 
 /// <summary>
-/// Äldre entitet som finns kvar för bakåtkompatibilitet.
-/// Nyare meddelandefunktionalitet bör använda Conversation och DirectMessage.
+/// Legacy-entitet för bakåtkompatibilitet. Nyare meddelandefunktionalitet använder `Conversation` och `DirectMessage`.
 /// </summary>
 public class Message
 {
@@ -12,5 +11,6 @@ public class Message
 
     public string? Text { get; set; }
 
+    // UTC-tidsstämpel satt vid instansiering
     public DateTimeOffset Skickad { get; set; } = DateTimeOffset.UtcNow;
 }

@@ -1,7 +1,8 @@
 namespace WebApp.Domain.Entities;
 
 /// <summary>
-/// Koppling mellan en konversation och en deltagare (Identity-användare).
+/// Entitet som representerar en koppling mellan en konversation och en Identity-användare.
+/// Motsvarar en relationsrad som binder en konversation till en användare.
 /// </summary>
 public class ConversationParticipant
 {
@@ -9,6 +10,6 @@ public class ConversationParticipant
 
     public int ConversationId { get; set; }
 
-    // Identity-användarens Id (AspNetUsers.Id).
-    public string UserId { get; set; } = "";
+    // Identity-användarens Id (AspNetUsers.Id)
+    public string UserId { get; set; } = string.Empty;
 }

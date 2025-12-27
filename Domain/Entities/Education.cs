@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations;
 namespace WebApp.Domain.Entities;
 
 /// <summary>
-/// En utbildningsrad kopplad till en profil (CV).
-/// Airtight lagring (normaliserat) istället för JSON.
+/// Entitet som representerar en utbildningspost kopplad till en profil (CV).
+/// Normaliserad lagring av utbildningsinformation istället för att spara som JSON.
 /// </summary>
 public class Education
 {
@@ -12,32 +12,29 @@ public class Education
 
     public int ProfileId { get; set; }
 
+    // Navigationsproperty; null! används för att undertrycka nullable-varning då EF sätter relationen vid körning.
     public Profile Profile { get; set; } = null!;
 
     [Required]
     [StringLength(120)]
-    public string School { get; set; } = "";
+    public string School { get; set; } = string.Empty;
 
     [Required]
     [StringLength(120)]
-    public string Program { get; set; } = "";
+    public string Program { get; set; } = string.Empty;
 
-    /// <summary>
-    /// Valfri fritext för år/period, t.ex. "2024 – Pågående".
-    /// (Kan senare delas upp i From/To.)
-    /// </summary>
     [Required]
     [StringLength(40)]
-    public string Years { get; set; } = "";
+    // Valfri fritext för år/period, t.ex. "2024 – Pågående". Kan senare delas upp i From/To.
+    public string Years { get; set; } = string.Empty;
 
     [StringLength(200)]
     public string? Note { get; set; }
 
-    /// <summary>
-    /// Sorteringsordning (lägre = högre upp i CV).
-    /// </summary>
+    // Lägre värde visas högre upp i CV
     public int SortOrder { get; set; }
 
+    // UTC-tidsstämplar; initieras vid instansiering
     public DateTimeOffset CreatedUtc { get; set; } = DateTimeOffset.UtcNow;
 
     public DateTimeOffset UpdatedUtc { get; set; } = DateTimeOffset.UtcNow;
