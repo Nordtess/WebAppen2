@@ -7,6 +7,9 @@ using WebApp.Infrastructure.Data;
 
 namespace WebApp.Controllers;
 
+/// <summary>
+/// Administrationsgränssnitt för att hantera användare och deras data (endast för Admin-rollen).
+/// </summary>
 [Authorize(Roles = AdminRoleName)]
 public sealed class AdminController : Controller
 {
@@ -26,7 +29,7 @@ public sealed class AdminController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        // Make sure the Admin role exists.
+        // Se till att Admin-rollen finns i Identity-tabellerna
         if (!await _roleManager.RoleExistsAsync(AdminRoleName))
         {
             await _roleManager.CreateAsync(new IdentityRole(AdminRoleName));
@@ -44,7 +47,7 @@ public sealed class AdminController : Controller
             })
             .ToListAsync();
 
-        // Load admin flags (Identity roles are stored in separate tables)
+        // Läs in vilka användare som har Admin-rollen (lagras i Identity-rollenstabeller)
         var adminIds = new HashSet<string>();
         foreach (var u in users)
         {
@@ -91,7 +94,7 @@ public sealed class AdminController : Controller
         var user = await _userManager.FindByIdAsync(id);
         if (user is null) return NotFound();
 
-        // Prevent locking yourself out.
+        // Förhindra att man tar bort sin egen admin-roll (risk för att låsa ut sig själv)
         var meId = _userManager.GetUserId(User);
         if (string.Equals(meId, user.Id, StringComparison.Ordinal))
         {
@@ -113,7 +116,7 @@ public sealed class AdminController : Controller
         var user = await _userManager.FindByIdAsync(id);
         if (user is null) return NotFound();
 
-        // Hard rule: never allow deleting an admin.
+        // Hårdkodad regel: tillåt inte borttagning av admin-konton
         if (await _userManager.IsInRoleAsync(user, AdminRoleName))
         {
             TempData["ToastTitle"] = "Inte tillåtet";
@@ -121,7 +124,7 @@ public sealed class AdminController : Controller
             return RedirectToAction(nameof(Index));
         }
 
-        // Best-effort cleanup of app-owned data (messages, profile link, profile, etc.)
+        // Försök rensa app-ägda data före borttagning av identity-användaren
         await DeleteUserDataAsync(user.Id);
 
         var res = await _userManager.DeleteAsync(user);
@@ -138,8 +141,7 @@ public sealed class AdminController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteAllNonAdmins()
     {
-        // Deletes all users that are not admins, plus their app-owned data.
-
+        // Tar bort alla användare som inte är admins, inklusive deras app-ägda data.
         var users = await _db.Users.ToListAsync();
         foreach (var u in users)
         {
@@ -160,15 +162,15 @@ public sealed class AdminController : Controller
 
     private async Task DeleteUserDataAsync(string userId)
     {
-        // Messages (sent or received)
+        // Ta bort meddelanden där användaren är avsändare eller mottagare
         var msgs = await _db.UserMessages.Where(m => m.RecipientUserId == userId || m.SenderUserId == userId).ToListAsync();
         if (msgs.Count > 0) _db.UserMessages.RemoveRange(msgs);
 
-        // Project links
+        // Ta bort kopplingar mellan användaren och projekt
         var projUsers = await _db.ProjektAnvandare.Where(x => x.UserId == userId).ToListAsync();
         if (projUsers.Count > 0) _db.ProjektAnvandare.RemoveRange(projUsers);
 
-        // CV profile + link + child tables
+        // Hantera eventuell profilkoppling och alla relaterade child-tabeller
         var link = await _db.ApplicationUserProfiles.FirstOrDefaultAsync(x => x.UserId == userId);
         if (link is not null)
         {
@@ -188,7 +190,7 @@ public sealed class AdminController : Controller
             if (profile is not null) _db.Profiler.Remove(profile);
         }
 
-        // Projects created by user (delete). This may cascade depending on FK setup.
+        // Ta bort projekt skapade av användaren (kan cascada beroende på FK)
         var projects = await _db.Projekt.Where(p => p.CreatedByUserId == userId).ToListAsync();
         if (projects.Count > 0) _db.Projekt.RemoveRange(projects);
 

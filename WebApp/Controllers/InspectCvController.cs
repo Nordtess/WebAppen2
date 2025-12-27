@@ -11,6 +11,10 @@ using WebApp.Models.Export;
 
 namespace WebApp.Controllers;
 
+/// <summary>
+/// Hanterar visning, export och meddelandefunktion för publika/anonyma användarprofiler (CV).
+/// Innehåller loggning av besök, privacy-kontroller och server-side validering av meddelanden.
+/// </summary>
 [Route("InspectCV")]
 public sealed class InspectCvController : Controller
 {
@@ -30,11 +34,13 @@ public sealed class InspectCvController : Controller
         var user = await _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == userId);
         if (user is null) return NotFound();
 
+        // Integritet: avaktiverade profiler visas inte
         if (user.IsDeactivated)
         {
             return NotFound();
         }
 
+        // Integritet: privata profiler kräver inloggning
         if (user.IsProfilePrivate && !(User.Identity?.IsAuthenticated == true))
         {
             return Forbid();
@@ -45,14 +51,12 @@ public sealed class InspectCvController : Controller
             ? null
             : await _db.Profiler.AsNoTracking().FirstOrDefaultAsync(p => p.Id == link.ProfileId);
 
-        // Track visit count (the requirement is to save number of visitors per CV page).
-        // We log a row per visit; later we show Count().
+        // Logga profilbesök (spara rad per besök). Räkna inte ägarens egna besök.
         if (link is not null)
         {
             var visitorUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
 
-            // Do not count the profile owner's own visits.
             if (!string.Equals(visitorUserId, userId, StringComparison.Ordinal))
             {
                 _db.ProfilBesok.Add(new ProfileVisit
@@ -67,12 +71,12 @@ public sealed class InspectCvController : Controller
             }
         }
 
-        // Visit count shown on inspect page.
+        // Visa antal besök
         var visits = link is null
             ? 0
             : await _db.ProfilBesok.AsNoTracking().CountAsync(v => v.ProfileId == link.ProfileId);
 
-        // Selected projects from profile.
+        // Valda projekt från profilen
         var selectedProjectIds = ParseSelectedProjectIds(profile?.SelectedProjectsJson);
 
         var projects = new List<InspectCvProjectCardVm>();
@@ -137,9 +141,7 @@ public sealed class InspectCvController : Controller
                 })
                 .ToListAsync();
 
-        // Message prefill rules:
-        // - Logged in: name is prefilled from account and cannot be changed.
-        // - Anonymous: must type a name.
+        // Meddelandeförifyllning: inloggade får namn förifyllt och låst, anonyma måste ange namn
         var viewer = User.Identity?.IsAuthenticated == true
             ? await _userManager.GetUserAsync(User)
             : null;
@@ -185,7 +187,7 @@ public sealed class InspectCvController : Controller
         if (user is null) return NotFound();
         if (user.IsDeactivated) return NotFound();
 
-        // Keep same privacy guard as viewing the page.
+        // Samma privacy-guard som vy
         if (user.IsProfilePrivate && !(User.Identity?.IsAuthenticated == true))
         {
             return Forbid();
@@ -196,7 +198,7 @@ public sealed class InspectCvController : Controller
             ? null
             : await _db.Profiler.AsNoTracking().FirstOrDefaultAsync(p => p.Id == link.ProfileId);
 
-        // Full CV data (export should include existing profile data).
+        // Full CV-data för export
         var educations = link is null
             ? new List<ExportEducationDto>()
             : await _db.Utbildningar.AsNoTracking()
@@ -225,7 +227,6 @@ public sealed class InspectCvController : Controller
                 })
                 .ToListAsync();
 
-        // Selected projects from profile.
         var selectedProjectIds = ParseSelectedProjectIds(profile?.SelectedProjectsJson);
         var exportProjects = new List<ExportProjectDto>();
 
@@ -286,6 +287,7 @@ public sealed class InspectCvController : Controller
 
         ms.Position = 0;
 
+        // Bygg ett säkert filnamn utan specialtecken
         var safeName = (user.FirstName + "_" + user.LastName).Trim('_');
         if (string.IsNullOrWhiteSpace(safeName)) safeName = "profile";
         safeName = string.Concat(safeName.Select(ch => char.IsLetterOrDigit(ch) ? ch : '_'));
@@ -312,11 +314,9 @@ public sealed class InspectCvController : Controller
             return Forbid();
         }
 
-        // Server-side validation.
+        // Server-side validering; vid fel -> återgå till vy
         if (!ModelState.IsValid)
         {
-            // Re-render page by redirecting back; keeping it simple for now.
-            // (If you want inline validation, we can keep state and return View with errors.)
             return RedirectToAction(nameof(ByUserId), new { userId });
         }
 
@@ -326,7 +326,7 @@ public sealed class InspectCvController : Controller
 
         if (!string.IsNullOrWhiteSpace(viewerUserId))
         {
-            // Logged in: always use account name (read-only requirement).
+            // Inloggad: använd kontots namn och id (låst)
             var sender = await _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == viewerUserId);
             if (sender is not null)
             {
@@ -336,11 +336,11 @@ public sealed class InspectCvController : Controller
         }
         else
         {
-            // Anonymous: must type name.
+            // Anonym: namn måste anges i formuläret
             senderName = input.SenderName?.Trim();
         }
 
-        // Final safety checks.
+        // Grundläggande säkerhetskontroller för namn och meddelandelängd
         if (string.IsNullOrWhiteSpace(senderName) || !IsValidPersonName(senderName))
         {
             return RedirectToAction(nameof(ByUserId), new { userId });
@@ -370,9 +370,7 @@ public sealed class InspectCvController : Controller
 
     private static bool IsValidPersonName(string name)
     {
-        // Allow letters (including Swedish), whitespace and hyphen.
-        // No numbers/symbols.
-        // Basic length guard.
+        // Tillåt bokstäver (inkl. svenska), mellanslag och bindestreck; inga siffror eller symboler.
         if (name.Length is < 1 or > 100) return false;
 
         foreach (var ch in name)
@@ -482,7 +480,7 @@ public sealed class InspectCvController : Controller
 
         public List<InspectCvProjectCardVm> Projects { get; init; } = new();
 
-        // Message form
+        // Meddelandeform
         public string MessagePrefillName { get; init; } = string.Empty;
         public bool MessageNameReadonly { get; init; }
 

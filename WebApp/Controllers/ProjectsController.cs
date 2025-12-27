@@ -11,6 +11,9 @@ using WebApp.ViewModels;
 
 namespace WebApp.Controllers;
 
+/// <summary>
+/// Hanterar CRUD- och listningsfunktionalitet för projekt.
+/// </summary>
 public sealed class ProjectsController : Controller
 {
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
@@ -37,7 +40,7 @@ public sealed class ProjectsController : Controller
 
         if (project.CreatedByUserId != user.Id) return Forbid();
 
-        // Remove memberships first (FK safety)
+        // Ta bort medlemskopplingar först för att undvika FK-konstigheter vid radering
         var links = await _db.ProjektAnvandare.Where(x => x.ProjectId == id).ToListAsync();
         if (links.Count > 0)
         {
@@ -64,7 +67,7 @@ public sealed class ProjectsController : Controller
 
         var onlyMine = (mine ?? false) && viewerId != null;
 
-        // Join to creator so we can filter on name/email and (optionally) show it.
+        // Basfråga: join mot skapare för att kunna visa och filtrera på namn/email
         var baseQuery = from p in _db.Projekt.AsNoTracking()
                         join u in _db.Users.AsNoTracking() on p.CreatedByUserId equals u.Id into users
                         from u in users.DefaultIfEmpty()
@@ -81,8 +84,7 @@ public sealed class ProjectsController : Controller
         {
             var s = q.Trim();
 
-            // EF.Functions.Like makes it case-insensitive on SQL Server collations typically,
-            // and avoids client-side evaluation.
+            // EF.Functions.Like används för att förlita sig på DB-kollation för case-insensitiv match och undvika klientutvärdering.
             var like = $"{s}%";
             var likeAnywhere = $"%{s}%";
 
@@ -101,8 +103,7 @@ public sealed class ProjectsController : Controller
             }
             else if (scopeKey == "member")
             {
-                // Projects where any member matches the query.
-                // We do a subquery so we don't have to project membership names into the main row.
+                // Sök i medlemmar via subquery för att hålla huvudprojektraden kompakt
                 baseQuery = baseQuery.Where(x =>
                     _db.ProjektAnvandare.AsNoTracking()
                         .Where(pu => pu.ProjectId == x.p.Id)
@@ -114,7 +115,7 @@ public sealed class ProjectsController : Controller
             }
             else
             {
-                // all
+                // all: sök i titel, kort beskrivning, skapare och medlemmar
                 baseQuery = baseQuery.Where(x =>
                     EF.Functions.Like(x.p.Titel, likeAnywhere) ||
                     (x.p.KortBeskrivning != null && EF.Functions.Like(x.p.KortBeskrivning, likeAnywhere)) ||
@@ -208,8 +209,7 @@ public sealed class ProjectsController : Controller
         _db.Projekt.Add(project);
         await _db.SaveChangesAsync();
 
-        // Creator auto-connects to their own project so the relationship exists (owner is still treated separately in UI).
-        // Members listing excludes the owner.
+        // Koppla skaparen som medlem så att relationen finns (ägarskap hanteras separat i UI)
         _db.ProjektAnvandare.Add(new ProjectUser { ProjectId = project.Id, UserId = user.Id, ConnectedUtc = now });
         await _db.SaveChangesAsync();
 
@@ -219,7 +219,7 @@ public sealed class ProjectsController : Controller
     [HttpGet]
     public async Task<IActionResult> Details(int id)
     {
-        // Load project + creator in one query so details page can show creator info.
+        // Hämta projekt + skapare i en fråga för detaljvisning
         var projectRow = await (from p in _db.Projekt.AsNoTracking()
                                 join u in _db.Users.AsNoTracking() on p.CreatedByUserId equals u.Id into users
                                 from u in users.DefaultIfEmpty()
@@ -237,7 +237,7 @@ public sealed class ProjectsController : Controller
 
         var isOwner = isLoggedIn && project.CreatedByUserId == viewer!.Id;
 
-        // Participants: hide private users if viewer is anonymous.
+        // Deltagare: döljer privata profiler för anonyma tittare
         var participantsQuery = from pu in _db.ProjektAnvandare.AsNoTracking()
                                 join u in _db.Users.AsNoTracking() on pu.UserId equals u.Id
                                 join link in _db.ApplicationUserProfiles.AsNoTracking() on u.Id equals link.UserId into links
@@ -429,7 +429,7 @@ public sealed class ProjectsController : Controller
 
         if (normalized.Length == 0) return null;
 
-        // Safety max length
+        // Säkerhetsgräns för total längd så fältet inte överskrider databasgräns
         var sb = new StringBuilder();
         foreach (var n in normalized)
         {

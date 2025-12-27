@@ -18,21 +18,27 @@ public sealed class MessagesController : Controller
         _db = db;
     }
 
+    /// <summary>
+    /// Visar inkorgen för inloggad användare med filtrering, sökning och sortering.
+    /// </summary>
     [HttpGet]
     public async Task<IActionResult> Index([FromQuery] string? sort, [FromQuery] string? q, [FromQuery] string? unreadOnly)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrWhiteSpace(userId)) return Forbid();
 
+        // Normalisera sorteringsläge
         var sortMode = (sort ?? "new").Trim().ToLowerInvariant();
         if (sortMode is not ("new" or "old")) sortMode = "new";
 
+        // Tolkning av flagga för endast olästa
         var onlyUnread = string.Equals((unreadOnly ?? "0").Trim(), "1", StringComparison.OrdinalIgnoreCase)
             || string.Equals((unreadOnly ?? "").Trim(), "true", StringComparison.OrdinalIgnoreCase);
 
         var query = (q ?? string.Empty).Trim();
         var qNorm = query.ToUpperInvariant();
 
+        // Basfråga: användarens mottagna meddelanden (AsNoTracking för läsning)
         var baseQuery = _db.UserMessages.AsNoTracking()
             .Where(m => m.RecipientUserId == userId);
 
@@ -41,7 +47,7 @@ public sealed class MessagesController : Controller
             baseQuery = baseQuery.Where(m => !m.IsRead);
         }
 
-        // Join sender for nicer filtering + display for logged-in senders.
+        // Join mot Users för att kunna visa och söka på avsändarens kontoinformation
         var joined = from m in baseQuery
                      join su in _db.Users.AsNoTracking() on m.SenderUserId equals su.Id into sus
                      from su in sus.DefaultIfEmpty()
@@ -63,6 +69,7 @@ public sealed class MessagesController : Controller
 
         var rows = await joined.Take(200).ToListAsync();
 
+        // Hjälpmetod: skapa förhandsvisning av meddelandetext
         static string MakePreview(string body)
         {
             var t = (body ?? string.Empty).Trim();
@@ -70,12 +77,14 @@ public sealed class MessagesController : Controller
             return t.Substring(0, 110) + "…";
         }
 
+        // Hjälpmetod: bygg visningsnamn från för- och efternamn
         static string DisplayName(string? a, string? b)
         {
             var s = string.Join(' ', new[] { a, b }.Where(x => !string.IsNullOrWhiteSpace(x)));
             return string.IsNullOrWhiteSpace(s) ? "Okänd" : s;
         }
 
+        // Räkna olästa meddelanden
         var unreadCount = await _db.UserMessages.AsNoTracking()
             .Where(m => m.RecipientUserId == userId && !m.IsRead)
             .CountAsync();
@@ -190,7 +199,7 @@ public sealed class MessagesController : Controller
 
         if (original is null) return NotFound();
 
-        // Can only reply when the sender is an authenticated user we can address.
+        // Kan endast svara om ursprungsavsändaren är en autentiserad användare
         if (string.IsNullOrWhiteSpace(original.SenderUserId))
         {
             TempData["ToastTitle"] = "Kan inte svara";

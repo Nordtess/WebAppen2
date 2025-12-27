@@ -6,7 +6,7 @@ using WebApp.Domain.Identity;
 namespace WebApp.Controllers;
 
 /// <summary>
-/// Enkla endpoints som kopplar ihop applikationens navigation/UI med ASP.NET Core Identity.
+/// Enkel controller som exponerar små Identity-relaterade endpoints användade av UI/ navigation.
 /// Inloggning/registrering hanteras av Razor Pages under /Identity/Account/.
 /// </summary>
 public class AccountController : Controller
@@ -27,7 +27,11 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout(string? returnUrl = null)
     {
+        // Loggar ut Identity (raderar auth-cookie och kopplade sessioner enligt SignInManager-implementationen).
         await _signInManager.SignOutAsync();
+
+        // Försök redirecta till angiven lokal returnUrl; om den saknas använd Home/Index som fallback.
+        // LocalRedirect används för att undvika öppna redirect-vulnerabiliteter.
         return LocalRedirect(returnUrl ?? Url.Action("Index", "Home")!);
     }
 }

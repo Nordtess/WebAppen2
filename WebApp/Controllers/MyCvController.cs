@@ -7,6 +7,9 @@ using WebApp.Infrastructure.Data;
 
 namespace WebApp.Controllers;
 
+/// <summary>
+/// Hanterar vy för användarens egen CV-sida och relaterade åtgärder (self-heal för äldre konton, privacy, valda projekt).
+/// </summary>
 [Authorize]
 public class MyCvController : Controller
 {
@@ -33,8 +36,8 @@ public class MyCvController : Controller
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.UserId == user.Id);
 
-        // Self-heal for older accounts:
-        // If user has created a CV before but the link row is missing, restore consistency.
+        // Återställ konsistens för äldre konton: om användaren har flaggat HasCreatedCv men länk saknas,
+        // försök hitta eller skapa profil och återställ koppling.
         if (link is null && user.HasCreatedCv)
         {
             var existingProfile = await _db.Profiler
@@ -64,7 +67,7 @@ public class MyCvController : Controller
             _db.ApplicationUserProfiles.Add(newLink);
             await _db.SaveChangesAsync();
 
-            // Re-load as no-tracking for the rest of the action.
+            // Ladda om länk som no-tracking för vidare användning i denna action.
             link = await _db.ApplicationUserProfiles
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.UserId == user.Id);
@@ -72,7 +75,7 @@ public class MyCvController : Controller
 
         if (link is null)
         {
-            // First time: after successful save, redirect back here so user sees the result.
+            // Markera att vi är i "första CV-edit"-flödet så EditCV kan återvända hit efter save.
             TempData["FirstCvEdit"] = "1";
 
             if (!user.HasCreatedCv)
@@ -95,7 +98,7 @@ public class MyCvController : Controller
             .AsNoTracking()
             .CountAsync(v => v.ProfileId == link.ProfileId);
 
-        // Educations from table.
+        // Utbildningar och erfarenheter hämtas från separata tabeller och ordnas med SortOrder.
         var educations = await _db.Utbildningar
             .AsNoTracking()
             .Where(x => x.ProfileId == link.ProfileId)
@@ -109,7 +112,6 @@ public class MyCvController : Controller
             })
             .ToListAsync();
 
-        // Work experiences from table.
         var experiences = await _db.Erfarenheter
             .AsNoTracking()
             .Where(x => x.ProfileId == link.ProfileId)
@@ -123,13 +125,13 @@ public class MyCvController : Controller
             })
             .ToListAsync();
 
-        // Resolve selected projects (stored as JSON array of ids in Profile.SelectedProjectsJson).
+        // Valda projekt lagras som JSON-array med projekt-IDs; parsas och hämtas här.
         var selectedProjectIds = ParseSelectedProjectIds(profile?.SelectedProjectsJson);
 
         var projects = new List<MyCvProjectCardVm>();
         if (selectedProjectIds.Length > 0)
         {
-            // Keep order as in selectedProjectIds by sorting in-memory after fetch.
+            // Hämta projektrader och bygg ordnade kort enligt ordningen i selectedProjectIds.
             var rows = await (from p in _db.Projekt.AsNoTracking()
                               join u in _db.Users.AsNoTracking() on p.CreatedByUserId equals u.Id into users
                               from u in users.DefaultIfEmpty()
@@ -201,6 +203,7 @@ public class MyCvController : Controller
             return BadRequest();
         }
 
+        // Uppdatera inloggningen så ändringen syns direkt i claims/session.
         await _signInManager.RefreshSignInAsync(user);
 
         return Ok(new { isPrivate = user.IsProfilePrivate });
@@ -208,6 +211,7 @@ public class MyCvController : Controller
 
     private static int[] ParseSelectedProjectIds(string? json)
     {
+        // Parsar JSON-array av ints; fel -> tom array.
         if (string.IsNullOrWhiteSpace(json)) return Array.Empty<int>();
 
         try
@@ -271,6 +275,7 @@ public class MyCvController : Controller
             };
         }
 
+        // Normalisera och ta bort dubbletter (skiftlägesokänsligt).
         return skills
             .Select(Display)
             .Where(x => !string.IsNullOrWhiteSpace(x))

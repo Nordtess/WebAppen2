@@ -9,7 +9,7 @@ using WebApp.Services;
 namespace WebApp.Controllers;
 
 /// <summary>
-/// Hanterar visning och uppdatering av inloggad användares kontoprofil.
+/// Controller för visning och uppdatering av den inloggade användarens kontoprofil.
 /// </summary>
 [Authorize]
 public class AccountProfileController : Controller
@@ -81,7 +81,7 @@ public class AccountProfileController : Controller
             return Challenge();
         }
 
-        // Normaliserar namn för konsekvent visning och enklare sökning.
+        // Normalisera namn för konsekvent presentation och sökning.
         user.FirstName = NameNormalizer.ToDisplayName(model.FirstName);
         user.LastName = NameNormalizer.ToDisplayName(model.LastName);
         user.FirstNameNormalized = NameNormalizer.ToNormalized(user.FirstName);
@@ -91,7 +91,7 @@ public class AccountProfileController : Controller
         user.City = NameNormalizer.ToDisplayName(model.City);
         user.PostalCode = model.PostalCode;
 
-        // Persist onboarding completion.
+        // Persist onboarding-completion för att visa relevanta meddelanden/flows.
         var wasCompleted = user.HasCompletedAccountProfile;
         user.HasCompletedAccountProfile = true;
 
@@ -106,7 +106,7 @@ public class AccountProfileController : Controller
             return View("AccountEdit", model);
         }
 
-        // Uppdaterar inloggningssessionen så att ändringar syns direkt.
+        // Uppdatera inloggningssessionen så att nya claims/profilfält reflekteras omedelbart.
         await _signInManager.RefreshSignInAsync(user);
 
         if (!wasCompleted)
@@ -200,6 +200,7 @@ public class AccountProfileController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteAccount([FromForm] string ConfirmText, [FromForm] string Password)
     {
+        // Bekräftelsetext måste matcha exakt (case-insensitive) för att förhindra oavsiktlig radering.
         if (!string.Equals(ConfirmText?.Trim(), "RADERA", StringComparison.OrdinalIgnoreCase))
         {
             TempData["Error"] = "Du måste skriva RADERA för att bekräfta.";
@@ -209,7 +210,7 @@ public class AccountProfileController : Controller
         var user = await _userManager.GetUserAsync(User);
         if (user is null) return Challenge();
 
-        // Verify password
+        // Verifiera lösenord innan destruktiva operationer utförs.
         var ok = await _userManager.CheckPasswordAsync(user, Password ?? "");
         if (!ok)
         {
@@ -217,6 +218,7 @@ public class AccountProfileController : Controller
             return RedirectToAction("Index", "AccountProfile");
         }
 
+        // Först ta bort ägda domändata via tjänsten; om detta misslyckas avbryt och informera användaren.
         var result = await _deletionService.DeleteUserAndOwnedDataAsync(user.Id);
         if (!result.Success)
         {
@@ -224,7 +226,7 @@ public class AccountProfileController : Controller
             return RedirectToAction("Index", "AccountProfile");
         }
 
-        // Finally delete identity user
+        // Slutligen ta bort Identity-användaren.
         var deleteResult = await _userManager.DeleteAsync(user);
         if (!deleteResult.Succeeded)
         {
