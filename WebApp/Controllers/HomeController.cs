@@ -117,8 +117,8 @@ namespace WebApp.Controllers
                         AboutMe = x.AboutMe,
                         Skills = ParseSkills(x.SkillsCsv),
                         ProjectCount = ParseSelectedProjectCount(x.SelectedProjectsJson),
-                        Educations = edus.Take(2).Select(e => $"{e.Years} • {e.Program}").ToArray(),
-                        Experiences = exps.Take(2).Select(e => $"{e.Years} • {e.Role} @ {e.Company}").ToArray()
+                        Educations = edus.Take(1).Select(e => $"{e.Years} • {e.Program}").ToArray(),
+                        Experiences = exps.Take(1).Select(e => $"{e.Years} • {e.Role} @ {e.Company}").ToArray()
                     };
                 }).ToList()
             };
