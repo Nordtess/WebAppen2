@@ -33,6 +33,10 @@ public class Program
             })
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
+        // App services (DI)
+        builder.Services.AddScoped<IUnreadMessagesService, UnreadMessagesService>();
+        builder.Services.AddScoped<AccountDeletionService>();
+
         var app = builder.Build();
 
         // Apply migrations / create DB on first run for ALL registered DbContexts
@@ -41,13 +45,33 @@ public class Program
             var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
             try
             {
-                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                db.Database.Migrate();
+                // Migrate any DbContext that is registered in DI
+                var contextTypes = AppDomain.CurrentDomain
+                    .GetAssemblies()
+                    .SelectMany(a => a.GetTypes())
+                    .Where(t => typeof(DbContext).IsAssignableFrom(t) && !t.IsAbstract)
+                    .ToList();
+
+                foreach (var ctxType in contextTypes)
+                {
+                    try
+                    {
+                        if (scope.ServiceProvider.GetService(ctxType) is DbContext ctx)
+                        {
+                            ctx.Database.Migrate();
+                        }
+                    }
+                    catch (Exception exCtx)
+                    {
+                        logger.LogError(exCtx, "Failed to apply migrations for DbContext {DbContext}", ctxType.FullName);
+                        throw;
+                    }
+                }
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Failed to apply EF Core migrations at startup.");
-                throw; // surface failure during development/review
+                throw; // Surface failure so issues are visible during review
             }
         }
 
