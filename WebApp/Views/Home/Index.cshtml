@@ -186,9 +186,15 @@
                                                     <div class="searchcv-skills" aria-label="Kompetenser">
                                                         @if (cv.Skills is { Length: > 0 })
                                                         {
-                                                            foreach (var s in cv.Skills.Take(8))
+                                                            var totalSkills = cv.Skills.Length;
+                                                            foreach (var s in cv.Skills.Take(4))
                                                             {
                                                                 <span class="searchcv-skill">@s</span>
+                                                            }
+
+                                                            if (totalSkills > 4)
+                                                            {
+                                                                <span class="searchcv-skill-more">+@(totalSkills - 4) more</span>
                                                             }
                                                         }
                                                         else
