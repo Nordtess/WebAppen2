@@ -313,6 +313,26 @@
                                 <div data-editcv-projects-json='@System.Text.Json.JsonSerializer.Serialize(Model.AllMyProjects.Select(p => new { id = p.Id, title = p.Title, createdUtc = p.CreatedUtc.ToString("yyyy-MM-dd"), imagePath = p.ImagePath, shortDescription = p.ShortDescription, techKeysCsv = p.TechKeysCsv, createdByName = p.CreatedByName, createdByEmail = p.CreatedByEmail }), new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web))'></div>
 
                                 <div class="editcv-project-preview" id="editcvProjectPreview"></div>
+
+                                <div id="editcv-projects-modal" class="editcv-modal" aria-hidden="true">
+                                    <div class="editcv-modal__backdrop" data-editcv-modal-close></div>
+                                    <div class="editcv-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="editcv-projects-title">
+                                        <div class="editcv-modal__header">
+                                            <div class="editcv-modal__title" id="editcv-projects-title">Välj projekt (max 4)</div>
+                                            <div class="editcv-modal__counter" id="editcv-projects-counter">0/4 valda</div>
+                                            <button type="button" class="editcv-modal__close" data-editcv-modal-close aria-label="Stäng">×</button>
+                                        </div>
+                                        <div class="editcv-modal__body">
+                                            <div class="editcv-picker__list" id="editcv-projects-picker"></div>
+                                        </div>
+                                        <div class="editcv-modal__footer">
+                                            <div></div>
+                                            <div class="editcv-modal__actions">
+                                                <button type="button" class="btn-secondary-custom" data-editcv-modal-close>Stäng</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </section>
 
                         </main>

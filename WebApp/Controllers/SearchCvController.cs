@@ -1,5 +1,7 @@
 ﻿using System.Security.Claims;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+
 using Microsoft.EntityFrameworkCore;
 using WebApp.Infrastructure.Data;
 using WebApp.ViewModels;
@@ -77,7 +79,8 @@ public sealed class SearchCvController : Controller
                 Headline = x.p == null ? null : x.p.Headline,
                 AboutMe = x.p == null ? null : x.p.AboutMe,
                 ProfileAvatar = x.p == null ? null : x.p.ProfileImagePath,
-                ProfileId = x.link == null ? (int?)null : x.link.ProfileId
+                ProfileId = x.link == null ? (int?)null : x.link.ProfileId,
+                SelectedProjectsJson = x.p == null ? null : x.p.SelectedProjectsJson
             })
             .ToListAsync();
 
@@ -137,6 +140,7 @@ public sealed class SearchCvController : Controller
                 var edus = pid != null && eduByProfile.TryGetValue(pid.Value, out var eduList) ? eduList : new();
                 var exps = pid != null && expByProfile.TryGetValue(pid.Value, out var expList) ? expList : new();
                 var skillsArr = compByUser.TryGetValue(x.Id, out var arr) ? arr : Array.Empty<string>();
+                var projectCount = ParseSelectedProjectIds(x.SelectedProjectsJson).Length;
 
                 return new SearchCvVm.CvCardVm
                 {
@@ -148,7 +152,7 @@ public sealed class SearchCvController : Controller
                     ProfileImagePath = !string.IsNullOrWhiteSpace(x.ProfileAvatar) ? x.ProfileAvatar : x.UserAvatar,
                     AboutMe = x.AboutMe,
                     Skills = skillsArr,
-                    ProjectCount = 0,
+                    ProjectCount = projectCount,
                     Educations = edus.Take(1).Select(e => $"{e.Years} • {e.Program}").ToArray(),
                     Experiences = exps.Take(1).Select(e => $"{e.Years} • {e.Role} @ {e.Company}").ToArray()
                 };
@@ -157,4 +161,20 @@ public sealed class SearchCvController : Controller
 
         return View("SearchCV", vm);
     }
+
+    private static int[] ParseSelectedProjectIds(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json)) return Array.Empty<int>();
+
+        try
+        {
+            var arr = JsonSerializer.Deserialize<int[]>(json, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            return arr?.Where(n => n > 0).Distinct().ToArray() ?? Array.Empty<int>();
+        }
+        catch
+        {
+            return Array.Empty<int>();
+        }
+    }
 }
+
