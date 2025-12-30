@@ -156,6 +156,13 @@
     display: block;
 }
 
+.register-tip {
+    margin: 6px 0 18px;
+    font-weight: 750;
+    color: rgba(0, 0, 0, 0.72);
+    line-height: 1.4;
+}
+
 @media (max-width: 800px) {
     .register-card {
         grid-template-columns: 1fr;
