@@ -42,7 +42,6 @@
 
             <div class="inspectcv-actions">
                 <a class="btn-secondary-custom" href="@findSimilarUrl" style="text-decoration:none;">Hitta liknande personer</a>
-                <a class="btn-secondary-custom" href="@Url.Action("Index", "Projects", new { userId = Model.UserId })" style="text-decoration:none;">Visa projekt</a>
                 <a class="btn-secondary-custom" href="@Url.Action("Export", "InspectCv", new { userId = Model.UserId })" style="text-decoration:none;">Export profile (XML)</a>
             </div>
         </div>
@@ -166,6 +165,9 @@
                 <section class="cv-box">
                     <div class="mycv-projects-header">
                         <h3 class="cv-box-title" style="margin: 0;">Projekt</h3>
+                        <div class="mycv-projects-header__actions">
+                            <a class="btn-primary-custom" href="@Url.Action("Index", "Projects", new { userId = Model.UserId })">Visa projekt</a>
+                        </div>
                     </div>
 
                     <div class="mycv-projects-card">
