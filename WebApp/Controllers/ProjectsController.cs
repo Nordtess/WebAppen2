@@ -73,6 +73,7 @@ public sealed class ProjectsController : Controller
         var baseQuery = from p in _db.Projekt.AsNoTracking()
                         join u in _db.Users.AsNoTracking() on p.CreatedByUserId equals u.Id into users
                         from u in users.DefaultIfEmpty()
+                        where u == null || !u.IsDeactivated
                         select new { p, u };
 
         if (!string.IsNullOrWhiteSpace(filterUserId))
@@ -111,9 +112,12 @@ public sealed class ProjectsController : Controller
                         .Where(pu => pu.ProjectId == x.p.Id)
                         .Join(_db.Users.AsNoTracking(), pu => pu.UserId, u2 => u2.Id, (pu, u2) => u2)
                         .Any(u2 =>
-                            (u2.FirstName != null && EF.Functions.Like(u2.FirstName, like)) ||
-                            (u2.LastName != null && EF.Functions.Like(u2.LastName, like)) ||
-                            (u2.Email != null && EF.Functions.Like(u2.Email, like))));
+                            !u2.IsDeactivated &&
+                            (
+                                (u2.FirstName != null && EF.Functions.Like(u2.FirstName, like)) ||
+                                (u2.LastName != null && EF.Functions.Like(u2.LastName, like)) ||
+                                (u2.Email != null && EF.Functions.Like(u2.Email, like))
+                            )));
             }
             else
             {
@@ -128,9 +132,12 @@ public sealed class ProjectsController : Controller
                         .Where(pu => pu.ProjectId == x.p.Id)
                         .Join(_db.Users.AsNoTracking(), pu => pu.UserId, u2 => u2.Id, (pu, u2) => u2)
                         .Any(u2 =>
-                            (u2.FirstName != null && EF.Functions.Like(u2.FirstName, like)) ||
-                            (u2.LastName != null && EF.Functions.Like(u2.LastName, like)) ||
-                            (u2.Email != null && EF.Functions.Like(u2.Email, like))));
+                            !u2.IsDeactivated &&
+                            (
+                                (u2.FirstName != null && EF.Functions.Like(u2.FirstName, like)) ||
+                                (u2.LastName != null && EF.Functions.Like(u2.LastName, like)) ||
+                                (u2.Email != null && EF.Functions.Like(u2.Email, like))
+                            )));
             }
         }
 
@@ -230,7 +237,7 @@ public sealed class ProjectsController : Controller
                                 select new { p, u })
             .FirstOrDefaultAsync();
 
-        if (projectRow is null) return NotFound();
+        if (projectRow is null || (projectRow.u != null && projectRow.u.IsDeactivated)) return NotFound();
 
         var project = projectRow.p;
         var creator = projectRow.u;

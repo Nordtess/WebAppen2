@@ -24,8 +24,8 @@ public class SearchCvController : Controller
     [AllowAnonymous]
     public async Task<IActionResult> Index([FromQuery] string? name, [FromQuery] string? city, [FromQuery] string? mode = "normal", [FromQuery] string? skillIds = null, [FromQuery] string? source = null, [FromQuery] string? sourceUserId = null, [FromQuery] string? sort = null)
     {
-        var isLoggedIn = User?.Identity?.IsAuthenticated == true;
-        var currentUserId = _userManager.GetUserId(User);
+        var isAuthenticated = User?.Identity?.IsAuthenticated == true;
+        var currentUserId = isAuthenticated && User != null ? _userManager.GetUserId(User) : null;
 
         var selectedSkillIds = ParseSkillIds(skillIds);
         var selectedSkillSet = selectedSkillIds.ToHashSet();
@@ -88,9 +88,11 @@ public class SearchCvController : Controller
                             user
                         };
 
-        if (!isLoggedIn)
+        baseQuery = baseQuery.Where(x => !x.user.IsDeactivated);
+
+        if (!isAuthenticated)
         {
-            baseQuery = baseQuery.Where(x => x.profile.IsPublic);
+            baseQuery = baseQuery.Where(x => x.profile.IsPublic && !x.user.IsProfilePrivate);
         }
 
         if (!string.IsNullOrWhiteSpace(currentUserId))
@@ -172,6 +174,7 @@ public class SearchCvController : Controller
             var skillNames = compsForUser
                 .Select(id => nameById.TryGetValue(id, out var n) ? n : null)
                 .Where(n => !string.IsNullOrWhiteSpace(n))
+                .Select(n => n!)
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToArray();
 
@@ -243,7 +246,7 @@ public class SearchCvController : Controller
             Mode = mode ?? "normal",
             Sort = sortKey,
             SortLockedToMatch = isSimilarMode,
-            ShowLoginTip = !isLoggedIn,
+            ShowLoginTip = !isAuthenticated,
             SelectedSkillIds = selectedSkillIds,
             SelectedSkillNames = selectedSkillNames,
             SimilarHint = isSimilarMode ? "Visar profiler som matchar dina kompetenser." : string.Empty,
