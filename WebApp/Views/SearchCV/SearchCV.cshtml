@@ -90,29 +90,40 @@
                     </div>
 
                     <div class="searchcv-search-right">
-                        <select class="searchcv-input" name="sort" aria-label="Sortering">
-                            @if (Model.IsSimilarMode)
-                            {
-                                <option value="match" selected="@(sortKey == "match")">Bäst matchning</option>
-                            }
-                            <option value="new" selected="@(sortKey == "new")">Senast skapade</option>
-                            <option value="old" selected="@(sortKey == "old")">Äldst först</option>
-                            <option value="az" selected="@(sortKey == "az")">A-Ö</option>
-                            <option value="za" selected="@(sortKey == "za")">Ö-A</option>
-                        </select>
+                        @if (Model.IsSimilarMode)
+                        {
+                            <select class="searchcv-input" aria-label="Sortering" disabled>
+                                <option value="match" selected>Best matchning</option>
+                                <option value="new">Senast skapade</option>
+                                <option value="old">Äldst först</option>
+                                <option value="az">A-Ö</option>
+                                <option value="za">Ö-A</option>
+                            </select>
+                            <input type="hidden" name="sort" value="match" />
+                            <span class="searchcv-chip-muted" style="margin-left:6px;">Sortering: Bäst matchning</span>
+                        }
+                        else
+                        {
+                            <select class="searchcv-input" name="sort" aria-label="Sortering">
+                                <option value="new" selected="@(sortKey == "new")">Senast skapade</option>
+                                <option value="old" selected="@(sortKey == "old")">Äldst först</option>
+                                <option value="az" selected="@(sortKey == "az")">A-Ö</option>
+                                <option value="za" selected="@(sortKey == "za")">Ö-A</option>
+                            </select>
+                        }
 
                         <button type="submit" class="btn-secondary-custom">Sök</button>
 
                         @if (isLoggedIn)
                         {
-                            <a class="btn-secondary-custom" style="text-decoration:none;" href="@Url.Action("Index", "SearchCv", new { mode = "similar", source = "me", sort = sortKey })">Hitta liknande personer</a>
+                            <a class="btn-secondary-custom" style="text-decoration:none;" href="@Url.Action("Index", "SearchCv", new { mode = "similar", source = "me" })">Hitta liknande personer</a>
                         }
 
                         <button type="button" class="btn-secondary-custom" id="clearSkills" style="text-decoration:none;">Rensa kompetenser</button>
 
                         @if (!string.IsNullOrWhiteSpace(Model.NameQuery) || Model.SelectedSkillIds.Length > 0 || !string.IsNullOrWhiteSpace(Model.CityQuery) || Model.Mode == "similar")
                         {
-                            <a class="btn-secondary-custom" style="text-decoration:none;" href="@Url.Action("Index", "SearchCv", new { sort = sortKey })">Rensa</a>
+                            <a class="btn-secondary-custom" style="text-decoration:none;" href="@Url.Action("Index", "SearchCv", new { mode = Model.Mode })">Rensa</a>
                         }
                     </div>
                 </form>

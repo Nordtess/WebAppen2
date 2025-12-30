@@ -202,6 +202,11 @@ public class SearchCvController : Controller
             ? (isSimilarMode ? "match" : "new")
             : sortKeyRaw.Trim().ToLowerInvariant();
 
+        if (isSimilarMode)
+        {
+            sortKey = "match";
+        }
+
         var validSort = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "match", "new", "old", "az", "za" };
         if (!validSort.Contains(sortKey)) sortKey = isSimilarMode ? "match" : "new";
 
@@ -237,6 +242,7 @@ public class SearchCvController : Controller
             CityQuery = city ?? string.Empty,
             Mode = mode ?? "normal",
             Sort = sortKey,
+            SortLockedToMatch = isSimilarMode,
             ShowLoginTip = !isLoggedIn,
             SelectedSkillIds = selectedSkillIds,
             SelectedSkillNames = selectedSkillNames,

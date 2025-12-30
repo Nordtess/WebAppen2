@@ -17,6 +17,7 @@ public sealed class SearchCvVm
     public string Mode { get; init; } = "normal";
 
     public string Sort { get; init; } = string.Empty;
+    public bool SortLockedToMatch { get; init; }
 
     public bool ShowLoginTip { get; init; }
 
