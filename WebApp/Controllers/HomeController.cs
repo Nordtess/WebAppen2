@@ -27,6 +27,7 @@ public class HomeController : Controller
         var row = await (from p in _db.Projekt.AsNoTracking()
                          join u in _db.Users.AsNoTracking() on p.CreatedByUserId equals u.Id into users
                          from u in users.DefaultIfEmpty()
+                         where u == null || !u.IsDeactivated
                          orderby p.CreatedUtc descending
                          select new HomeIndexVm.LatestProjectVm
                          {
