@@ -1,0 +1,2 @@
+.editcv-modal { display: none; }
+.editcv-modal.is-open { display: block; }

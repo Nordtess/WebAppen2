@@ -16,6 +16,9 @@ public sealed class ProjectsIndexVm
     // Sorteringsnyckel, t.ex. "new"
     public string Sort { get; init; } = "new";
 
+    // Filtrera på angiven användares projekt/medlemskap
+    public string? FilterUserId { get; init; }
+
     // Visas som tips när användaren är anonym
     public bool ShowLoginTip { get; init; }
 

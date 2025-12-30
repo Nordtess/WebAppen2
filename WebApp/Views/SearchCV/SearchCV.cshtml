@@ -5,6 +5,16 @@
 
     var isLoggedIn = User?.Identity?.IsAuthenticated == true;
     var bannerSrc = Url.Content("~/images/bannersandicons/allacv2.png");
+    var sortKey = string.IsNullOrWhiteSpace(Model.Sort)
+        ? (Model.IsSimilarMode ? "match" : "new")
+        : Model.Sort.ToLowerInvariant();
+
+    string NormalizeCategory(string? cat)
+    {
+        var trimmed = (cat ?? string.Empty).Trim();
+        if (string.IsNullOrWhiteSpace(trimmed)) return "Övrigt";
+        return string.Equals(trimmed, "topplista", StringComparison.OrdinalIgnoreCase) ? "Övrigt" : trimmed;
+    }
 }
 
 @section Styles {
@@ -34,37 +44,119 @@
             <div class="searchcv-controls">
                 <form method="get" class="searchcv-search">
                     <input type="hidden" name="mode" value="@Model.Mode" />
+                    @if (!string.IsNullOrWhiteSpace(Model.Source))
+                    {
+                        <input type="hidden" name="source" value="@Model.Source" />
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.SourceUserId))
+                    {
+                        <input type="hidden" name="sourceUserId" value="@Model.SourceUserId" />
+                    }
 
                     <div class="searchcv-search-main">
                         <input class="searchcv-input" type="text" name="name" value="@Model.NameQuery" placeholder="Sök på namn…" />
                         <input class="searchcv-input" type="text" name="city" value="@Model.CityQuery" placeholder="Stad (ex: Örebro)…" />
-                        <input class="searchcv-input" type="text" name="skills" value="@Model.SkillsQuery" placeholder="Kompetenser (ex: C#, SQL, .NET)…" />
 
-                        <div class="searchcv-help">
-                            <div>
-                                Vanlig sök (kompetenser): <strong>måste matcha alla</strong> kompetenser du skriver.
-                            </div>
-                            <div>
-                                “Hitta liknande personer” använder dina egna kompetenser och matchar <strong>minst en</strong>.
-                            </div>
+                        <div class="searchcv-skillpicker">
+                            @if (Model.IsSimilarMode)
+                            {
+                                <div class="searchcv-chip-muted">Kompetensval: styrs av liknande-läget</div>
+                            }
+                            else
+                            {
+                                <button type="button" class="searchcv-input searchcv-skillbtn" id="openSkillModal">Välj kompetenser…</button>
+                                <input type="hidden" name="skillIds" id="skillIds" value="@string.Join(",", Model.SelectedSkillIds)" />
+                            }
+                        </div>
+                    </div>
+
+                    <div class="searchcv-selected-row">
+                        <div class="searchcv-selected-skills" id="selectedSkillSummary">
+                            @if (Model.IsSimilarMode)
+                            {
+                                <span class="searchcv-chip-muted">Visar liknande personer baserat på kompetenser.</span>
+                            }
+                            else
+                            {
+                                var selectedNames = Model.SelectedSkillNames ?? Array.Empty<string>();
+                                var topNames = selectedNames.Take(4).ToArray();
+                                var rest = selectedNames.Length - topNames.Length;
+
+                                if (selectedNames.Length == 0)
+                                {
+                                    <span class="searchcv-chip-muted">Inga valda kompetenser</span>
+                                }
+                                else
+                                {
+                                    <span class="searchcv-chip-title">Valda:</span>
+                                    @foreach (var s in topNames)
+                                    {
+                                        <span class="searchcv-chip">@s</span>
+                                    }
+                                    @if (rest > 0)
+                                    {
+                                        <span class="searchcv-chip-more">+@rest fler</span>
+                                    }
+                                }
+                            }
                         </div>
                     </div>
 
                     <div class="searchcv-search-right">
+                        @if (Model.IsSimilarMode)
+                        {
+                            <select class="searchcv-input" aria-label="Sortering" disabled>
+                                <option value="match" selected>Bäst matchning</option>
+                                <option value="new">Senast skapade</option>
+                                <option value="old">Äldst först</option>
+                                <option value="az">A-Ö</option>
+                                <option value="za">Ö-A</option>
+                            </select>
+                            <input type="hidden" name="sort" value="match" />
+                            <span class="searchcv-chip-muted" style="margin-left:6px;">Sortering: Bäst matchning</span>
+                        }
+                        else
+                        {
+                            <select class="searchcv-input" name="sort" aria-label="Sortering">
+                                <option value="new" selected="@(sortKey == "new")">Senast skapade</option>
+                                <option value="old" selected="@(sortKey == "old")">Äldst först</option>
+                                <option value="az" selected="@(sortKey == "az")">A-Ö</option>
+                                <option value="za" selected="@(sortKey == "za")">Ö-A</option>
+                            </select>
+                        }
+
                         <button type="submit" class="btn-secondary-custom">Sök</button>
 
                         @if (isLoggedIn)
                         {
-                            <a class="btn-secondary-custom" style="text-decoration:none;" href="@Url.Action("Index", "SearchCv", new { mode = "similar" })">Hitta liknande personer</a>
+                            <a class="btn-secondary-custom" style="text-decoration:none;" href="@Url.Action("Index", "SearchCv", new { mode = "similar", source = "me" })">Hitta liknande personer</a>
                         }
 
-                        @if (!string.IsNullOrWhiteSpace(Model.NameQuery) || !string.IsNullOrWhiteSpace(Model.SkillsQuery) || !string.IsNullOrWhiteSpace(Model.CityQuery) || Model.Mode == "similar")
+                        @if (!Model.IsSimilarMode)
                         {
-                            <a class="btn-secondary-custom" style="text-decoration:none;" href="@Url.Action("Index", "SearchCv")">Rensa</a>
+                            <button type="button" class="btn-secondary-custom" id="clearSkills" style="text-decoration:none;">Rensa kompetenser</button>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(Model.NameQuery) || Model.SelectedSkillIds.Length > 0 || !string.IsNullOrWhiteSpace(Model.CityQuery) || Model.Mode == "similar")
+                        {
+                            if (Model.IsSimilarMode)
+                            {
+                                <a class="btn-secondary-custom" style="text-decoration:none;" href="@Url.Action("Index", "SearchCv", new { mode = "similar", source = Model.Source, sourceUserId = Model.SourceUserId })">Rensa filter</a>
+                                <a class="btn-secondary-custom" style="text-decoration:none;" href="@Url.Action("Index", "SearchCv")">Byt till vanlig sök</a>
+                            }
+                            else
+                            {
+                                <a class="btn-secondary-custom" style="text-decoration:none;" href="@Url.Action("Index", "SearchCv")">Rensa</a>
+                            }
                         }
                     </div>
                 </form>
             </div>
+
+            @if (Model.IsSimilarMode)
+            {
+                <div class="searchcv-tip">@Model.SimilarHint</div>
+            }
 
             <div class="searchcv-list-card">
                 <div class="searchcv-grid">
@@ -85,7 +177,6 @@
                                 : cv.Headline;
 
                             var about = string.IsNullOrWhiteSpace(cv.AboutMe) ? "" : cv.AboutMe.Trim();
-                            if (about.Length > 120) about = about[..120] + "…";
 
                             <a class="searchcv-card" href="/InspectCV/@cv.UserId" aria-label="Öppna CV: @cv.FullName">
                                 <div class="searchcv-doc">
@@ -101,10 +192,9 @@
                                                 <div class="searchcv-doc-meta">
                                                     <span class="searchcv-dot" aria-hidden="true">📍</span>
                                                     <span>@(string.IsNullOrWhiteSpace(cv.City) ? "—" : cv.City)</span>
-
-                                                    @if (isLoggedIn && cv.IsPrivate)
+                                                    @if (cv.MatchCount.HasValue && cv.SourceTotal.HasValue && cv.SourceTotal.Value > 0)
                                                     {
-                                                        <span class="searchcv-private-pill" title="Privat profil">Privat</span>
+                                                        <span class="searchcv-match">Matchar @cv.MatchCount/@cv.SourceTotal kompetenser</span>
                                                     }
                                                 </div>
                                             </div>
@@ -114,17 +204,16 @@
                                     <div class="searchcv-doc-body">
                                         @if (!string.IsNullOrWhiteSpace(about))
                                         {
-                                            <div class="searchcv-about">@about</div>
+                                            <div class="about-box">
+                                                <div class="about-text">@about</div>
+                                            </div>
                                         }
 
                                         @if (cv.Educations is { Length: > 0 })
                                         {
                                             <div class="searchcv-lines" aria-label="Utbildningar">
                                                 <div class="searchcv-lines-title">Utbildning</div>
-                                                @foreach (var line in cv.Educations)
-                                                {
-                                                    <div class="searchcv-line">@line</div>
-                                                }
+                                                <div class="searchcv-line">@cv.Educations[0]</div>
                                             </div>
                                         }
 
@@ -132,10 +221,7 @@
                                         {
                                             <div class="searchcv-lines" aria-label="Erfarenheter">
                                                 <div class="searchcv-lines-title">Erfarenhet</div>
-                                                @foreach (var line in cv.Experiences)
-                                                {
-                                                    <div class="searchcv-line">@line</div>
-                                                }
+                                                <div class="searchcv-line">@cv.Experiences[0]</div>
                                             </div>
                                         }
 
@@ -143,9 +229,15 @@
                                             <div class="searchcv-skills" aria-label="Kompetenser">
                                                 @if (cv.Skills is { Length: > 0 })
                                                 {
-                                                    foreach (var s in cv.Skills.Take(8))
+                                                    var total = cv.Skills.Length;
+                                                    foreach (var s in cv.Skills.Take(4))
                                                     {
                                                         <span class="searchcv-skill">@s</span>
+                                                    }
+
+                                                    if (total > 4)
+                                                    {
+                                                        <span class="searchcv-skill-more">+@(total - 4) fler</span>
                                                     }
                                                 }
                                                 else
@@ -158,6 +250,7 @@
                                             <div class="searchcv-doc-foot">
                                                 <span><strong>@cv.ProjectCount</strong> projekt på CV</span>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -169,3 +262,254 @@
         </div>
     </div>
 </div>
+
+@if (!Model.IsSimilarMode)
+{
+    var topCompetences = Model.Competences.Where(c => c.IsTopList).OrderBy(c => c.SortOrder).ToList();
+    var groupedCompetences = Model.Competences
+        .Where(c => !c.IsTopList)
+        .Select(c => new { Item = c, SafeCategory = NormalizeCategory(c.Category) })
+        .GroupBy(c => c.SafeCategory)
+        .OrderBy(g => g.Key);
+    <div id="searchcv-skills-modal" class="editcv-modal" aria-hidden="true">
+        <div class="editcv-modal__backdrop" data-searchcv-modal-close></div>
+        <div class="editcv-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="searchcv-skills-title">
+            <div class="editcv-modal__header">
+                <div class="editcv-modal__title" id="searchcv-skills-title">Välj kompetenser</div>
+                <div class="editcv-modal__counter" id="searchcv-competences-counter">0/10</div>
+                <button type="button" class="editcv-modal__close" data-searchcv-modal-close aria-label="Stäng">×</button>
+            </div>
+            <div class="editcv-modal__hint">Tips: Välj kompetenser för att smalna av sökningen. Resultatet visar endast personer som har samtliga valda kompetenser.</div>
+            <div class="editcv-modal__body">
+                <input type="text" class="editcv-modal__search" id="skillFilter" placeholder="Sök kompetens…" />
+                <div class="editcv-picker__list" id="skillList">
+                    @if (topCompetences.Count > 0)
+                    {
+                        <details class="editcv-picker__group" data-group="Topplista" open>
+                            <summary class="editcv-picker__group-title">Topplista</summary>
+                            <div class="editcv-picker__rows">
+                                @foreach (var c in topCompetences)
+                                {
+                                    var isChecked = Model.SelectedSkillIds.Contains(c.Id);
+                                    <label class="editcv-picker__row" data-name="@c.Name">
+                                        <input type="checkbox" value="@c.Id" class="editcv-picker__chk competence-chk" @(isChecked ? "checked" : null) />
+                                        <span class="editcv-picker__content">
+                                            <span class="editcv-picker__title">@c.Name</span>
+                                        </span>
+                                    </label>
+                                }
+                            </div>
+                        </details>
+                    }
+
+                    @foreach (var group in groupedCompetences)
+                    {
+                        <details class="editcv-picker__group" data-group="@group.Key">
+                            <summary class="editcv-picker__group-title">@group.Key</summary>
+                            <div class="editcv-picker__rows">
+                                @foreach (var entry in group.OrderBy(x => x.Item.SortOrder))
+                                {
+                                    var c = entry.Item;
+                                    var isChecked = Model.SelectedSkillIds.Contains(c.Id);
+                                    <label class="editcv-picker__row" data-name="@c.Name">
+                                        <input type="checkbox" value="@c.Id" class="editcv-picker__chk competence-chk" @(isChecked ? "checked" : null) />
+                                        <span class="editcv-picker__content">
+                                            <span class="editcv-picker__title">@c.Name</span>
+                                        </span>
+                                    </label>
+                                }
+                            </div>
+                        </details>
+                    }
+                </div>
+            </div>
+            <div class="editcv-modal__footer">
+                <button type="button" class="btn-secondary-custom" data-searchcv-modal-close>Avbryt</button>
+                <div class="editcv-modal__actions">
+                    <button type="button" class="btn-primary-custom" id="applySkills">Använd</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        (() => {
+            const form = document.querySelector('.searchcv-search');
+            const modal = document.getElementById('searchcv-skills-modal');
+            const openBtn = document.getElementById('openSkillModal');
+            const applyBtn = document.getElementById('applySkills');
+            const hidden = document.getElementById('skillIds');
+            const filterInput = document.getElementById('skillFilter');
+            const list = document.getElementById('skillList');
+            const clearSkills = document.getElementById('clearSkills');
+            const summary = document.getElementById('selectedSkillSummary');
+            const counter = document.getElementById('searchcv-competences-counter');
+            const MAX_COMP = 10;
+
+            const escapeVal = (v) => window.CSS && CSS.escape ? CSS.escape(v) : v.replace(/([\\\\\[\]#.:"])/g, '\\\\$1');
+
+            function setModal(open) {
+                if (!modal) return;
+                modal.setAttribute('aria-hidden', open ? 'false' : 'true');
+                document.body.classList.toggle('editcv-modal-open', open);
+                if (open) {
+                    filterInput?.focus();
+                    updateCounter();
+                    enforceLimit();
+                }
+            }
+
+            function updateCounter() {
+                if (!counter || !modal) return;
+                const checkedVals = new Set(Array.from(modal.querySelectorAll('.editcv-picker__chk:checked')).map(cb => cb.value));
+                counter.textContent = `${checkedVals.size}/${MAX_COMP}`;
+            }
+
+            openBtn?.addEventListener('click', () => setModal(true));
+            modal?.addEventListener('click', (e) => {
+                if ((e.target instanceof HTMLElement) && e.target.closest('[data-searchcv-modal-close]')) {
+                    setModal(false);
+                }
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal?.getAttribute('aria-hidden') === 'false') {
+                    setModal(false);
+                }
+            });
+
+            filterInput?.addEventListener('input', () => {
+                if (!list) return;
+                const term = filterInput.value.trim().toLowerCase();
+                list.querySelectorAll('.editcv-picker__row').forEach((row) => {
+                    const name = row.getAttribute('data-name')?.toLowerCase() ?? '';
+                    row.style.display = !term || name.includes(term) ? 'flex' : 'none';
+                });
+                list.querySelectorAll('.editcv-picker__group').forEach((group) => {
+                    const anyVisible = Array.from(group.querySelectorAll('.editcv-picker__row')).some(r => r instanceof HTMLElement && r.style.display !== 'none');
+                    group.style.display = anyVisible ? 'block' : 'none';
+                });
+            });
+
+            function renderSummary(names) {
+                if (!summary) return;
+                summary.innerHTML = '';
+                if (names.length === 0) {
+                    const span = document.createElement('span');
+                    span.className = 'searchcv-chip-muted';
+                    span.textContent = 'Inga valda kompetenser';
+                    summary.appendChild(span);
+                    return;
+                }
+                const top = names.slice(0, 4);
+                const rest = names.length - top.length;
+                const label = document.createElement('span');
+                label.className = 'searchcv-chip-title';
+                label.textContent = 'Valda:';
+                summary.appendChild(label);
+                top.forEach(n => {
+                    const chip = document.createElement('span');
+                    chip.className = 'searchcv-chip';
+                    chip.textContent = n;
+                    summary.appendChild(chip);
+                });
+                if (rest > 0) {
+                    const more = document.createElement('span');
+                    more.className = 'searchcv-chip-more';
+                    more.textContent = `+${rest} fler`;
+                    summary.appendChild(more);
+                }
+            }
+
+            function getCheckedValues() {
+                if (!modal) return [];
+                const seen = new Set();
+                return Array.from(modal.querySelectorAll('.editcv-picker__chk'))
+                    .filter((cb) => cb instanceof HTMLInputElement && cb.checked)
+                    .map((cb) => cb.value)
+                    .filter((v) => !!v && !seen.has(v) && seen.add(v));
+            }
+
+            function getCheckedNames() {
+                if (!modal) return [];
+                const seen = new Set();
+                const names = [];
+                Array.from(modal.querySelectorAll('.editcv-picker__chk'))
+                    .filter((cb) => cb instanceof HTMLInputElement && cb.checked)
+                    .forEach((cb) => {
+                        const val = cb.value;
+                        if (seen.has(val)) return;
+                        seen.add(val);
+                        const name = cb.closest('.editcv-picker__row')?.getAttribute('data-name') ?? '';
+                        if (name) names.push(name);
+                    });
+                return names;
+            }
+
+            function syncCheckboxes(value, isChecked) {
+                if (!modal) return;
+                modal.querySelectorAll(`.competence-chk[value="${escapeVal(value)}"]`).forEach((cb) => {
+                    if (cb instanceof HTMLInputElement) cb.checked = isChecked;
+                });
+            }
+
+            function enforceLimit(changedCb) {
+                if (!modal) return;
+                const all = Array.from(modal.querySelectorAll('.editcv-picker__chk'));
+                let checkedSet = new Set(all.filter((cb) => cb instanceof HTMLInputElement && cb.checked).map((cb) => cb.value));
+                if (checkedSet.size > MAX_COMP && changedCb) {
+                    syncCheckboxes(changedCb.value, false);
+                    checkedSet = new Set(all.filter((cb) => cb instanceof HTMLInputElement && cb.checked).map((cb) => cb.value));
+                }
+                const limitReached = checkedSet.size >= MAX_COMP;
+                all.forEach(cb => {
+                    if (!(cb instanceof HTMLInputElement)) return;
+                    const row = cb.closest('.editcv-picker__row');
+                    if (cb.checked) {
+                        cb.disabled = false;
+                        row?.classList.remove('is-disabled');
+                    } else {
+                        const shouldDisable = limitReached && !checkedSet.has(cb.value);
+                        cb.disabled = shouldDisable;
+                        row?.classList.toggle('is-disabled', shouldDisable);
+                    }
+                });
+                updateCounter();
+            }
+
+            modal?.addEventListener('change', (e) => {
+                const t = e.target;
+                if (!(t instanceof HTMLInputElement)) return;
+                if (!t.classList.contains('editcv-picker__chk')) return;
+                syncCheckboxes(t.value, t.checked);
+                enforceLimit(t);
+            });
+
+            applyBtn?.addEventListener('click', () => {
+                if (!modal || !form || !hidden) return;
+                const checkedVals = getCheckedValues();
+                hidden.value = checkedVals.join(',');
+                const names = getCheckedNames();
+                renderSummary(names);
+                setModal(false);
+                form.submit();
+            });
+
+            clearSkills?.addEventListener('click', () => {
+                if (!form || !hidden) return;
+                hidden.value = '';
+                modal?.querySelectorAll('.editcv-picker__chk').forEach((cb) => {
+                    if (cb instanceof HTMLInputElement) cb.checked = false;
+                });
+                enforceLimit();
+                renderSummary([]);
+                form.submit();
+            });
+
+            // init counter and limit state on load
+            enforceLimit();
+            updateCounter();
+        })();
+    </script>
+}

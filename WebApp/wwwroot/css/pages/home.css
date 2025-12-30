@@ -741,25 +741,28 @@
     opacity: 0;
 }
 
-.home-cv-card .searchcv-doc-sep {
-    display: none;
+.home-cv-card .about-box {
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: rgba(255, 255, 255, 0.92);
+    padding: 10px 12px;
+    box-sizing: border-box;
 }
 
-.home-project-card {
-    position: relative;
-    padding: 0;
+.home-cv-card .about-text {
+    line-height: 1.45;
+    max-height: calc(2 * 1.45em);
     overflow: hidden;
-    margin-top: 12px;
+    font-size: 13px;
+    font-weight: 650;
+    color: rgba(0, 0, 0, 0.72);
 }
 
-.home-project-badge {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    z-index: 5;
-    display: block;
-    width: 46px;
-    height: auto;
-    margin: 0;
-    pointer-events: none;
+.home-cv-card .searchcv-skill-more {
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: rgba(0, 0, 0, 0.66);
+    line-height: 1.2;
 }

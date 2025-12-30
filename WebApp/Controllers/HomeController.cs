@@ -1,5 +1,7 @@
 using System.Diagnostics;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+
 using Microsoft.EntityFrameworkCore;
 using WebApp.Infrastructure.Data;
 using WebApp.Models;
@@ -25,6 +27,7 @@ public class HomeController : Controller
         var row = await (from p in _db.Projekt.AsNoTracking()
                          join u in _db.Users.AsNoTracking() on p.CreatedByUserId equals u.Id into users
                          from u in users.DefaultIfEmpty()
+                         where u == null || !u.IsDeactivated
                          orderby p.CreatedUtc descending
                          select new HomeIndexVm.LatestProjectVm
                          {
@@ -60,9 +63,8 @@ public class HomeController : Controller
                                      Headline = p == null ? null : p.Headline,
                                      AboutMe = p == null ? null : p.AboutMe,
                                      ProfileAvatar = p == null ? null : p.ProfileImagePath,
-                                     SkillsCsv = p == null ? null : p.SkillsCsv,
-                                     SelectedProjectsJson = p == null ? null : p.SelectedProjectsJson,
-                                     ProfileId = link == null ? (int?)null : link.ProfileId
+                                     ProfileId = link == null ? (int?)null : link.ProfileId,
+                                     SelectedProjectsJson = p == null ? null : p.SelectedProjectsJson
                                  })
             .Take(maxCvCards)
             .ToListAsync();
@@ -97,6 +99,20 @@ public class HomeController : Controller
                         g => g.Key,
                         g => g.Select(x => (x.Company, x.Role, x.Years)).ToList()));
 
+        var userIds = latestUsers.Select(x => x.Id).Distinct().ToArray();
+        var compByUser = userIds.Length == 0
+            ? new Dictionary<string, string[]>()
+            : await (from link in _db.ApplicationUserProfiles.AsNoTracking()
+                     join uc in _db.AnvandarKompetenser.AsNoTracking() on link.UserId equals uc.UserId
+                     join c in _db.Kompetenskatalog.AsNoTracking() on uc.CompetenceId equals c.Id
+                     where userIds.Contains(link.UserId)
+                     orderby c.SortOrder
+                     select new { link.UserId, c.Name })
+                .ToListAsync()
+                .ContinueWith(t => t.Result
+                    .GroupBy(x => x.UserId)
+                    .ToDictionary(g => g.Key, g => g.Select(x => x.Name).Distinct(StringComparer.OrdinalIgnoreCase).ToArray()));
+
         var vm = new HomeIndexVm
         {
             LatestProject = row,
@@ -107,18 +123,20 @@ public class HomeController : Controller
                 var pid = x.ProfileId;
                 var edus = pid != null && eduByProfile.TryGetValue(pid.Value, out var eduList) ? eduList : new();
                 var exps = pid != null && expByProfile.TryGetValue(pid.Value, out var expList) ? expList : new();
+                var skills = compByUser.TryGetValue(x.Id, out var arr) ? arr : Array.Empty<string>();
+                var projectCount = ParseSelectedProjectIds(x.SelectedProjectsJson).Length;
 
                 return new HomeIndexVm.CvCardVm
                 {
                     UserId = x.Id,
                     FullName = fullName,
-                    Headline = string.IsNullOrWhiteSpace(x.Headline) ? "" : x.Headline,
+                    Headline = string.IsNullOrWhiteSpace(x.Headline) ? string.Empty : x.Headline,
                     City = x.City ?? string.Empty,
                     IsPrivate = x.IsProfilePrivate,
                     ProfileImagePath = !string.IsNullOrWhiteSpace(x.ProfileAvatar) ? x.ProfileAvatar : x.UserAvatar,
                     AboutMe = x.AboutMe,
-                    Skills = ParseSkills(x.SkillsCsv),
-                    ProjectCount = ParseSelectedProjectCount(x.SelectedProjectsJson),
+                    Skills = skills,
+                    ProjectCount = projectCount,
                     Educations = edus.Take(1).Select(e => $"{e.Years} • {e.Program}").ToArray(),
                     Experiences = exps.Take(1).Select(e => $"{e.Years} • {e.Role} @ {e.Company}").ToArray()
                 };
@@ -126,6 +144,21 @@ public class HomeController : Controller
         };
 
         return View(vm);
+    }
+
+    private static int[] ParseSelectedProjectIds(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json)) return Array.Empty<int>();
+
+        try
+        {
+            var arr = JsonSerializer.Deserialize<int[]>(json, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            return arr?.Where(n => n > 0).Distinct().ToArray() ?? Array.Empty<int>();
+        }
+        catch
+        {
+            return Array.Empty<int>();
+        }
     }
 
     public IActionResult Privacy()
@@ -137,33 +170,6 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
-
-    // Parse skills CSV från profil till array av tokens.
-    private static string[] ParseSkills(string? csv)
-    {
-        if (string.IsNullOrWhiteSpace(csv)) return Array.Empty<string>();
-
-        return csv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-            .Where(s => !string.IsNullOrWhiteSpace(s))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToArray();
-    }
-
-    // Räkna ut hur många valda projekt som finns i JSON (felfall -> 0).
-    private static int ParseSelectedProjectCount(string? json)
-    {
-        if (string.IsNullOrWhiteSpace(json)) return 0;
-
-        try
-        {
-            var ids = System.Text.Json.JsonSerializer.Deserialize<int[]>(json, new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web));
-            return ids?.Length ?? 0;
-        }
-        catch
-        {
-            return 0;
-        }
     }
 }
 
@@ -201,3 +207,4 @@ public sealed class HomeIndexVm
         public string[] Experiences { get; init; } = Array.Empty<string>();
     }
 }
+

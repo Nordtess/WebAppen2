@@ -162,6 +162,13 @@ public class MyCvController : Controller
             }
         }
 
+        // Läs kompetenser via join-tabellen
+        var competenceNames = await (from uc in _db.AnvandarKompetenser.AsNoTracking()
+                                     join c in _db.Kompetenskatalog.AsNoTracking() on uc.CompetenceId equals c.Id
+                                     where uc.UserId == user.Id
+                                     orderby c.SortOrder
+                                     select c.Name).ToArrayAsync();
+
         var model = new MyCvProfileViewModel
         {
             FirstName = user.FirstName ?? string.Empty,
@@ -171,11 +178,10 @@ public class MyCvController : Controller
             PhoneNumber = user.PhoneNumberDisplay ?? user.PhoneNumber ?? string.Empty,
             IsPrivate = user.IsProfilePrivate,
             VisitCount = visits,
-
             Headline = profile?.Headline,
             AboutMe = profile?.AboutMe,
             ProfileImagePath = profile?.ProfileImagePath ?? user.ProfileImagePath,
-            Skills = NormalizeSkillsForDisplay(ParseSkills(profile?.SkillsCsv)),
+            Skills = competenceNames,
 
             Educations = educations,
             Experiences = experiences,
@@ -231,54 +237,6 @@ public class MyCvController : Controller
 
         return csv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .Where(s => !string.IsNullOrWhiteSpace(s))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToArray();
-    }
-
-    private static string[] ParseSkills(string? csv)
-    {
-        if (string.IsNullOrWhiteSpace(csv)) return Array.Empty<string>();
-
-        return csv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-            .Where(s => !string.IsNullOrWhiteSpace(s))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToArray();
-    }
-
-    private static string[] NormalizeSkillsForDisplay(string[] skills)
-    {
-        if (skills.Length == 0) return skills;
-
-        static string Display(string s)
-        {
-            var t = (s ?? string.Empty).Trim();
-            if (t.Length == 0) return "";
-
-            var low = t.ToLowerInvariant();
-            return low switch
-            {
-                "c#" => "C#",
-                "f#" => "F#",
-                "sql" => "SQL",
-                "html" => "HTML",
-                "css" => "CSS",
-                "js" or "javascript" => "JavaScript",
-                "ts" or "typescript" => "TypeScript",
-                ".net" or "dotnet" => ".NET",
-                "asp.net" or "aspnet" => "ASP.NET",
-                "mvc" => "MVC",
-                "api" => "API",
-                "mongodb" or "mongo db" or "mongo-db" => "MongoDB",
-                "aws" => "AWS",
-                "azure" => "Azure",
-                _ => (t.Length <= 4 && t.All(char.IsLetter)) ? t.ToUpperInvariant() : char.ToUpper(t[0]) + t[1..]
-            };
-        }
-
-        // Normalisera och ta bort dubbletter (skiftlägesokänsligt).
-        return skills
-            .Select(Display)
-            .Where(x => !string.IsNullOrWhiteSpace(x))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToArray();
     }

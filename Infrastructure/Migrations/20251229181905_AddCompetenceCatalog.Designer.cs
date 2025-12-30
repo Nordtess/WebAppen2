@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApp.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using WebApp.Infrastructure.Data;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251229181905_AddCompetenceCatalog")]
+    partial class AddCompetenceCatalog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,30 +200,15 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<bool>("IsTopList")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("NormalizedName")
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
-                        .HasComputedColumnSql("UPPER(LTRIM(RTRIM([Name])))", true);
-
                     b.Property<int>("SortOrder")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique();
 
                     b.ToTable("Kompetenskatalog");
 
@@ -228,487 +216,456 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Category = "Programmeringsspråk",
-                            IsTopList = true,
+                            Category = "Topplista",
                             Name = "C#",
-                            NormalizedName = "",
                             SortOrder = 0
                         },
                         new
                         {
                             Id = 2,
-                            Category = "Backend",
-                            IsTopList = true,
+                            Category = "Topplista",
                             Name = ".NET",
-                            NormalizedName = "",
-                            SortOrder = 0
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Category = "Backend",
-                            IsTopList = true,
-                            Name = "ASP.NET Core",
-                            NormalizedName = "",
                             SortOrder = 1
                         },
                         new
                         {
-                            Id = 4,
-                            Category = "Backend",
-                            IsTopList = true,
-                            Name = "MVC",
-                            NormalizedName = "",
+                            Id = 3,
+                            Category = "Topplista",
+                            Name = "ASP.NET Core",
                             SortOrder = 2
                         },
                         new
                         {
+                            Id = 4,
+                            Category = "Topplista",
+                            Name = "MVC",
+                            SortOrder = 3
+                        },
+                        new
+                        {
                             Id = 5,
-                            Category = "Backend",
-                            IsTopList = true,
+                            Category = "Topplista",
                             Name = "EF Core",
-                            NormalizedName = "",
                             SortOrder = 4
                         },
                         new
                         {
                             Id = 6,
-                            Category = "Backend",
-                            IsTopList = true,
+                            Category = "Topplista",
                             Name = "LINQ",
-                            NormalizedName = "",
                             SortOrder = 5
                         },
                         new
                         {
                             Id = 7,
-                            Category = "Programmeringsspråk",
-                            IsTopList = true,
+                            Category = "Topplista",
                             Name = "SQL",
-                            NormalizedName = "",
-                            SortOrder = 5
+                            SortOrder = 6
                         },
                         new
                         {
                             Id = 8,
-                            Category = "DevOps & Drift",
-                            IsTopList = true,
+                            Category = "Topplista",
                             Name = "Git",
-                            NormalizedName = "",
-                            SortOrder = 0
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Category = "DevOps & Drift",
-                            IsTopList = true,
-                            Name = "Docker",
-                            NormalizedName = "",
-                            SortOrder = 3
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Category = "DevOps & Drift",
-                            IsTopList = true,
-                            Name = "Azure",
-                            NormalizedName = "",
                             SortOrder = 7
                         },
                         new
                         {
+                            Id = 9,
+                            Category = "Topplista",
+                            Name = "Docker",
+                            SortOrder = 8
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Category = "Topplista",
+                            Name = "Azure",
+                            SortOrder = 9
+                        },
+                        new
+                        {
                             Id = 11,
-                            Category = "DevOps & Drift",
-                            IsTopList = true,
+                            Category = "Topplista",
                             Name = "Linux",
-                            NormalizedName = "",
-                            SortOrder = 5
+                            SortOrder = 10
                         },
                         new
                         {
                             Id = 12,
-                            Category = "Backend",
-                            IsTopList = true,
+                            Category = "Topplista",
                             Name = "REST API",
-                            NormalizedName = "",
-                            SortOrder = 6
+                            SortOrder = 11
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Category = "Programmeringsspråk",
+                            Name = "C#",
+                            SortOrder = 0
                         },
                         new
                         {
                             Id = 14,
                             Category = "Programmeringsspråk",
-                            IsTopList = false,
                             Name = "Java",
-                            NormalizedName = "",
                             SortOrder = 1
                         },
                         new
                         {
                             Id = 15,
                             Category = "Programmeringsspråk",
-                            IsTopList = false,
                             Name = "Python",
-                            NormalizedName = "",
                             SortOrder = 2
                         },
                         new
                         {
                             Id = 16,
                             Category = "Programmeringsspråk",
-                            IsTopList = false,
                             Name = "JavaScript",
-                            NormalizedName = "",
                             SortOrder = 3
                         },
                         new
                         {
                             Id = 17,
                             Category = "Programmeringsspråk",
-                            IsTopList = false,
                             Name = "TypeScript",
-                            NormalizedName = "",
                             SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Category = "Programmeringsspråk",
+                            Name = "SQL",
+                            SortOrder = 5
                         },
                         new
                         {
                             Id = 19,
                             Category = "Programmeringsspråk",
-                            IsTopList = false,
                             Name = "HTML",
-                            NormalizedName = "",
                             SortOrder = 6
                         },
                         new
                         {
                             Id = 20,
                             Category = "Programmeringsspråk",
-                            IsTopList = false,
                             Name = "CSS",
-                            NormalizedName = "",
                             SortOrder = 7
                         },
                         new
                         {
                             Id = 21,
                             Category = "Programmeringsspråk",
-                            IsTopList = false,
                             Name = "Bash",
-                            NormalizedName = "",
                             SortOrder = 8
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Category = "Backend",
+                            Name = ".NET",
+                            SortOrder = 0
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Category = "Backend",
+                            Name = "ASP.NET Core",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Category = "Backend",
+                            Name = "MVC",
+                            SortOrder = 2
                         },
                         new
                         {
                             Id = 25,
                             Category = "Backend",
-                            IsTopList = false,
                             Name = "Web API",
-                            NormalizedName = "",
                             SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 26,
+                            Category = "Backend",
+                            Name = "EF Core",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Category = "Backend",
+                            Name = "LINQ",
+                            SortOrder = 5
                         },
                         new
                         {
                             Id = 28,
                             Category = "Backend",
-                            IsTopList = false,
                             Name = "SignalR",
-                            NormalizedName = "",
-                            SortOrder = 7
+                            SortOrder = 6
                         },
                         new
                         {
                             Id = 29,
                             Category = "Frontend",
-                            IsTopList = false,
                             Name = "React",
-                            NormalizedName = "",
                             SortOrder = 0
                         },
                         new
                         {
                             Id = 30,
                             Category = "Frontend",
-                            IsTopList = false,
                             Name = "Vue",
-                            NormalizedName = "",
                             SortOrder = 1
                         },
                         new
                         {
                             Id = 31,
                             Category = "Frontend",
-                            IsTopList = false,
                             Name = "Angular",
-                            NormalizedName = "",
                             SortOrder = 2
                         },
                         new
                         {
                             Id = 32,
                             Category = "Frontend",
-                            IsTopList = false,
                             Name = "Vite",
-                            NormalizedName = "",
                             SortOrder = 3
                         },
                         new
                         {
                             Id = 33,
                             Category = "Frontend",
-                            IsTopList = false,
                             Name = "Tailwind",
-                            NormalizedName = "",
                             SortOrder = 4
                         },
                         new
                         {
                             Id = 34,
                             Category = "Frontend",
-                            IsTopList = false,
                             Name = "Bootstrap",
-                            NormalizedName = "",
                             SortOrder = 5
                         },
                         new
                         {
                             Id = 35,
                             Category = "Databaser",
-                            IsTopList = false,
                             Name = "SQL Server",
-                            NormalizedName = "",
                             SortOrder = 0
                         },
                         new
                         {
                             Id = 36,
                             Category = "Databaser",
-                            IsTopList = false,
                             Name = "PostgreSQL",
-                            NormalizedName = "",
                             SortOrder = 1
                         },
                         new
                         {
                             Id = 37,
                             Category = "Databaser",
-                            IsTopList = false,
                             Name = "MySQL",
-                            NormalizedName = "",
                             SortOrder = 2
                         },
                         new
                         {
                             Id = 38,
                             Category = "Databaser",
-                            IsTopList = false,
                             Name = "SQLite",
-                            NormalizedName = "",
                             SortOrder = 3
                         },
                         new
                         {
                             Id = 39,
                             Category = "Databaser",
-                            IsTopList = false,
                             Name = "MongoDB",
-                            NormalizedName = "",
                             SortOrder = 4
                         },
                         new
                         {
                             Id = 40,
                             Category = "Databaser",
-                            IsTopList = false,
                             Name = "Redis",
-                            NormalizedName = "",
                             SortOrder = 5
+                        },
+                        new
+                        {
+                            Id = 41,
+                            Category = "DevOps & Drift",
+                            Name = "Git",
+                            SortOrder = 0
                         },
                         new
                         {
                             Id = 42,
                             Category = "DevOps & Drift",
-                            IsTopList = false,
                             Name = "GitHub",
-                            NormalizedName = "",
                             SortOrder = 1
                         },
                         new
                         {
                             Id = 43,
                             Category = "DevOps & Drift",
-                            IsTopList = false,
                             Name = "CI/CD",
-                            NormalizedName = "",
                             SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 44,
+                            Category = "DevOps & Drift",
+                            Name = "Docker",
+                            SortOrder = 3
                         },
                         new
                         {
                             Id = 45,
                             Category = "DevOps & Drift",
-                            IsTopList = false,
                             Name = "Kubernetes",
-                            NormalizedName = "",
                             SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 46,
+                            Category = "DevOps & Drift",
+                            Name = "Linux",
+                            SortOrder = 5
                         },
                         new
                         {
                             Id = 47,
                             Category = "DevOps & Drift",
-                            IsTopList = false,
                             Name = "Nginx",
-                            NormalizedName = "",
                             SortOrder = 6
+                        },
+                        new
+                        {
+                            Id = 48,
+                            Category = "DevOps & Drift",
+                            Name = "Azure",
+                            SortOrder = 7
                         },
                         new
                         {
                             Id = 49,
                             Category = "DevOps & Drift",
-                            IsTopList = false,
                             Name = "AWS",
-                            NormalizedName = "",
                             SortOrder = 8
                         },
                         new
                         {
                             Id = 50,
                             Category = "Test & Kvalitet",
-                            IsTopList = false,
                             Name = "xUnit",
-                            NormalizedName = "",
                             SortOrder = 0
                         },
                         new
                         {
                             Id = 51,
                             Category = "Test & Kvalitet",
-                            IsTopList = false,
                             Name = "NUnit",
-                            NormalizedName = "",
                             SortOrder = 1
                         },
                         new
                         {
                             Id = 52,
                             Category = "Test & Kvalitet",
-                            IsTopList = false,
                             Name = "Integration Tests",
-                            NormalizedName = "",
                             SortOrder = 2
                         },
                         new
                         {
                             Id = 53,
                             Category = "Test & Kvalitet",
-                            IsTopList = false,
                             Name = "Unit Tests",
-                            NormalizedName = "",
                             SortOrder = 3
                         },
                         new
                         {
                             Id = 54,
                             Category = "Test & Kvalitet",
-                            IsTopList = false,
                             Name = "Logging",
-                            NormalizedName = "",
                             SortOrder = 4
                         },
                         new
                         {
                             Id = 55,
                             Category = "Test & Kvalitet",
-                            IsTopList = false,
                             Name = "Serilog",
-                            NormalizedName = "",
                             SortOrder = 5
                         },
                         new
                         {
                             Id = 56,
                             Category = "Säkerhet",
-                            IsTopList = false,
                             Name = "OWASP",
-                            NormalizedName = "",
                             SortOrder = 0
                         },
                         new
                         {
                             Id = 57,
                             Category = "Säkerhet",
-                            IsTopList = false,
                             Name = "HTTPS/TLS",
-                            NormalizedName = "",
                             SortOrder = 1
                         },
                         new
                         {
                             Id = 58,
                             Category = "Säkerhet",
-                            IsTopList = false,
                             Name = "JWT",
-                            NormalizedName = "",
                             SortOrder = 2
                         },
                         new
                         {
                             Id = 59,
                             Category = "Säkerhet",
-                            IsTopList = false,
                             Name = "OAuth2",
-                            NormalizedName = "",
                             SortOrder = 3
                         },
                         new
                         {
                             Id = 60,
                             Category = "Arkitektur & Metoder",
-                            IsTopList = false,
                             Name = "Clean Architecture",
-                            NormalizedName = "",
                             SortOrder = 0
                         },
                         new
                         {
                             Id = 61,
                             Category = "Arkitektur & Metoder",
-                            IsTopList = false,
                             Name = "SOLID",
-                            NormalizedName = "",
                             SortOrder = 1
                         },
                         new
                         {
                             Id = 62,
                             Category = "Arkitektur & Metoder",
-                            IsTopList = false,
                             Name = "DDD",
-                            NormalizedName = "",
                             SortOrder = 2
                         },
                         new
                         {
                             Id = 63,
                             Category = "Arkitektur & Metoder",
-                            IsTopList = false,
                             Name = "Agile",
-                            NormalizedName = "",
                             SortOrder = 3
                         },
                         new
                         {
                             Id = 64,
                             Category = "Arkitektur & Metoder",
-                            IsTopList = false,
                             Name = "Scrum",
-                            NormalizedName = "",
                             SortOrder = 4
                         },
                         new
                         {
                             Id = 65,
                             Category = "Arkitektur & Metoder",
-                            IsTopList = false,
                             Name = "TDD",
-                            NormalizedName = "",
                             SortOrder = 5
                         });
                 });

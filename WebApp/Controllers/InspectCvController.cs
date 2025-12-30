@@ -141,6 +141,16 @@ public sealed class InspectCvController : Controller
                 })
                 .ToListAsync();
 
+        var skills = await (from l in _db.ApplicationUserProfiles.AsNoTracking()
+                            join uc in _db.AnvandarKompetenser.AsNoTracking() on l.UserId equals uc.UserId
+                            join c in _db.Kompetenskatalog.AsNoTracking() on uc.CompetenceId equals c.Id
+                            where l.UserId == userId
+                            orderby c.SortOrder
+                            select c.Name)
+            .ToListAsync();
+
+        var skillNames = skills.Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+
         // Meddelandeförifyllning: inloggade får namn förifyllt och låst, anonyma måste ange namn
         var viewer = User.Identity?.IsAuthenticated == true
             ? await _userManager.GetUserAsync(User)
@@ -166,10 +176,11 @@ public sealed class InspectCvController : Controller
             Headline = profile?.Headline,
             AboutMe = profile?.AboutMe,
             ProfileImagePath = profile?.ProfileImagePath ?? user.ProfileImagePath,
-            Skills = ParseSkills(profile?.SkillsCsv),
+            Skills = skillNames,
 
             Educations = educations,
             Experiences = experiences,
+
             Projects = projects,
 
             MessagePrefillName = viewerName,
@@ -227,8 +238,19 @@ public sealed class InspectCvController : Controller
                 })
                 .ToListAsync();
 
+        var skills = await (from l in _db.ApplicationUserProfiles.AsNoTracking()
+                            join uc in _db.AnvandarKompetenser.AsNoTracking() on l.UserId equals uc.UserId
+                            join c in _db.Kompetenskatalog.AsNoTracking() on uc.CompetenceId equals c.Id
+                            where l.UserId == userId
+                            orderby c.SortOrder
+                            select c.Name)
+            .ToListAsync();
+
+        var skillNames = skills.Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+
         var selectedProjectIds = ParseSelectedProjectIds(profile?.SelectedProjectsJson);
         var exportProjects = new List<ExportProjectDto>();
+
 
         if (selectedProjectIds.Length > 0)
         {
@@ -270,10 +292,11 @@ public sealed class InspectCvController : Controller
                 Headline = profile?.Headline,
                 AboutMe = profile?.AboutMe,
                 ProfileImagePath = profile?.ProfileImagePath ?? user.ProfileImagePath,
-                Skills = ParseSkills(profile?.SkillsCsv).ToList(),
+                Skills = skillNames.ToList(),
                 Educations = educations,
                 Experiences = experiences
             },
+
             Projects = exportProjects
         };
 
@@ -401,16 +424,6 @@ public sealed class InspectCvController : Controller
     }
 
     private static string[] ParseCsv(string? csv)
-    {
-        if (string.IsNullOrWhiteSpace(csv)) return Array.Empty<string>();
-
-        return csv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-            .Where(s => !string.IsNullOrWhiteSpace(s))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToArray();
-    }
-
-    private static string[] ParseSkills(string? csv)
     {
         if (string.IsNullOrWhiteSpace(csv)) return Array.Empty<string>();
 

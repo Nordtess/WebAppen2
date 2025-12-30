@@ -920,3 +920,54 @@ body.editcv-modal-open {
     color: rgba(0, 0, 0, 0.70);
     padding: 6px 2px;
 }
+
+/* Kontaktkort (EditCV) */
+.editcv-contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.editcv-contact-item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.editcv-contact-ico {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: rgba(0, 0, 0, 0.03);
+    font-size: 14px;
+    flex: 0 0 auto;
+}
+
+.editcv-contact-k {
+    font-size: 12px;
+    font-weight: 800;
+    color: rgba(0, 0, 0, 0.62);
+    line-height: 1.1;
+}
+
+.editcv-contact-v {
+    font-size: 13px;
+    font-weight: 900;
+    color: rgba(0, 0, 0, 0.82);
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+/* Om du saknar muted-variant för +X fler */
+.cv-skill-pill--muted {
+    opacity: 0.72;
+}
+
+

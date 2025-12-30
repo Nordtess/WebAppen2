@@ -1,0 +1,45 @@
+@model WebApp.ViewModels.EditCvViewModel
+
+<div id="competenceModal" class="editcv-modal" aria-hidden="true">
+    <div class="editcv-modal__backdrop" data-editcv-modal-close></div>
+    <div class="editcv-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="editcv-competences-title">
+        <div class="editcv-modal__header">
+            <div class="editcv-modal__title" id="editcv-competences-title">Välj kompetenser</div>
+            <button type="button" class="editcv-modal__close" id="closeCompetenceModal" data-editcv-modal-close aria-label="Stäng">×</button>
+        </div>
+
+        <div class="editcv-modal__body">
+            <div class="editcv-modal__hint">Tips: Välj dina top 10 – ingen är specialist i allt.</div>
+
+            <input id="competenceSearch" class="editcv-input" type="text" placeholder="Sök kompetens..." />
+
+            <div id="editcv-competences-picker" class="editcv-picker__list">
+                @foreach (var group in Model.CompetenceGroups.OrderBy(g => g.Category == "Topplista" ? 0 : 1).ThenBy(g => g.Category))
+                {
+                    var open = group.Category == "Topplista";
+                    <details class="editcv-accordion" @(open ? "open" : null)>
+                        <summary class="editcv-picker__title">@group.Category</summary>
+                        @foreach (var item in group.Items)
+                        {
+                            <label class="editcv-picker__row" data-name="@item.Name">
+                                <input type="checkbox" class="editcv-picker__chk competence-chk" value="@item.Id" @(Model.SelectedCompetenceIds.Contains(item.Id) ? "checked" : null) />
+                                <span class="editcv-picker__content">
+                                    <span class="editcv-picker__title">@item.Name</span>
+                                </span>
+                            </label>
+                        }
+                    </details>
+                }
+            </div>
+        </div>
+
+        <div class="editcv-modal__footer">
+            <div class="editcv-modal__counter">Valda: <span id="editcv-competences-counter">@Model.SelectedCompetenceIds.Length</span>/10</div>
+            <div class="editcv-modal__actions">
+                <button type="button" class="btn-secondary-custom" id="clearCompetencesBtn">Rensa</button>
+                <button type="button" class="btn-secondary-custom" id="closeCompetenceModalFooter">Spara</button>
+            </div>
+        </div>
+
+    </div>
+</div>

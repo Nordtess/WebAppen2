@@ -132,7 +132,6 @@
 
                                 // Trunkera "about" för att hålla korta kort i karusellen
                                 var about = string.IsNullOrWhiteSpace(cv.AboutMe) ? "" : cv.AboutMe.Trim();
-                                if (about.Length > 120) about = about[..120] + "…";
 
                                 <a class="cv-slide @(isActive ? "is-active" : "")" href="/InspectCV/@cv.UserId" data-href="/InspectCV/@cv.UserId" aria-label="Öppna CV: @cv.FullName">
                                     <div class="searchcv-card">
@@ -157,7 +156,9 @@
                                             <div class="searchcv-doc-body">
                                                 @if (!string.IsNullOrWhiteSpace(about))
                                                 {
-                                                    <div class="searchcv-about">@about</div>
+                                                    <div class="about-box">
+                                                        <div class="about-text">@about</div>
+                                                    </div>
                                                 }
 
                                                 @if (cv.Educations is { Length: > 0 })
@@ -186,9 +187,15 @@
                                                     <div class="searchcv-skills" aria-label="Kompetenser">
                                                         @if (cv.Skills is { Length: > 0 })
                                                         {
-                                                            foreach (var s in cv.Skills.Take(8))
+                                                            var totalSkills = cv.Skills.Length;
+                                                            foreach (var s in cv.Skills.Take(4))
                                                             {
                                                                 <span class="searchcv-skill">@s</span>
+                                                            }
+
+                                                            if (totalSkills > 4)
+                                                            {
+                                                                <span class="searchcv-skill-more">+@(totalSkills - 4) fler</span>
                                                             }
                                                         }
                                                         else

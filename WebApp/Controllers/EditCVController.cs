@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +13,6 @@ using WebApp.ViewModels;
 
 namespace WebApp.Controllers;
 
-/// <summary>
-/// Hanterar redigering och lagring av användarens CV/profil (inkl. utbildning, erfarenhet, projekt och avatar).
-/// </summary>
 [Authorize]
 public class EditCVController : Controller
 {
@@ -35,10 +33,7 @@ public class EditCVController : Controller
     public async Task<IActionResult> Index([FromQuery] string? toastTitle = null, [FromQuery] string? toastMessage = null)
     {
         var user = await _userManager.GetUserAsync(User);
-        if (user is null)
-        {
-            return Challenge();
-        }
+        if (user is null) return Challenge();
 
         if (!string.IsNullOrWhiteSpace(toastMessage))
         {
@@ -52,30 +47,65 @@ public class EditCVController : Controller
             .AsNoTracking()
             .Where(x => x.ProfileId == profile.Id)
             .OrderBy(x => x.SortOrder)
-            .Select(x => new EducationItemVm
-            {
-                School = x.School,
-                Program = x.Program,
-                Years = x.Years,
-                Note = x.Note
-            })
+            .Select(x => new EducationItemVm { School = x.School, Program = x.Program, Years = x.Years, Note = x.Note })
             .ToListAsync();
 
         var experiences = await _db.Erfarenheter
             .AsNoTracking()
             .Where(x => x.ProfileId == profile.Id)
             .OrderBy(x => x.SortOrder)
-            .Select(x => new WorkExperienceItemVm
-            {
-                Company = x.Company,
-                Role = x.Role,
-                Years = x.Years,
-                Description = x.Description
-            })
+            .Select(x => new WorkExperienceItemVm { Company = x.Company, Role = x.Role, Years = x.Years, Description = x.Description })
             .ToListAsync();
 
         var selectedIds = ParseSelectedProjectIds(profile.SelectedProjectsJson);
         var allMyProjects = await GetAllMyProjectsAsync(user.Id);
+
+        var selectedCompetenceIds = await _db.AnvandarKompetenser
+            .AsNoTracking()
+            .Where(x => x.UserId == user.Id)
+            .Select(x => x.CompetenceId)
+            .ToArrayAsync();
+
+        var selectedCompetenceNames = await _db.Kompetenskatalog
+            .AsNoTracking()
+            .Where(c => selectedCompetenceIds.Contains(c.Id))
+            .OrderBy(c => c.SortOrder)
+            .Select(c => c.Name)
+            .ToArrayAsync();
+
+        var comps = await _db.Kompetenskatalog
+            .AsNoTracking()
+            .OrderByDescending(c => c.IsTopList)
+            .ThenBy(c => c.Category)
+            .ThenBy(c => c.SortOrder)
+            .ToListAsync();
+
+        var groups = new List<EditCvViewModel.CompetenceGroupVm>();
+
+        var topItems = comps.Where(c => c.IsTopList)
+            .OrderBy(c => c.SortOrder)
+            .Select(x => new EditCvViewModel.CompetenceItemVm { Id = x.Id, Name = x.Name })
+            .ToList();
+        if (topItems.Count > 0)
+        {
+            groups.Add(new EditCvViewModel.CompetenceGroupVm
+            {
+                Category = "Topplista",
+                Items = topItems
+            });
+        }
+
+        var categoryGroups = comps
+            .Where(c => !string.IsNullOrWhiteSpace(c.Category))
+            .GroupBy(c => c.Category)
+            .OrderBy(g => g.Key)
+            .Select(g => new EditCvViewModel.CompetenceGroupVm
+            {
+                Category = g.Key,
+                Items = g.OrderBy(x => x.SortOrder).Select(x => new EditCvViewModel.CompetenceItemVm { Id = x.Id, Name = x.Name }).ToList()
+            });
+
+        groups.AddRange(categoryGroups);
 
         var vm = new EditCvViewModel
         {
@@ -87,24 +117,21 @@ public class EditCVController : Controller
             Headline = profile.Headline,
             AboutMe = profile.AboutMe ?? string.Empty,
             ProfileImagePath = profile.ProfileImagePath,
+            ExistingProfileImagePath = profile.ProfileImagePath,
 
-            // education is stored in table
             EducationJson = JsonSerializer.Serialize(educations, JsonOptions),
-
-            // experience is stored in table
             ExperienceJson = JsonSerializer.Serialize(experiences, JsonOptions),
 
-            // projects
             SelectedProjectsJson = string.IsNullOrWhiteSpace(profile.SelectedProjectsJson) ? "[]" : profile.SelectedProjectsJson!,
             SelectedProjectIds = selectedIds.Take(4).ToArray(),
             AllMyProjects = allMyProjects,
 
-            SkillsJson = SkillsCsvToJson(profile.SkillsCsv)
+            CompetenceGroups = groups,
+            SelectedCompetenceIds = selectedCompetenceIds,
+            SelectedCompetenceNames = selectedCompetenceNames
         };
 
-        // Markera initialt att data i vyn är "saved" (det som visas på GET är innehållet i DB).
         TempData["Saved"] ??= "1";
-
         return View("EditCV", vm);
     }
 
@@ -113,18 +140,20 @@ public class EditCVController : Controller
     public async Task<IActionResult> Save(EditCvViewModel model, [FromForm(Name = "AvatarFile")] IFormFile? avatarFile)
     {
         var user = await _userManager.GetUserAsync(User);
-        if (user is null)
-        {
-            return Challenge();
-        }
+        if (user is null) return Challenge();
 
-        // Läs-only fält får alltid komma från DB för att förhindra tampering.
+        // Hämta nuvarande userId via Claims
+        var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrWhiteSpace(currentUserId)) return Challenge();
+
         model.FullName = string.Join(' ', new[] { user.FirstName, user.LastName }.Where(s => !string.IsNullOrWhiteSpace(s)));
         model.Email = user.Email ?? string.Empty;
         model.Phone = user.PhoneNumberDisplay ?? user.PhoneNumber ?? string.Empty;
         model.Location = user.City ?? string.Empty;
 
-        // Validera och normalisera år-format innan ModelState-check.
+        model.Headline = (model.Headline ?? string.Empty).Trim();
+
+
         if (!TryValidateEducationYears(model.EducationJson, out var educationYearsError))
         {
             ModelState.AddModelError(string.Empty, educationYearsError);
@@ -135,24 +164,75 @@ public class EditCVController : Controller
             ModelState.AddModelError(string.Empty, expYearsError);
         }
 
+        if (model.SelectedCompetenceIds is { Length: > 10 })
+        {
+            ModelState.AddModelError(string.Empty, "Max 10 kompetenser får väljas.");
+        }
+
+        var (profile, _) = await GetOrCreateProfileForUserAsync(user.Id);
+
         if (!ModelState.IsValid)
         {
-            // Vid valideringsfel: behåll "dirty"-status.
             TempData.Remove("Saved");
+
+            var comps = await _db.Kompetenskatalog
+                .AsNoTracking()
+                .OrderByDescending(c => c.IsTopList)
+                .ThenBy(c => c.Category)
+                .ThenBy(c => c.SortOrder)
+                .ToListAsync();
+
+            var groups = new List<EditCvViewModel.CompetenceGroupVm>();
+
+            var topItems = comps.Where(c => c.IsTopList)
+                .OrderBy(c => c.SortOrder)
+                .Select(x => new EditCvViewModel.CompetenceItemVm { Id = x.Id, Name = x.Name })
+                .ToList();
+            if (topItems.Count > 0)
+            {
+                groups.Add(new EditCvViewModel.CompetenceGroupVm
+                {
+                    Category = "Topplista",
+                    Items = topItems
+                });
+            }
+
+            var categoryGroups = comps
+                .Where(c => !string.IsNullOrWhiteSpace(c.Category))
+                .GroupBy(c => c.Category)
+                .OrderBy(g => g.Key)
+                .Select(g => new EditCvViewModel.CompetenceGroupVm
+                {
+                    Category = g.Key,
+                    Items = g.OrderBy(x => x.SortOrder).Select(x => new EditCvViewModel.CompetenceItemVm { Id = x.Id, Name = x.Name }).ToList()
+                });
+
+            groups.AddRange(categoryGroups);
+            model.CompetenceGroups = groups;
+
+            var selectedNames = await _db.Kompetenskatalog
+                .AsNoTracking()
+                .Where(c => model.SelectedCompetenceIds.Contains(c.Id))
+                .OrderBy(c => c.SortOrder)
+                .Select(c => c.Name)
+                .ToArrayAsync();
+            model.SelectedCompetenceNames = selectedNames;
+
+            model.ProfileImagePath = string.IsNullOrWhiteSpace(model.ProfileImagePath)
+                ? (model.ExistingProfileImagePath ?? profile.ProfileImagePath)
+                : model.ProfileImagePath;
+            model.ExistingProfileImagePath = model.ProfileImagePath;
+
             return View("EditCV", model);
         }
 
-        // Om detta är första gången användaren skapar ett CV från MyCV-flödet.
         var isFirstCvEdit = TempData.Peek("FirstCvEdit")?.ToString() == "1";
-
-        var (profile, _) = await GetOrCreateProfileForUserAsync(user.Id);
 
         await using var tx = await _db.Database.BeginTransactionAsync();
 
         profile.Headline = string.IsNullOrWhiteSpace(model.Headline) ? null : model.Headline.Trim();
         profile.AboutMe = model.AboutMe.Trim();
         profile.SelectedProjectsJson = string.IsNullOrWhiteSpace(model.SelectedProjectsJson) ? "[]" : model.SelectedProjectsJson;
-        profile.SkillsCsv = NormalizeSkillsJsonToCsv(model.SkillsJson);
 
         await ReplaceEducationsAsync(profile.Id, model.EducationJson);
         await ReplaceExperiencesAsync(profile.Id, model.ExperienceJson);
@@ -161,33 +241,48 @@ public class EditCVController : Controller
         {
             var path = await SaveAvatarAsync(user.Id, avatarFile);
             profile.ProfileImagePath = path;
-
-            // Spara även i ApplicationUser så andra vyer som läser där får uppdaterad path.
             user.ProfileImagePath = path;
             await _userManager.UpdateAsync(user);
+        }
+        else
+        {
+            // Bevara
+            profile.ProfileImagePath = model.ExistingProfileImagePath ?? profile.ProfileImagePath;
+        }
+
+        // Endast nuvarande användare, atomärt i transaktion
+        var existing = await _db.AnvandarKompetenser
+            .Where(x => x.UserId == currentUserId)
+            .ToListAsync();
+        if (existing.Count > 0)
+        {
+            _db.AnvandarKompetenser.RemoveRange(existing);
+            await _db.SaveChangesAsync();
+        }
+
+        var uniq = model.SelectedCompetenceIds?.Distinct().Take(10).ToArray() ?? Array.Empty<int>();
+        if (uniq.Length > 0)
+        {
+            foreach (var cid in uniq)
+            {
+                _db.AnvandarKompetenser.Add(new UserCompetence { UserId = currentUserId, CompetenceId = cid });
+            }
+            await _db.SaveChangesAsync();
         }
 
         profile.UpdatedUtc = DateTimeOffset.UtcNow;
         await _db.SaveChangesAsync();
-
         await tx.CommitAsync();
 
         TempData["Saved"] = "1";
+        if (isFirstCvEdit) TempData.Remove("FirstCvEdit");
 
-        // Rensa första-CV-flaggan om den fanns
-        if (isFirstCvEdit)
-        {
-            TempData.Remove("FirstCvEdit");
-        }
-
-        // Persist onboarding-flagga: användaren har nu skapat ett CV.
         if (!user.HasCreatedCv)
         {
             user.HasCreatedCv = true;
             await _userManager.UpdateAsync(user);
         }
 
-        // Efter lyckad spara, återvänd alltid till MyCV.
         return RedirectToAction("Index", "MyCV");
     }
 

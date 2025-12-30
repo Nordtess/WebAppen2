@@ -75,17 +75,34 @@
                 setModalOpen(true);
                 updatePickerUi();
             }
+            if (id === "mycv-competences-modal") {
+                const cm = document.getElementById("mycv-competences-modal");
+                if (cm) {
+                    cm.setAttribute("aria-hidden", "false");
+                    document.body.classList.toggle("mycv-modal-open", true);
+                }
+            }
             return;
         }
 
         if (t.closest("[data-mycv-modal-close]")) {
             setModalOpen(false);
+            const cm = document.getElementById("mycv-competences-modal");
+            if (cm?.getAttribute("aria-hidden") === "false") {
+                cm.setAttribute("aria-hidden", "true");
+                document.body.classList.toggle("mycv-modal-open", false);
+            }
         }
     });
 
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape" && modal?.getAttribute("aria-hidden") === "false") {
             setModalOpen(false);
+        }
+        const cm = document.getElementById("mycv-competences-modal");
+        if (e.key === "Escape" && cm?.getAttribute("aria-hidden") === "false") {
+            cm.setAttribute("aria-hidden", "true");
+            document.body.classList.toggle("mycv-modal-open", false);
         }
     });
 

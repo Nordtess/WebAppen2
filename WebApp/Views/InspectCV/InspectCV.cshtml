@@ -22,7 +22,7 @@
         : $"{Model.FirstName} har en publik profil";
 
     // "Liknande" => OR match (at least one of my skills)
-    var findSimilarUrl = Url.Action("Index", "SearchCv", new { mode = "similar" });
+    var findSimilarUrl = Url.Action("Index", "SearchCv", new { mode = "similar", sourceUserId = Model.UserId });
 }
 
 <div class="cv-page">
@@ -92,20 +92,14 @@
                 </section>
 
                 <section class="cv-box">
-                    <h3 class="cv-box-title">Kompetenser</h3>
-                    <div class="cv-skill-grid">
+                    <div class="cv-box-head">
+                        <h3 class="cv-box-title" style="margin:0;">Kompetenser</h3>
                         @if (Model.Skills is { Length: > 0 })
                         {
-                            foreach (var skill in Model.Skills)
-                            {
-                                <span class="cv-skill-pill">@skill</span>
-                            }
-                        }
-                        else
-                        {
-                            <span class="cv-paragraph cv-paragraph-muted">Inga kompetenser ännu.</span>
+                            <button type="button" class="btn-secondary-custom" data-mycv-modal-open="mycv-competences-modal">Visa alla kompetenser</button>
                         }
                     </div>
+                    @await Html.PartialAsync("_CompetencePills", Model.Skills)
                 </section>
             </div>
 
@@ -171,6 +165,9 @@
                 <section class="cv-box">
                     <div class="mycv-projects-header">
                         <h3 class="cv-box-title" style="margin: 0;">Projekt</h3>
+                        <div class="mycv-projects-header__actions">
+                            <a class="btn-primary-custom" href="@Url.Action("Index", "Projects", new { userId = Model.UserId })">Visa projekt</a>
+                        </div>
                     </div>
 
                     <div class="mycv-projects-card">
@@ -266,3 +263,34 @@
         </div>
     </div>
 </div>
+
+@if (Model.Skills is { Length: > 0 })
+{
+    <div id="mycv-competences-modal" class="mycv-modal" aria-hidden="true">
+        <div class="mycv-modal__backdrop" data-mycv-modal-close></div>
+        <div class="mycv-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="mycv-competences-title">
+            <div class="mycv-modal__header">
+                <div class="mycv-modal__title" id="mycv-competences-title">Alla kompetenser</div>
+                <button type="button" class="mycv-modal__close" data-mycv-modal-close aria-label="Stäng">×</button>
+            </div>
+            <div class="mycv-modal__body">
+                <div class="cv-skill-grid">
+                    @foreach (var s in Model.Skills)
+                    {
+                        <span class="cv-skill-pill">@s</span>
+                    }
+                </div>
+            </div>
+            <div class="mycv-modal__footer">
+                <div></div>
+                <div class="mycv-modal__actions">
+                    <button type="button" class="btn-secondary-custom" data-mycv-modal-close>Stäng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/pages/mycv.js" asp-append-version="true"></script>
+}

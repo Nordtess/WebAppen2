@@ -1,0 +1,25 @@
+@model string[]
+@{
+    var names = Model ?? Array.Empty<string>();
+    var top = names.Take(4).ToArray();
+    var rest = names.Length - top.Length;
+    var pillClass = (ViewData["PillClass"] as string) ?? "cv-skill-pill";
+    var mutedClass = pillClass.StartsWith("searchcv-skill") ? "searchcv-skill--muted" : "cv-skill-pill--muted";
+}
+<div class="cv-skill-grid">
+@if (names.Length == 0)
+{
+    <span class="cv-paragraph cv-paragraph-muted">Ingen kompetens ännu.</span>
+}
+else
+{
+    foreach (var s in top)
+    {
+        <span class="@pillClass">@s</span>
+    }
+    if (rest > 0)
+    {
+        <span class="@pillClass @mutedClass">+@rest fler</span>
+    }
+}
+</div>

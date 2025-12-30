@@ -37,6 +37,10 @@
 
             <div class="projects-controls">
                 <form method="get" class="projects-search">
+                    @if (!string.IsNullOrWhiteSpace(Model.FilterUserId))
+                    {
+                        <input type="hidden" name="userId" value="@Model.FilterUserId" />
+                    }
                     <div class="projects-search-main">
                         <input class="projects-input" type="text" name="q" value="@Model.Query" placeholder="Sök…" />
 

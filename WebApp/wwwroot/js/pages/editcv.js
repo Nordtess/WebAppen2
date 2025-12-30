@@ -116,12 +116,10 @@
     }
 
     form.addEventListener("input", (e) => {
-        // Read-only (konto) fält ska inte trigga "dirty".
         const t = e.target;
         if (t instanceof HTMLInputElement || t instanceof HTMLTextAreaElement) {
             if (t.hasAttribute("readonly")) return;
         }
-
         markDirty();
     });
 
@@ -130,7 +128,6 @@
         if (t instanceof HTMLInputElement || t instanceof HTMLTextAreaElement) {
             if (t.hasAttribute("readonly")) return;
         }
-
         markDirty();
     });
 
@@ -160,15 +157,13 @@
             if (avatarPreview) {
                 avatarPreview.src = String(reader.result);
             }
-
             markDirty();
         };
 
         reader.readAsDataURL(file);
     });
 
-    // Back navigation guard: no modal, no window.confirm.
-    // If form is dirty and user clicks "Tillbaka", show an inline confirmation row.
+    // Back navigation guard
     const backBtn = document.getElementById("backBtn");
     const bottomBar = document.querySelector(".editcv-bottom-inner");
 
@@ -192,7 +187,6 @@
                 <button type="button" class="btn-secondary-custom" id="editcvLeaveCancel">Stanna</button>
             </div>`;
 
-        // Insert after back button (near left side).
         bottomBar.insertBefore(row, bottomBar.children[1] ?? null);
 
         const cancel = row.querySelector("#editcvLeaveCancel");
@@ -219,145 +213,12 @@
         row.style.display = "block";
     });
 
-    // On submit, validate and show inline messages.
     form.addEventListener("submit", (e) => {
         const ok = validateForm({ focusFirstInvalid: true });
-        if (!ok) {
-            e.preventDefault();
-        }
+        if (!ok) e.preventDefault();
     });
 
-    // --- Skill formatting ---
-    function skillDisplay(s) {
-        const t = String(s || "").trim();
-        if (!t) return "";
-
-        const low = t.toLocaleLowerCase();
-        if (low === "c#") return "C#";
-        if (low === "f#") return "F#";
-        if (low === "sql") return "SQL";
-        if (low === "html") return "HTML";
-        if (low === "css") return "CSS";
-        if (low === "js" || low === "javascript") return "JavaScript";
-        if (low === "ts" || low === "typescript") return "TypeScript";
-        if (low === ".net" || low === "dotnet") return ".NET";
-        if (low === "asp.net" || low === "aspnet") return "ASP.NET";
-        if (low === "mvc") return "MVC";
-        if (low === "api") return "API";
-        if (low === "azure") return "Azure";
-        if (low === "aws") return "AWS";
-
-        if (t.length <= 4 && /^[A-Za-zÅÄÖåäö]+$/.test(t)) {
-            return t.toUpperCase();
-        }
-
-        // TitleCase-ish (simple): uppercase first letter.
-        return t.charAt(0).toUpperCase() + t.slice(1);
-    }
-
-    // Skills (pills + dedupe)
-    const skillsJsonInput = document.getElementById("SkillsJson");
-    const skillList = document.getElementById("skillList");
-    const skillInput = document.getElementById("skillInput");
-    const skillAddBtn = document.getElementById("skillAddBtn");
-
-    /** @type {string[]} */
-    let skills = [];
-
-    function loadSkillsFromHidden() {
-        if (!skillsJsonInput) return;
-
-        try {
-            const parsed = JSON.parse(skillsJsonInput.value || "[]");
-            if (Array.isArray(parsed)) {
-                skills = parsed.filter((s) => typeof s === "string");
-            }
-        } catch {
-            skills = [];
-        }
-
-        skills = normalizeSkills(skills);
-        syncSkillsJson();
-    }
-
-    function normalizeSkills(items) {
-        const map = new Map();
-        for (const raw of items) {
-            const v = skillDisplay(raw);
-            if (!v) continue;
-
-            const key = v.toLocaleLowerCase();
-            if (!map.has(key)) map.set(key, v);
-        }
-
-        return Array.from(map.values());
-    }
-
-    function syncSkillsJson() {
-        if (!skillsJsonInput) return;
-        skillsJsonInput.value = JSON.stringify(skills);
-    }
-
-    function renderSkills() {
-        if (!skillList) return;
-        skillList.innerHTML = "";
-
-        if (skills.length === 0) {
-            skillList.innerHTML = `<div class="editcv-help">Ingakompetenser ännu. Lägg till en kompetens ovan.</div>`;
-            return;
-        }
-
-        skills.forEach((skill, idx) => {
-            const pill = document.createElement("div");
-            pill.className = "editcv-draft-card";
-
-            const label = document.createElement("div");
-            label.className = "editcv-draft-title";
-            label.textContent = skill;
-
-            const remove = document.createElement("button");
-            remove.type = "button";
-            remove.className = "editcv-draft-remove";
-            remove.textContent = "×";
-            remove.setAttribute("aria-label", "Ta bort kompetens");
-
-            remove.addEventListener("click", () => {
-                skills.splice(idx, 1);
-                syncSkillsJson();
-                renderSkills();
-                markDirty();
-            });
-
-            pill.appendChild(label);
-            pill.appendChild(remove);
-            skillList.appendChild(pill);
-        });
-    }
-
-    function tryAddSkill(text) {
-        const v = skillDisplay(text);
-        if (!v) return;
-
-        skills = normalizeSkills([v, ...skills]);
-        syncSkillsJson();
-        renderSkills();
-        markDirty();
-
-        if (skillInput) skillInput.value = "";
-    }
-
-    skillAddBtn?.addEventListener("click", () => tryAddSkill(skillInput?.value));
-
-    skillInput?.addEventListener("keydown", (e) => {
-        if (e.key !== "Enter") return;
-        e.preventDefault();
-        tryAddSkill(skillInput.value);
-    });
-
-    loadSkillsFromHidden();
-    renderSkills();
-
-    // Education JSON + UI
+    // --- Education JSON + UI ---
     const eduJsonInput = document.getElementById("EducationJson");
     const eduList = document.getElementById("eduList");
     const eduToggleBtn = document.getElementById("eduToggleBtn");
@@ -384,7 +245,6 @@
         } catch {
             educations = [];
         }
-
         syncEduJson();
     }
 
@@ -394,9 +254,7 @@
         eduFormWrap.classList.toggle("is-open", open);
         eduFormWrap.setAttribute("aria-hidden", open ? "false" : "true");
 
-        if (eduMiniError) {
-            eduMiniError.textContent = "";
-        }
+        if (eduMiniError) eduMiniError.textContent = "";
     }
 
     eduToggleBtn?.addEventListener("click", () => {
@@ -490,7 +348,7 @@
     loadEduFromHidden();
     renderEdu();
 
-    // Work experience JSON + UI
+    // --- Work experience JSON + UI ---
     const expJsonInput = document.getElementById("ExperienceJson");
     const expList = document.getElementById("expList");
     const expToggleBtn = document.getElementById("expToggleBtn");
@@ -517,7 +375,6 @@
         } catch {
             experiences = [];
         }
-
         syncExpJson();
     }
 
@@ -641,14 +498,22 @@
         try {
             const parsed = JSON.parse(selectedProjectsJson.value || "[]");
             if (Array.isArray(parsed)) return parsed.map((x) => Number(x)).filter((n) => Number.isFinite(n));
-        } catch {
-        }
+        } catch { }
         return [];
     }
 
     function syncSelectedJson() {
         if (!selectedProjectsJson) return;
         selectedProjectsJson.value = JSON.stringify(Array.from(selected));
+    }
+
+    function escapeHtml(s) {
+        return String(s || "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#39;");
     }
 
     function renderPreview() {
@@ -663,22 +528,22 @@
         preview.innerHTML = `
             <div class="mycv-projects-grid">
                 ${selectedList
-                    .slice(0, MAX_SELECTED_PROJECTS)
-                    .map((id) => {
-                        const p = projects.find((x) => x.id === id);
-                        if (!p) return "";
+                .slice(0, MAX_SELECTED_PROJECTS)
+                .map((id) => {
+                    const p = projects.find((x) => x.id === id);
+                    if (!p) return "";
 
-                        const imgSrc = (p.imagePath || "").trim() || "/images/projects/rocketship.png";
-                        const shortDesc = (p.shortDescription || "").trim();
-                        const techKeys = String(p.techKeysCsv || "")
-                            .split(",")
-                            .map((s) => s.trim())
-                            .filter(Boolean)
-                            .slice(0, 4);
+                    const imgSrc = (p.imagePath || "").trim() || "/images/projects/rocketship.png";
+                    const shortDesc = (p.shortDescription || "").trim();
+                    const techKeys = String(p.techKeysCsv || "")
+                        .split(",")
+                        .map((s) => s.trim())
+                        .filter(Boolean)
+                        .slice(0, 4);
 
-                        const creator = (p.createdByName || "").trim() || (p.createdByEmail || "").trim() || "Okänd";
+                    const creator = (p.createdByName || "").trim() || (p.createdByEmail || "").trim() || "Okänd";
 
-                        return `
+                    return `
                             <div class="mycv-project-card" role="group" aria-label="Förhandsvisning projekt: ${escapeHtml(p.title)}">
                                 <div class="mycv-project-doc">
                                     <div class="mycv-project-doc-top">
@@ -701,34 +566,25 @@
                                         </div>
 
                                         ${techKeys.length
-                                            ? `
+                            ? `
                                             <div class="mycv-project-doc-bottom">
                                                 <div class="mycv-project-doc-sep" aria-hidden="true"></div>
                                                 <div class="mycv-project-doc-tech" aria-label="Tech stack">
                                                     ${techKeys
-                                                        .map(
-                                                            (k) =>
-                                                                `<span class="mycv-project-doc-tech-tile"><img class="mycv-project-doc-tech-icon" src="/images/svg/techstack/${encodeURIComponent(k)}.svg" alt="${escapeHtml(k)}" /></span>`
-                                                        )
-                                                        .join("")}
+                                .map(
+                                    (k) =>
+                                        `<span class="mycv-project-doc-tech-tile"><img class="mycv-project-doc-tech-icon" src="/images/svg/techstack/${encodeURIComponent(k)}.svg" alt="${escapeHtml(k)}" /></span>`
+                                )
+                                .join("")}
                                                 </div>
                                             </div>`
-                                            : ""}
+                            : ""}
                                     </div>
                                 </div>
                             </div>`;
-                    })
-                    .join("")}
+                })
+                .join("")}
             </div>`;
-    }
-
-    function escapeHtml(s) {
-        return String(s || "")
-            .replaceAll("&", "&amp;")
-            .replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;")
-            .replaceAll('"', "&quot;")
-            .replaceAll("'", "&#39;");
     }
 
     function setModalOpen(open) {
@@ -763,7 +619,6 @@
             cb.closest(".editcv-picker__row")?.classList.toggle("is-disabled", limitReached);
         }
 
-        // Keep `selected` in sync with DOM.
         selected = new Set(checked.map((c) => Number(c.value)));
         syncSelectedJson();
         renderPreview();
@@ -809,7 +664,6 @@
             picker.appendChild(row);
         }
 
-        // This also syncs selected/json/preview.
         updatePickerUi();
     }
 
@@ -874,7 +728,6 @@
         if (!(t instanceof HTMLInputElement)) return;
         if (t.type !== "checkbox") return;
 
-        // Enforce limit immediately.
         const checked = Array.from(picker.querySelectorAll('input[type="checkbox"]')).filter((c) => c.checked);
         if (checked.length > MAX_SELECTED_PROJECTS) {
             t.checked = false;
@@ -883,4 +736,213 @@
         updatePickerUi();
         markDirty();
     });
+
+    // --- KOMPETENSVÄLJARE ---
+    const compModal = document.getElementById("competenceModal");
+    const compPicker = document.getElementById("editcv-competences-picker");
+    const compCounter = document.getElementById("editcv-competences-counter");
+    const compSearch = document.getElementById("competenceSearch");
+    const selectedContainer = document.getElementById("selectedCompetenceIdsContainer");
+
+    const openCompBtn = document.getElementById("openCompetenceModal");
+    const closeCompBtn = document.getElementById("closeCompetenceModal");
+    const closeCompBtnFooter = document.getElementById("closeCompetenceModalFooter");
+    const clearCompBtn = document.getElementById("clearCompetencesBtn");
+    const compBackdrop = compModal ? compModal.querySelector(".editcv-modal__backdrop") : null;
+
+    const MAX_COMPETENCES = 10;
+
+    // Viktigt: init-flagga så vi inte triggar dirty vid sidladdning/öppna modal
+    let compInit = true;
+
+    function setCompModalOpen(open) {
+        if (!compModal) return;
+        compModal.setAttribute("aria-hidden", open ? "false" : "true");
+        compModal.classList.toggle("is-open", open);
+        compModal.style.display = open ? "block" : "none";
+        document.body.classList.toggle("editcv-modal-open", open);
+
+        if (open) {
+            const focusEl = compModal.querySelector(".editcv-modal__close");
+            focusEl?.focus();
+        }
+    }
+
+    function getAllCompetenceCheckboxes() {
+        return Array.from(compPicker?.querySelectorAll("input.competence-chk") ?? []);
+    }
+
+    function getUniqueSelectedIds() {
+        const seen = new Set();
+        for (const cb of getAllCompetenceCheckboxes()) {
+            if (!(cb instanceof HTMLInputElement)) continue;
+            if (!cb.checked) continue;
+            seen.add(cb.value);
+        }
+        return seen;
+    }
+
+    function getCheckedNames() {
+        const seen = new Set();
+        const names = [];
+        for (const cb of getAllCompetenceCheckboxes()) {
+            if (!(cb instanceof HTMLInputElement)) continue;
+            if (!cb.checked) continue;
+            if (seen.has(cb.value)) continue;
+            seen.add(cb.value);
+            const name = (cb.closest(".editcv-picker__row")?.getAttribute("data-name") || "").trim();
+            if (name) names.push(name);
+        }
+        return names;
+    }
+
+    function syncSameIdCheckboxes(value, isChecked) {
+        const target = getAllCompetenceCheckboxes().filter(cb => cb.value === value);
+        target.forEach(cb => { cb.checked = isChecked; });
+    }
+
+    function rebuildHiddenIds() {
+        if (!selectedContainer) return;
+        selectedContainer.innerHTML = "";
+        for (const id of getUniqueSelectedIds()) {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "SelectedCompetenceIds";
+            input.value = id;
+            selectedContainer.appendChild(input);
+        }
+    }
+
+    function updateCompetenceCounter() {
+        if (!compCounter) return;
+        const count = getUniqueSelectedIds().size;
+        compCounter.textContent = `${count}`;
+    }
+
+    function renderCompetencePills() {
+        const host = document.getElementById("competencePills");
+        if (!host) return;
+
+        const names = getCheckedNames();
+        const top = names.slice(0, 4);
+        const rest = names.length - top.length;
+
+        const grid = document.createElement("div");
+        grid.className = "cv-skill-grid";
+
+        if (names.length === 0) {
+            grid.innerHTML = `<span class="cv-paragraph cv-paragraph-muted">Inga kompetenser ännu.</span>`;
+        } else {
+            for (const s of top) {
+                const pill = document.createElement("span");
+                pill.className = "cv-skill-pill";
+                pill.textContent = s;
+                grid.appendChild(pill);
+            }
+            if (rest > 0) {
+                const more = document.createElement("span");
+                more.className = "cv-skill-pill cv-skill-pill--muted";
+                more.textContent = `+${rest} fler`;
+                grid.appendChild(more);
+            }
+        }
+
+        host.innerHTML = "";
+        host.appendChild(grid);
+    }
+
+    function enforceCompetenceLimit(changedValue) {
+        const uniqueSelected = getUniqueSelectedIds();
+        const limitReached = uniqueSelected.size >= MAX_COMPETENCES;
+
+        getAllCompetenceCheckboxes().forEach(cb => {
+            const row = cb.closest(".editcv-picker__row");
+            if (cb.checked) {
+                cb.disabled = false;
+                row?.classList.remove("is-disabled");
+            } else {
+                const shouldDisable = limitReached && !uniqueSelected.has(cb.value);
+                cb.disabled = shouldDisable;
+                row?.classList.toggle("is-disabled", shouldDisable);
+            }
+        });
+
+        if (limitReached && changedValue && !uniqueSelected.has(changedValue)) {
+            syncSameIdCheckboxes(changedValue, false);
+        }
+    }
+
+    function updateCompetenceUi() {
+        rebuildHiddenIds();
+        updateCompetenceCounter();
+        renderCompetencePills();
+
+        if (!compInit) markDirty();
+    }
+
+    function openCompetenceModal() {
+        compInit = true;
+        setCompModalOpen(true);
+        enforceCompetenceLimit();
+        updateCompetenceUi();
+        compInit = false;
+    }
+
+    function closeCompetenceModal() {
+        setCompModalOpen(false);
+    }
+
+    openCompBtn?.addEventListener("click", openCompetenceModal);
+    closeCompBtn?.addEventListener("click", closeCompetenceModal);
+    closeCompBtnFooter?.addEventListener("click", () => {
+        // Spara valen till hidden och stäng
+        updateCompetenceUi();
+        closeCompetenceModal();
+    });
+    if (compBackdrop instanceof HTMLElement) compBackdrop.addEventListener("click", closeCompetenceModal);
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && compModal?.getAttribute("aria-hidden") === "false") {
+            closeCompetenceModal();
+        }
+    });
+
+    compPicker?.addEventListener("change", (e) => {
+        const t = e.target;
+        if (!(t instanceof HTMLInputElement)) return;
+        if (!t.classList.contains("competence-chk")) return;
+
+        syncSameIdCheckboxes(t.value, t.checked);
+
+        // Stoppa 11:e unika valet
+        const uniqueSelected = getUniqueSelectedIds();
+        if (uniqueSelected.size > MAX_COMPETENCES) {
+            syncSameIdCheckboxes(t.value, false);
+        }
+
+        enforceCompetenceLimit(t.value);
+        updateCompetenceUi();
+    });
+
+    clearCompBtn?.addEventListener("click", () => {
+        getAllCompetenceCheckboxes().forEach(cb => { cb.checked = false; cb.disabled = false; cb.closest(".editcv-picker__row")?.classList.remove("is-disabled"); });
+        compInit = false;
+        updateCompetenceUi();
+    });
+
+    compSearch?.addEventListener("input", () => {
+        const q = compSearch.value.trim().toLowerCase();
+        const rows = compPicker?.querySelectorAll(".editcv-picker__row") ?? [];
+        rows.forEach((row) => {
+            const name = (row.getAttribute("data-name") || "").toLowerCase();
+            row.style.display = name.includes(q) ? "" : "none";
+        });
+    });
+
+    // Init kompetenser utan dirty
+    compInit = true;
+    enforceCompetenceLimit();
+    updateCompetenceUi();
+    compInit = false;
+
 })();
