@@ -444,3 +444,9 @@ p {
         font-size: 0.9rem;
     }
 }
+
+.sidebar-bottom {
+    margin-top: 18px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
