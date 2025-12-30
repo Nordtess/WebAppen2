@@ -129,6 +129,13 @@
     flex-wrap: wrap;
 }
 
+.searchcv-search-right .searchcv-input {
+    width: auto !important;
+    min-width: 140px;
+    max-width: 220px;
+    flex: 0 0 auto;
+}
+
 .searchcv-list-card {
     width: 100%;
     max-width: var(--scv-max);
@@ -827,3 +834,11 @@ body.editcv-modal-open { overflow: hidden; }
 
 /* Align hint spacing to modal body */
 .editcv-modal__hint + .editcv-modal__body { padding-top: 6px; }
+
+/* Compact sort dropdown */
+.searchcv-search-right .searchcv-input {
+    width: auto !important;
+    min-width: 140px;
+    max-width: 220px;
+    flex: 0 0 auto;
+}
