@@ -54,18 +54,18 @@
                     }
 
                     <div class="searchcv-search-main">
-                        <input class="searchcv-input" type="text" name="name" value="@(Model.IsSimilarMode ? "" : Model.NameQuery)" placeholder="@(Model.IsSimilarMode ? "Endast i vanlig sök" : "Sök på namn…")" @(Model.IsSimilarMode ? "disabled" : string.Empty) />
-                        <input class="searchcv-input" type="text" name="city" value="@(Model.IsSimilarMode ? "" : Model.CityQuery)" placeholder="@(Model.IsSimilarMode ? "Endast i vanlig sök" : "Stad (ex: Örebro)…")" @(Model.IsSimilarMode ? "disabled" : string.Empty) />
+                        <input class="searchcv-input" type="text" name="name" value="@Model.NameQuery" placeholder="Sök på namn…" />
+                        <input class="searchcv-input" type="text" name="city" value="@Model.CityQuery" placeholder="Stad (ex: Örebro)…" />
 
                         <div class="searchcv-skillpicker">
-                            <button type="button" class="searchcv-input searchcv-skillbtn" id="openSkillModal" @(Model.IsSimilarMode ? "disabled" : string.Empty)>Välj kompetenser…</button>
-                            @if (!Model.IsSimilarMode)
+                            @if (Model.IsSimilarMode)
                             {
-                                <input type="hidden" name="skillIds" id="skillIds" value="@string.Join(",", Model.SelectedSkillIds)" />
+                                <div class="searchcv-chip-muted">Kompetensval: styrs av liknande-läget</div>
                             }
                             else
                             {
-                                <span class="searchcv-chip-muted" style="font-size:12px;">Endast i vanlig sök</span>
+                                <button type="button" class="searchcv-input searchcv-skillbtn" id="openSkillModal">Välj kompetenser…</button>
+                                <input type="hidden" name="skillIds" id="skillIds" value="@string.Join(",", Model.SelectedSkillIds)" />
                             }
                         </div>
                     </div>
@@ -141,6 +141,7 @@
                         {
                             if (Model.IsSimilarMode)
                             {
+                                <a class="btn-secondary-custom" style="text-decoration:none;" href="@Url.Action("Index", "SearchCv", new { mode = "similar", source = Model.Source, sourceUserId = Model.SourceUserId })">Rensa filter</a>
                                 <a class="btn-secondary-custom" style="text-decoration:none;" href="@Url.Action("Index", "SearchCv")">Byt till vanlig sök</a>
                             }
                             else
@@ -347,7 +348,7 @@
             const counter = document.getElementById('searchcv-competences-counter');
             const MAX_COMP = 10;
 
-            const escapeVal = (v) => window.CSS && CSS.escape ? CSS.escape(v) : v.replace(/([\\\[\]#.:\"])/g, '\\$1');
+            const escapeVal = (v) => window.CSS && CSS.escape ? CSS.escape(v) : v.replace(/([\\\\\[\]#.:"])/g, '\\\\$1');
 
             function setModal(open) {
                 if (!modal) return;
@@ -511,4 +512,4 @@
             updateCounter();
         })();
     </script>
-}}
+}
