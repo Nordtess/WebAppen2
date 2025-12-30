@@ -105,8 +105,9 @@
 
                                             <div class="editcv-field">
                                                 <label class="editcv-label" asp-for="Headline">Titel / inriktning</label>
-                                                <input class="editcv-input" asp-for="Headline" placeholder="Systemvetenskap • Fullstack" maxlength="60" />
+                                                <input class="editcv-input" asp-for="Headline" placeholder="Systemvetenskap • Fullstack" maxlength="60" required pattern="^(?=.*[A-Za-zÅÄÖåäö])[A-Za-zÅÄÖåäö\- ]+$" data-val-required="Titel är obligatoriskt." data-val-pattern="Titel måste innehålla minst 1 bokstav och får bara innehålla bokstäver (A-Ö), mellanslag och bindestreck." />
                                                 <span class="editcv-error" asp-validation-for="Headline" data-valmsg-for="Headline"></span>
+
                                             </div>
                                         </div>
                                     </div>

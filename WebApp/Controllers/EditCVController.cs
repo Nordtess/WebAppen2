@@ -134,6 +134,9 @@ public class EditCVController : Controller
         model.Phone = user.PhoneNumberDisplay ?? user.PhoneNumber ?? string.Empty;
         model.Location = user.City ?? string.Empty;
 
+        model.Headline = (model.Headline ?? string.Empty).Trim();
+
+
         if (!TryValidateEducationYears(model.EducationJson, out var educationYearsError))
         {
             ModelState.AddModelError(string.Empty, educationYearsError);

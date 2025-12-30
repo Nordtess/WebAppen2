@@ -15,8 +15,11 @@ public sealed class EditCvViewModel
     public string Location { get; set; } = "";
 
     [Display(Name = "Rubrik")]
+    [Required(ErrorMessage = "Titel är obligatoriskt.")]
     [StringLength(60, ErrorMessage = "Rubrik får max vara 60 tecken.")]
+    [RegularExpression("^(?=.*[A-Za-zÅÄÖåäö])[A-Za-zÅÄÖåäö\\- ]+$", ErrorMessage = "Titel måste innehålla minst 1 bokstav och får bara innehålla bokstäver (A-Ö), mellanslag och bindestreck.")]
     public string? Headline { get; set; }
+
 
     [Display(Name = "Om mig")]
     [Required(ErrorMessage = "Om mig är obligatoriskt.")]
