@@ -34,19 +34,36 @@
             <div class="searchcv-controls">
                 <form method="get" class="searchcv-search">
                     <input type="hidden" name="mode" value="@Model.Mode" />
+                    @if (!string.IsNullOrWhiteSpace(Model.Source))
+                    {
+                        <input type="hidden" name="source" value="@Model.Source" />
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.SourceUserId))
+                    {
+                        <input type="hidden" name="sourceUserId" value="@Model.SourceUserId" />
+                    }
 
                     <div class="searchcv-search-main">
                         <input class="searchcv-input" type="text" name="name" value="@Model.NameQuery" placeholder="Sök på namn…" />
                         <input class="searchcv-input" type="text" name="city" value="@Model.CityQuery" placeholder="Stad (ex: Örebro)…" />
-                        <input class="searchcv-input" type="text" name="skills" value="@Model.SkillsQuery" placeholder="Kompetenser (ex: C#, SQL, .NET)…" />
 
-                        <div class="searchcv-help">
-                            <div>
-                                Vanlig sök (kompetenser): <strong>måste matcha alla</strong> kompetenser du skriver.
+                        <div class="searchcv-skillpicker">
+                            <button type="button" class="searchcv-input searchcv-skillbtn" id="openSkillModal">Välj kompetenser…</button>
+                            <div class="searchcv-selected-skills" id="selectedSkillSummary">
+                                @if (Model.SelectedSkillNames is { Length: > 0 })
+                                {
+                                    <span class="searchcv-chip-title">Valda:</span>
+                                    @foreach (var s in Model.SelectedSkillNames)
+                                    {
+                                        <span class="searchcv-chip">@s</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="searchcv-chip-muted">Inga valda kompetenser</span>
+                                }
                             </div>
-                            <div>
-                                “Hitta liknande personer” använder dina egna kompetenser och matchar <strong>minst en</strong>.
-                            </div>
+                            <input type="hidden" name="skillIds" id="skillIds" value="@string.Join(",", Model.SelectedSkillIds)" />
                         </div>
                     </div>
 
@@ -55,16 +72,23 @@
 
                         @if (isLoggedIn)
                         {
-                            <a class="btn-secondary-custom" style="text-decoration:none;" href="@Url.Action("Index", "SearchCv", new { mode = "similar" })">Hitta liknande personer</a>
+                            <a class="btn-secondary-custom" style="text-decoration:none;" href="@Url.Action("Index", "SearchCv", new { mode = "similar", source = "me" })">Hitta liknande personer</a>
                         }
 
-                        @if (!string.IsNullOrWhiteSpace(Model.NameQuery) || !string.IsNullOrWhiteSpace(Model.SkillsQuery) || !string.IsNullOrWhiteSpace(Model.CityQuery) || Model.Mode == "similar")
+                        <button type="button" class="btn-secondary-custom" id="clearSkills" style="text-decoration:none;">Rensa kompetenser</button>
+
+                        @if (!string.IsNullOrWhiteSpace(Model.NameQuery) || Model.SelectedSkillIds.Length > 0 || !string.IsNullOrWhiteSpace(Model.CityQuery) || Model.Mode == "similar")
                         {
                             <a class="btn-secondary-custom" style="text-decoration:none;" href="@Url.Action("Index", "SearchCv")">Rensa</a>
                         }
                     </div>
                 </form>
             </div>
+
+            @if (Model.IsSimilarMode)
+            {
+                <div class="searchcv-tip">@Model.SimilarHint</div>
+            }
 
             <div class="searchcv-list-card">
                 <div class="searchcv-grid">
@@ -100,6 +124,10 @@
                                                 <div class="searchcv-doc-meta">
                                                     <span class="searchcv-dot" aria-hidden="true">📍</span>
                                                     <span>@(string.IsNullOrWhiteSpace(cv.City) ? "—" : cv.City)</span>
+                                                    @if (cv.MatchCount.HasValue && cv.SourceTotal.HasValue && cv.SourceTotal.Value > 0)
+                                                    {
+                                                        <span class="searchcv-match">Matchar @cv.MatchCount/@cv.SourceTotal kompetenser</span>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
@@ -164,3 +192,136 @@
         </div>
     </div>
 </div>
+
+@{
+    var groupedCompetences = Model.Competences
+        .GroupBy(c => string.IsNullOrWhiteSpace(c.Category) ? "Övrigt" : c.Category)
+        .OrderBy(g => g.Key);
+}
+
+<div id="searchcv-skills-modal" class="searchcv-modal" aria-hidden="true">
+    <div class="searchcv-modal__backdrop" data-searchcv-modal-close></div>
+    <div class="searchcv-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="searchcv-skills-title">
+        <div class="searchcv-modal__header">
+            <div class="searchcv-modal__title" id="searchcv-skills-title">Välj kompetenser</div>
+            <button type="button" class="searchcv-modal__close" data-searchcv-modal-close aria-label="Stäng">×</button>
+        </div>
+        <div class="searchcv-modal__body">
+            <input type="text" class="searchcv-modal__search" id="skillFilter" placeholder="Sök kompetens…" />
+            <div class="searchcv-modal__list" id="skillList">
+                @foreach (var group in groupedCompetences)
+                {
+                    <div class="searchcv-modal__group" data-group="@group.Key">
+                        <div class="searchcv-modal__group-title">@group.Key</div>
+                        @foreach (var c in group)
+                        {
+                            var isChecked = Model.SelectedSkillIds.Contains(c.Id);
+                            <label class="searchcv-modal__row" data-name="@c.Name">
+                                <input type="checkbox" value="@c.Id" class="searchcv-modal__chk" @(isChecked ? "checked" : null) />
+                                <span class="searchcv-modal__label">@c.Name</span>
+                            </label>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="searchcv-modal__footer">
+            <button type="button" class="btn-secondary-custom" data-searchcv-modal-close>Avbryt</button>
+            <button type="button" class="btn-primary-custom" id="applySkills">Använd</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (() => {
+            const form = document.querySelector('.searchcv-search');
+            const modal = document.getElementById('searchcv-skills-modal');
+            const openBtn = document.getElementById('openSkillModal');
+            const applyBtn = document.getElementById('applySkills');
+            const hidden = document.getElementById('skillIds');
+            const filterInput = document.getElementById('skillFilter');
+            const list = document.getElementById('skillList');
+            const clearSkills = document.getElementById('clearSkills');
+            const summary = document.getElementById('selectedSkillSummary');
+
+            function setModal(open) {
+                if (!modal) return;
+                modal.setAttribute('aria-hidden', open ? 'false' : 'true');
+                document.body.classList.toggle('searchcv-modal-open', open);
+                if (open) {
+                    filterInput?.focus();
+                }
+            }
+
+            openBtn?.addEventListener('click', () => setModal(true));
+            modal?.addEventListener('click', (e) => {
+                if ((e.target instanceof HTMLElement) && e.target.closest('[data-searchcv-modal-close]')) {
+                    setModal(false);
+                }
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal?.getAttribute('aria-hidden') === 'false') {
+                    setModal(false);
+                }
+            });
+
+            filterInput?.addEventListener('input', () => {
+                if (!list) return;
+                const term = filterInput.value.trim().toLowerCase();
+                list.querySelectorAll('.searchcv-modal__row').forEach((row) => {
+                    const name = row.getAttribute('data-name')?.toLowerCase() ?? '';
+                    row.style.display = !term || name.includes(term) ? 'flex' : 'none';
+                });
+            });
+
+            function updateSummary(names) {
+                if (!summary) return;
+                summary.innerHTML = '';
+                if (names.length === 0) {
+                    const span = document.createElement('span');
+                    span.className = 'searchcv-chip-muted';
+                    span.textContent = 'Inga valda kompetenser';
+                    summary.appendChild(span);
+                    return;
+                }
+                const label = document.createElement('span');
+                label.className = 'searchcv-chip-title';
+                label.textContent = 'Valda:';
+                summary.appendChild(label);
+                names.forEach(n => {
+                    const chip = document.createElement('span');
+                    chip.className = 'searchcv-chip';
+                    chip.textContent = n;
+                    summary.appendChild(chip);
+                });
+            }
+
+            applyBtn?.addEventListener('click', () => {
+                if (!modal || !form || !hidden) return;
+                const checked = Array.from(modal.querySelectorAll('.searchcv-modal__chk'))
+                    .filter((cb) => cb instanceof HTMLInputElement && cb.checked)
+                    .map((cb) => cb.value)
+                    .filter(v => !!v);
+                hidden.value = checked.join(',');
+                const names = Array.from(modal.querySelectorAll('.searchcv-modal__chk'))
+                    .filter((cb) => cb instanceof HTMLInputElement && cb.checked)
+                    .map((cb) => cb.closest('.searchcv-modal__row')?.getAttribute('data-name') ?? '')
+                    .filter(n => n);
+                updateSummary(names);
+                setModal(false);
+                form.submit();
+            });
+
+            clearSkills?.addEventListener('click', () => {
+                if (!form || !hidden) return;
+                hidden.value = '';
+                modal?.querySelectorAll('.searchcv-modal__chk').forEach((cb) => {
+                    if (cb instanceof HTMLInputElement) cb.checked = false;
+                });
+                updateSummary([]);
+                form.submit();
+            });
+        })();
+    </script>
+}

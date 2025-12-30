@@ -10,18 +10,43 @@ namespace WebApp.ViewModels;
 public sealed class SearchCvVm
 {
     public string NameQuery { get; init; } = string.Empty;
-    public string SkillsQuery { get; init; } = string.Empty;
     public string CityQuery { get; init; } = string.Empty;
 
     // Mode: "normal" innebär AND över sökord (kräver alla tokens),
-    // "similar" innebär OR och använder den inloggade användarens färdigheter.
+    // "similar" innebär matchning mot en användarprofilens kompetenser.
     public string Mode { get; init; } = "normal";
 
-    // Visas som en hint när användaren är anonym (uppmaning att logga in).
     public bool ShowLoginTip { get; init; }
+
+    public int[] SelectedSkillIds { get; init; } = Array.Empty<int>();
+    public string[] SelectedSkillNames { get; init; } = Array.Empty<string>();
+
+    public bool IsSimilarMode => string.Equals(Mode, "similar", StringComparison.OrdinalIgnoreCase);
+    public int SimilarSourceTotal { get; init; }
+    public string SimilarHint { get; init; } = string.Empty;
+    public string? Source { get; init; }
+    public string? SourceUserId { get; init; }
+
+    public List<CompetenceItemVm> Competences { get; init; } = new();
+
+    // Statisk lista med alla tillgängliga färdigheter (krävs för vy).
+    public List<SkillItemVm> AllSkills { get; init; } = new();
 
     // Lista med CV-kort som används för vy-rendering.
     public List<CvCardVm> Cvs { get; init; } = new();
+
+    public sealed class CompetenceItemVm
+    {
+        public int Id { get; init; }
+        public string Name { get; init; } = string.Empty;
+        public string Category { get; init; } = string.Empty;
+    }
+
+    public sealed class SkillItemVm
+    {
+        public int Id { get; init; }
+        public string Name { get; init; } = string.Empty;
+    }
 
     public sealed class CvCardVm
     {
@@ -42,5 +67,8 @@ public sealed class SearchCvVm
         public string[] Experiences { get; init; } = Array.Empty<string>();
 
         public int ProjectCount { get; init; }
+
+        public int? MatchCount { get; init; }
+        public int? SourceTotal { get; init; }
     }
 }

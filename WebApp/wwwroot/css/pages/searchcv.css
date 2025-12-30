@@ -470,3 +470,165 @@
     color: rgba(0, 0, 0, 0.66);
     line-height: 1.2;
 }
+
+.searchcv-skillpicker {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.searchcv-skillbtn {
+    cursor: pointer;
+    text-align: left;
+}
+
+.searchcv-selected-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.searchcv-chip-title {
+    font-weight: 900;
+    color: rgba(0,0,0,0.70);
+}
+
+.searchcv-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.06);
+    font-weight: 800;
+    color: rgba(0,0,0,0.78);
+}
+
+.searchcv-chip-muted {
+    color: rgba(0,0,0,0.55);
+    font-weight: 750;
+}
+
+.searchcv-match {
+    font-size: 12px;
+    font-weight: 800;
+    color: rgba(0,0,0,0.58);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.searchcv-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: none;
+}
+
+.searchcv-modal[aria-hidden="false"] {
+    display: block;
+}
+
+.searchcv-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(3px);
+}
+
+.searchcv-modal__dialog {
+    position: relative;
+    width: min(720px, calc(100% - 28px));
+    max-height: min(80vh, 720px);
+    margin: 70px auto;
+    border-radius: 18px;
+    border: 1px solid rgba(0,0,0,0.14);
+    background: #fff;
+    box-shadow: 0 20px 44px rgba(0,0,0,0.12);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.searchcv-modal__header,
+.searchcv-modal__footer {
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.searchcv-modal__title {
+    font-weight: 950;
+    font-size: 14px;
+    color: rgba(0,0,0,0.82);
+}
+
+.searchcv-modal__close {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.10);
+    background: rgba(0,0,0,0.04);
+    cursor: pointer;
+}
+
+.searchcv-modal__body {
+    padding: 10px 16px 16px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.searchcv-modal__search {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.10);
+    padding: 10px 12px;
+    font-size: 13px;
+}
+
+.searchcv-modal__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.searchcv-modal__group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.searchcv-modal__group-title {
+    font-weight: 900;
+    font-size: 12px;
+    color: rgba(0,0,0,0.64);
+}
+
+.searchcv-modal__row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.10);
+    background: rgba(0,0,0,0.02);
+}
+
+.searchcv-modal__chk {
+    accent-color: #7fffd4;
+}
+
+.searchcv-modal__label {
+    font-weight: 850;
+    font-size: 13px;
+    color: rgba(0,0,0,0.78);
+}
+
+body.searchcv-modal-open {
+    overflow: hidden;
+}
