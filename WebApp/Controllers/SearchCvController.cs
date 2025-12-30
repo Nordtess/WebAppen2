@@ -26,6 +26,8 @@ public sealed class SearchCvController : Controller
         [FromQuery] string? source,
         [FromQuery] string? sourceUserId)
     {
+        static string Normalize(string s) => s.Trim().ToLowerInvariant();
+
         var isLoggedIn = User.Identity?.IsAuthenticated == true;
 
         var nameQuery = (name ?? string.Empty).Trim();
@@ -127,6 +129,10 @@ public sealed class SearchCvController : Controller
                     .GroupBy(x => x.UserId)
                     .ToDictionary(g => g.Key, g => g.Select(x => x.Name).Distinct(StringComparer.OrdinalIgnoreCase).ToArray()));
 
+        var compNamesLowerByUser = compByUser.ToDictionary(
+            kvp => kvp.Key,
+            kvp => kvp.Value.Select(Normalize).Distinct(StringComparer.OrdinalIgnoreCase).ToArray());
+
         var compIdsByUser = userIds.Length == 0
             ? new Dictionary<string, int[]>()
             : await (from link in _db.ApplicationUserProfiles.AsNoTracking()
@@ -138,7 +144,27 @@ public sealed class SearchCvController : Controller
                     .GroupBy(x => x.UserId)
                     .ToDictionary(g => g.Key, g => g.Select(x => x.CompetenceId).Distinct().ToArray()));
 
-        int[] sourceSkillIds = Array.Empty<int>();
+        var competenceList = await _db.Kompetenskatalog.AsNoTracking()
+            .OrderBy(c => c.Category)
+            .ThenBy(c => c.SortOrder)
+            .Select(c => new SearchCvVm.CompetenceItemVm
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Category = c.Category ?? string.Empty
+            })
+            .ToListAsync();
+
+        var nameById = competenceList.ToDictionary(c => c.Id, c => c.Name, EqualityComparer<int>.Default);
+        var selectedSkillNames = selectedSkillIds
+            .Select(id => nameById.TryGetValue(id, out var n) ? n : null)
+            .Where(n => !string.IsNullOrWhiteSpace(n))
+            .Select(n => n!)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+        var selectedSkillNamesLower = selectedSkillNames.Select(Normalize).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+
+        string[] sourceSkillNames = Array.Empty<string>();
         if (useSimilarMode)
         {
             if (string.Equals(source, "me", StringComparison.OrdinalIgnoreCase))
@@ -146,34 +172,37 @@ public sealed class SearchCvController : Controller
                 var viewerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (!string.IsNullOrWhiteSpace(viewerId))
                 {
-                    sourceSkillIds = await _db.AnvandarKompetenser.AsNoTracking()
-                        .Where(x => x.UserId == viewerId)
-                        .Select(x => x.CompetenceId)
+                    sourceSkillNames = await (from uc in _db.AnvandarKompetenser.AsNoTracking()
+                                              join c in _db.Kompetenskatalog.AsNoTracking() on uc.CompetenceId equals c.Id
+                                              where uc.UserId == viewerId
+                                              select c.Name)
                         .Distinct()
                         .ToArrayAsync();
                 }
             }
             else if (!string.IsNullOrWhiteSpace(sourceUserId))
             {
-                sourceSkillIds = await _db.AnvandarKompetenser.AsNoTracking()
-                    .Where(x => x.UserId == sourceUserId)
-                    .Select(x => x.CompetenceId)
+                sourceSkillNames = await (from uc in _db.AnvandarKompetenser.AsNoTracking()
+                                          join c in _db.Kompetenskatalog.AsNoTracking() on uc.CompetenceId equals c.Id
+                                          where uc.UserId == sourceUserId
+                                          select c.Name)
                     .Distinct()
                     .ToArrayAsync();
             }
         }
+        var sourceSkillNamesLower = sourceSkillNames.Select(Normalize).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
 
         var cvs = new List<SearchCvVm.CvCardVm>();
 
         foreach (var x in list)
         {
-            compIdsByUser.TryGetValue(x.Id, out var compIds);
+            compNamesLowerByUser.TryGetValue(x.Id, out var userNamesLower);
 
             if (useSimilarMode)
             {
-                if (sourceSkillIds.Length == 0) continue;
-                if (compIds is null || compIds.Length == 0) continue;
-                var matchCount = compIds.Intersect(sourceSkillIds).Distinct().Count();
+                if (sourceSkillNamesLower.Length == 0) continue;
+                if (userNamesLower is null || userNamesLower.Length == 0) continue;
+                var matchCount = userNamesLower.Intersect(sourceSkillNamesLower, StringComparer.OrdinalIgnoreCase).Count();
                 if (matchCount == 0) continue;
 
                 var fullName = string.Join(' ', new[] { x.FirstName, x.LastName }.Where(s => !string.IsNullOrWhiteSpace(s)));
@@ -197,15 +226,16 @@ public sealed class SearchCvController : Controller
                     Educations = edus.Take(1).Select(e => $"{e.Years} • {e.Program}").ToArray(),
                     Experiences = exps.Take(1).Select(e => $"{e.Years} • {e.Role} @ {e.Company}").ToArray(),
                     MatchCount = matchCount,
-                    SourceTotal = sourceSkillIds.Length
+                    SourceTotal = sourceSkillNamesLower.Length
                 });
             }
             else
             {
-                if (selectedSkillIds.Length > 0)
+                if (selectedSkillNamesLower.Length > 0)
                 {
-                    if (compIds is null || compIds.Length == 0) continue;
-                    var hasAll = selectedSkillIds.All(id => compIds.Contains(id));
+                    if (userNamesLower is null || userNamesLower.Length == 0) continue;
+                    var userSet = new HashSet<string>(userNamesLower, StringComparer.OrdinalIgnoreCase);
+                    var hasAll = selectedSkillNamesLower.All(id => userSet.Contains(id));
                     if (!hasAll) continue;
                 }
 
@@ -214,7 +244,7 @@ public sealed class SearchCvController : Controller
                 var edus = pid != null && eduByProfile.TryGetValue(pid.Value, out var eduList) ? eduList : new();
                 var exps = pid != null && expByProfile.TryGetValue(pid.Value, out var expList) ? expList : new();
                 var skillsArr = compByUser.TryGetValue(x.Id, out var arr) ? arr : Array.Empty<string>();
-                if (selectedSkillIds.Length > 0 && skillsArr.Length == 0) continue;
+                if (selectedSkillNamesLower.Length > 0 && skillsArr.Length == 0) continue;
                 var projectCount = ParseSelectedProjectIds(x.SelectedProjectsJson).Length;
 
                 cvs.Add(new SearchCvVm.CvCardVm
@@ -234,29 +264,13 @@ public sealed class SearchCvController : Controller
             }
         }
 
-        if (useSimilarMode && sourceSkillIds.Length > 0)
+        if (useSimilarMode && sourceSkillNamesLower.Length > 0)
         {
             cvs = cvs
                 .OrderByDescending(c => c.MatchCount ?? 0)
                 .ThenBy(c => c.FullName)
                 .ToList();
         }
-
-        var competenceList = await _db.Kompetenskatalog.AsNoTracking()
-            .OrderBy(c => c.Category)
-            .ThenBy(c => c.SortOrder)
-            .Select(c => new SearchCvVm.CompetenceItemVm
-            {
-                Id = c.Id,
-                Name = c.Name,
-                Category = c.Category ?? string.Empty
-            })
-            .ToListAsync();
-
-        var selectedSkillNames = competenceList
-            .Where(c => selectedSkillIds.Contains(c.Id))
-            .Select(c => c.Name)
-            .ToArray();
 
         var vm = new SearchCvVm
         {
@@ -266,8 +280,8 @@ public sealed class SearchCvController : Controller
             ShowLoginTip = !isLoggedIn,
             SelectedSkillIds = selectedSkillIds,
             SelectedSkillNames = selectedSkillNames,
-            SimilarSourceTotal = useSimilarMode ? sourceSkillIds.Length : 0,
-            SimilarHint = useSimilarMode && sourceSkillIds.Length == 0 ? "Inga kompetenser att matcha på." : (useSimilarMode ? "Visar liknande personer baserat på kompetenser." : string.Empty),
+            SimilarSourceTotal = useSimilarMode ? sourceSkillNamesLower.Length : 0,
+            SimilarHint = useSimilarMode && sourceSkillNamesLower.Length == 0 ? "Inga kompetenser att matcha på." : (useSimilarMode ? "Visar liknande personer baserat på kompetenser." : string.Empty),
             Source = source,
             SourceUserId = sourceUserId,
             Competences = competenceList,

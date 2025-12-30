@@ -18,7 +18,7 @@
         : Model.Headline;
 
     var myProjectsUrl = Url.Action("Index", "Projects", new { mine = true });
-    var similarUrl = Url.Action("Index", "SearchCv", new { mode = "similar" });
+    var similarUrl = Url.Action("Index", "SearchCv", new { mode = "similar", source = "me" });
 }
 
 @Html.AntiForgeryToken()

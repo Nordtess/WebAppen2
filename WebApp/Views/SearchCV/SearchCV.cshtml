@@ -49,21 +49,33 @@
 
                         <div class="searchcv-skillpicker">
                             <button type="button" class="searchcv-input searchcv-skillbtn" id="openSkillModal">Välj kompetenser…</button>
-                            <div class="searchcv-selected-skills" id="selectedSkillSummary">
-                                @if (Model.SelectedSkillNames is { Length: > 0 })
-                                {
-                                    <span class="searchcv-chip-title">Valda:</span>
-                                    @foreach (var s in Model.SelectedSkillNames)
-                                    {
-                                        <span class="searchcv-chip">@s</span>
-                                    }
-                                }
-                                else
-                                {
-                                    <span class="searchcv-chip-muted">Inga valda kompetenser</span>
-                                }
-                            </div>
                             <input type="hidden" name="skillIds" id="skillIds" value="@string.Join(",", Model.SelectedSkillIds)" />
+                        </div>
+                    </div>
+
+                    <div class="searchcv-selected-row">
+                        <div class="searchcv-selected-skills" id="selectedSkillSummary">
+                            @{
+                                var selectedNames = Model.SelectedSkillNames ?? Array.Empty<string>();
+                                var topNames = selectedNames.Take(4).ToArray();
+                                var rest = selectedNames.Length - topNames.Length;
+                            }
+                            @if (selectedNames.Length == 0)
+                            {
+                                <span class="searchcv-chip-muted">Inga valda kompetenser</span>
+                            }
+                            else
+                            {
+                                <span class="searchcv-chip-title">Valda:</span>
+                                @foreach (var s in topNames)
+                                {
+                                    <span class="searchcv-chip">@s</span>
+                                }
+                                @if (rest > 0)
+                                {
+                                    <span class="searchcv-chip-more">+@rest fler</span>
+                                }
+                            }
                         </div>
                     </div>
 
@@ -196,7 +208,8 @@
 @{
     var groupedCompetences = Model.Competences
         .GroupBy(c => string.IsNullOrWhiteSpace(c.Category) ? "Övrigt" : c.Category)
-        .OrderBy(g => g.Key);
+        .OrderBy(g => string.Equals(g.Key, "Topplista", StringComparison.OrdinalIgnoreCase) ? 0 : 1)
+        .ThenBy(g => g.Key);
 }
 
 <div id="searchcv-skills-modal" class="searchcv-modal" aria-hidden="true">
@@ -211,17 +224,20 @@
             <div class="searchcv-modal__list" id="skillList">
                 @foreach (var group in groupedCompetences)
                 {
-                    <div class="searchcv-modal__group" data-group="@group.Key">
-                        <div class="searchcv-modal__group-title">@group.Key</div>
-                        @foreach (var c in group)
-                        {
-                            var isChecked = Model.SelectedSkillIds.Contains(c.Id);
-                            <label class="searchcv-modal__row" data-name="@c.Name">
-                                <input type="checkbox" value="@c.Id" class="searchcv-modal__chk" @(isChecked ? "checked" : null) />
-                                <span class="searchcv-modal__label">@c.Name</span>
-                            </label>
-                        }
-                    </div>
+                    var isTop = string.Equals(group.Key, "Topplista", StringComparison.OrdinalIgnoreCase);
+                    <details class="searchcv-modal__group" data-group="@group.Key" @(isTop ? "open" : null)>
+                        <summary class="searchcv-modal__group-title">@group.Key</summary>
+                        <div class="searchcv-modal__rows">
+                            @foreach (var c in group)
+                            {
+                                var isChecked = Model.SelectedSkillIds.Contains(c.Id);
+                                <label class="searchcv-modal__row" data-name="@c.Name">
+                                    <input type="checkbox" value="@c.Id" class="searchcv-modal__chk" @(isChecked ? "checked" : null) />
+                                    <span class="searchcv-modal__label">@c.Name</span>
+                                </label>
+                            }
+                        </div>
+                    </details>
                 }
             </div>
         </div>
@@ -273,9 +289,13 @@
                     const name = row.getAttribute('data-name')?.toLowerCase() ?? '';
                     row.style.display = !term || name.includes(term) ? 'flex' : 'none';
                 });
+                list.querySelectorAll('.searchcv-modal__group').forEach((group) => {
+                    const anyVisible = Array.from(group.querySelectorAll('.searchcv-modal__row')).some(r => r instanceof HTMLElement && r.style.display !== 'none');
+                    group.style.display = anyVisible ? 'block' : 'none';
+                });
             });
 
-            function updateSummary(names) {
+            function renderSummary(names) {
                 if (!summary) return;
                 summary.innerHTML = '';
                 if (names.length === 0) {
@@ -285,16 +305,24 @@
                     summary.appendChild(span);
                     return;
                 }
+                const top = names.slice(0, 4);
+                const rest = names.length - top.length;
                 const label = document.createElement('span');
                 label.className = 'searchcv-chip-title';
                 label.textContent = 'Valda:';
                 summary.appendChild(label);
-                names.forEach(n => {
+                top.forEach(n => {
                     const chip = document.createElement('span');
                     chip.className = 'searchcv-chip';
                     chip.textContent = n;
                     summary.appendChild(chip);
                 });
+                if (rest > 0) {
+                    const more = document.createElement('span');
+                    more.className = 'searchcv-chip-more';
+                    more.textContent = `+${rest} fler`;
+                    summary.appendChild(more);
+                }
             }
 
             applyBtn?.addEventListener('click', () => {
@@ -308,7 +336,7 @@
                     .filter((cb) => cb instanceof HTMLInputElement && cb.checked)
                     .map((cb) => cb.closest('.searchcv-modal__row')?.getAttribute('data-name') ?? '')
                     .filter(n => n);
-                updateSummary(names);
+                renderSummary(names);
                 setModal(false);
                 form.submit();
             });
@@ -319,7 +347,7 @@
                 modal?.querySelectorAll('.searchcv-modal__chk').forEach((cb) => {
                     if (cb instanceof HTMLInputElement) cb.checked = false;
                 });
-                updateSummary([]);
+                renderSummary([]);
                 form.submit();
             });
         })();

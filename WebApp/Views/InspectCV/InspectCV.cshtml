@@ -22,7 +22,7 @@
         : $"{Model.FirstName} har en publik profil";
 
     // "Liknande" => OR match (at least one of my skills)
-    var findSimilarUrl = Url.Action("Index", "SearchCv", new { mode = "similar" });
+    var findSimilarUrl = Url.Action("Index", "SearchCv", new { mode = "similar", sourceUserId = Model.UserId });
 }
 
 <div class="cv-page">
