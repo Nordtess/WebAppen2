@@ -157,12 +157,15 @@ public sealed class SearchCvController : Controller
 
         var nameById = competenceList.ToDictionary(c => c.Id, c => c.Name, EqualityComparer<int>.Default);
         var selectedSkillNames = selectedSkillIds
-            .Select(id => nameById.TryGetValue(id, out var n) ? n : null)
+            .Select(id => nameById.TryGetValue(id, out var n) ? n?.Trim() : null)
             .Where(n => !string.IsNullOrWhiteSpace(n))
             .Select(n => n!)
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToArray();
-        var selectedSkillNamesLower = selectedSkillNames.Select(Normalize).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+        var selectedSkillNamesLower = selectedSkillNames
+            .Select(Normalize)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
 
         string[] sourceSkillNames = Array.Empty<string>();
         if (useSimilarMode)
@@ -175,8 +178,7 @@ public sealed class SearchCvController : Controller
                     sourceSkillNames = await (from uc in _db.AnvandarKompetenser.AsNoTracking()
                                               join c in _db.Kompetenskatalog.AsNoTracking() on uc.CompetenceId equals c.Id
                                               where uc.UserId == viewerId
-                                              select c.Name)
-                        .Distinct()
+                                              select c.Name.Trim())
                         .ToArrayAsync();
                 }
             }
@@ -185,12 +187,15 @@ public sealed class SearchCvController : Controller
                 sourceSkillNames = await (from uc in _db.AnvandarKompetenser.AsNoTracking()
                                           join c in _db.Kompetenskatalog.AsNoTracking() on uc.CompetenceId equals c.Id
                                           where uc.UserId == sourceUserId
-                                          select c.Name)
-                    .Distinct()
+                                          select c.Name.Trim())
                     .ToArrayAsync();
             }
         }
-        var sourceSkillNamesLower = sourceSkillNames.Select(Normalize).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+        var sourceSkillNamesLower = sourceSkillNames
+            .Where(n => !string.IsNullOrWhiteSpace(n))
+            .Select(Normalize)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
 
         var cvs = new List<SearchCvVm.CvCardVm>();
 
