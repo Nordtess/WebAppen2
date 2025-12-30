@@ -85,7 +85,6 @@
                                 : cv.Headline;
 
                             var about = string.IsNullOrWhiteSpace(cv.AboutMe) ? "" : cv.AboutMe.Trim();
-                            if (about.Length > 120) about = about[..120] + "…";
 
                             <a class="searchcv-card" href="/InspectCV/@cv.UserId" aria-label="Öppna CV: @cv.FullName">
                                 <div class="searchcv-doc">
@@ -112,9 +111,41 @@
                                             <div class="searchcv-about">@about</div>
                                         }
 
+                                        @if (cv.Educations is { Length: > 0 })
+                                        {
+                                            <div class="searchcv-lines" aria-label="Utbildningar">
+                                                <div class="searchcv-lines-title">Utbildning</div>
+                                                <div class="searchcv-line">@cv.Educations[0]</div>
+                                            </div>
+                                        }
+
+                                        @if (cv.Experiences is { Length: > 0 })
+                                        {
+                                            <div class="searchcv-lines" aria-label="Erfarenheter">
+                                                <div class="searchcv-lines-title">Erfarenhet</div>
+                                                <div class="searchcv-line">@cv.Experiences[0]</div>
+                                            </div>
+                                        }
+
                                         <div class="searchcv-doc-bottom">
                                             <div class="searchcv-skills" aria-label="Kompetenser">
-                                                @await Html.PartialAsync("_CompetencePills", cv.Skills)
+                                                @if (cv.Skills is { Length: > 0 })
+                                                {
+                                                    var total = cv.Skills.Length;
+                                                    foreach (var s in cv.Skills.Take(4))
+                                                    {
+                                                        <span class="searchcv-skill">@s</span>
+                                                    }
+
+                                                    if (total > 4)
+                                                    {
+                                                        <span class="searchcv-skill-more">+@(total - 4) fler</span>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <span class="searchcv-skill searchcv-skill--muted">Inga kompetenser</span>
+                                                }
                                             </div>
 
                                             <div class="searchcv-doc-sep" aria-hidden="true"></div>

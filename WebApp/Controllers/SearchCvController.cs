@@ -149,8 +149,8 @@ public sealed class SearchCvController : Controller
                     AboutMe = x.AboutMe,
                     Skills = skillsArr,
                     ProjectCount = 0,
-                    Educations = edus.Take(2).Select(e => $"{e.Years} • {e.Program}").ToArray(),
-                    Experiences = exps.Take(2).Select(e => $"{e.Years} • {e.Role} @ {e.Company}").ToArray()
+                    Educations = edus.Take(1).Select(e => $"{e.Years} • {e.Program}").ToArray(),
+                    Experiences = exps.Take(1).Select(e => $"{e.Years} • {e.Role} @ {e.Company}").ToArray()
                 };
             }).ToList()
         };

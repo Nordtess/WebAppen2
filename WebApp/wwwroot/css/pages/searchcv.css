@@ -335,6 +335,12 @@
     font-weight: 650;
     color: rgba(0, 0, 0, 0.72);
     line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 2.9em;
 }
 
 .searchcv-lines {
@@ -449,4 +455,13 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+.searchcv-skill-more {
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: rgba(0, 0, 0, 0.66);
+    line-height: 1.2;
 }
